@@ -1,1 +1,3 @@
-# commands
+# Commands
+
+- [x] Solr
