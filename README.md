@@ -1,4 +1,3 @@
-theme: jekyll-theme-midnight
 # - [x] Solr Commands
 
 
