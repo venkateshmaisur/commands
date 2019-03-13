@@ -1,6 +1,6 @@
-# - [x] Solr Commands
+# Solr Commands
 
-
+https://bhagadepravin.github.io/commands/solr
 
 ## Delete collection by running curl from solr node
 
