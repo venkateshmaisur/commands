@@ -62,7 +62,7 @@ SOLR_OPTS="$SOLR_OPTS -Xss256k -Dsun.security.krb5.rcache=none"
 
 ## Solr corruption
 ###### To check for corruptions: 
-```shell 
+```javascript 
 java -cp /usr/lib/ambari-infra-solr/server/solr-webapp/webapp/WEB-INF/lib/lucene-core-5.5.2.jar org.apache.lucene.index.CheckIndex INDEX_DATA_PATH
 ```
 ###### Use below command to fix any corruption on index.
