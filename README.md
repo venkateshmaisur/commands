@@ -4,7 +4,12 @@
 
 ## Delete collection by running curl from solr node
 
-###### This is an <h6> tag
+For a Kerberos env kinit with with keytab
+###### Kinit with Ambari Infra keytab
+```
+kinit -kt /etc/security/keytabs/ambari-infra-solr.service.keytab $(klist -kt /etc/security/keytabs/ambari-infra-solr.service.keytab |sed -n "4p"|cut -d ' ' -f7)
+```
+
 ###### This is for Ranger audit collection
 `curl --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=DELETE&name=ranger_audits"`
 
