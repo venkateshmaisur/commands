@@ -6,7 +6,7 @@
 
 For a Kerberos env kinit with with keytab
 ###### Kinit with Ambari Infra keytab
-```
+```YAML
 kinit -kt /etc/security/keytabs/ambari-infra-solr.service.keytab $(klist -kt /etc/security/keytabs/ambari-infra-solr.service.keytab |sed -n "4p"|cut -d ' ' -f7)
 ```
 
