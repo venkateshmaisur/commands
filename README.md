@@ -1,1 +1,1 @@
-# - [x] Solr Commands
+ - [x] Solr Commands [link to Solr!] https://bhagadepravin.github.io/commands/solr
