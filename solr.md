@@ -140,7 +140,8 @@ Edit the file or use sed to replace the `90 Days` in the `solrconfig.xml`
 `curl -v --negotiate -u : "http://horton0.example.com:8983/solr/admin/collections?action=RELOAD&name=ranger_audits"`
 
 ## Enabled Audit provider summary for services.
-Example: Ambari UI > HDFS > Configs > Advanced > Advanced ranger-<service>-audit
+Ambari UI --> HDFS --> Configs --> Advanced --> Advanced ranger-`hdfs`-audit --> Check [Audit provider summary enabled] 
+Ref: https://cwiki.apache.org/confluence/display/RANGER/Ranger+0.5+Audit+Configuration#Ranger0.5AuditConfiguration-Summarization 
 
 ## Delete the collection: 
 ```shell
@@ -200,3 +201,11 @@ $SOLR_INSTALL_HOME/server/scripts/cloud-scripts/zkcli.sh -zkhost  $ZK_HOST:2181 
 * You can verify by logging into the `Ranger Admin Web interface ­> Audit > Plugins`
 * Make sure to create required policies for users. If users are getting denied, please check the audit logs.
 
+## Performance Tuning for Ambari Infra
+Ref: https://docs.hortonworks.com/HDPDocuments/Ambari-2.6.2.0/bk_ambari-operations/content/performance_tuning_for_ambari_infra.html
+
+## Securing Solr Collections with Ranger + Kerberos
+Ref: https://community.hortonworks.com/articles/15159/securing-solr-collections-with-ranger-kerberos.html
+
+## Setup Ranger to use Ambari Infra Solr enabled in SSL
+Ref: https://community.hortonworks.com/articles/92987/setup-ranger-to-use-ambari-infra-solr-enabled-in-s.html
