@@ -122,7 +122,7 @@ Screenshot of `SOLR UI>>Cloud>>graph`
 
 ## Set TTL value:
 
-[Set TTL doc] (https://community.hortonworks.com/articles/63853/solr-ttl-auto-purging-solr-documents-ranger-audits.html)
+
 
 ###### Download the `solrconfig.xml` from Zookeeper
 ```shell
