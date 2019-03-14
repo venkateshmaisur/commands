@@ -163,6 +163,31 @@ http://<localhost>:8886/solr/admin/collections?action=CREATE&name=ranger_audits&
 6. curl -i --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=CREATE&name=ranger&numShards=2&replicationFactor=2&maxShardsPerNode=2&createNodeSet=<zk>:2181,<zk>:2181,<zk>:2181/solr&collection.configName=ranger_audits
 
 ```
+## Deleting Indexed Data
+
+In delete mode `(-m delete)`, the program deletes data from the Solr collection. This mode uses the filter field `(-f FITLER_FIELD)` option to control which data should be removed from the index.
+
+The command below will delete log entries from the hadoop_logs collection, which have been created before `August 29, 2017`, we'll use the -f option to specify the field in the Solr collection to use as a filter field, and the -e option to denote the end of the range of values to remove.
+
+`infra-solr-data-manager -m delete -s http://<solr-hostname>:8886/solr -c hadoop_logs -f logtime -e 2017-08-29T12:00:00.000Z`
+
+## Archiving Indexed Data
+
+In archive mode, the program fetches data from the Solr collection and writes it out to HDFS or S3, then deletes the data.
+
+`infra-solr-data-manager -m archive -s http://<solr-hostname>:8886/solr -c hadoop_logs -f logtime -d 1 -r 10 -w 100 -x /tmp -v`
+ 
+## Saving Indexed Data
+
+Saving is similar to Archiving data except that the data is not deleted from Solr after the files are created and uploaded. The Save mode is recommended for testing that the data is written as expected before running the program in Archive mode with the same parameters.
+
+The below example will save the last 3 days of hdfs audit logs into HDFS path "/" with the user hdfs, fetching data from a kerberized Solr.
+
+```shell
+infra-solr-data-manager -m save -s http://<solr-hostname>:8886/solr -c audit_logs -f logtime -d 3 -r 10 -w 100 -q type:\”hdfs_audit\” -j hdfs_audit -k /etc/security/keytabs/ambari-infra-solr.service.keytab -n infra-solr/c6401.ambari.apache.org@AMBARI.APACHE.ORG -u hdfs -p /
+```
+[GitHub Pages](https://pages.github.com/)
+https://docs.hortonworks.com/HDPDocuments/Ambari-2.6.2.0/bk_ambari-operations/content/amb_infra_arch_n_purge_command_line_operations.html
 
 ## Configuring Solr for Ranger
 Solr needs to be configured to use Ranger Authorization implementation. For that, run the following command on one of the Solr host
@@ -174,3 +199,4 @@ $SOLR_INSTALL_HOME/server/scripts/cloud-scripts/zkcli.sh -zkhost  $ZK_HOST:2181 
 * You can check the solr.log for any errors
 * You can verify by logging into the `Ranger Admin Web interface ­> Audit > Plugins`
 * Make sure to create required policies for users. If users are getting denied, please check the audit logs.
+
