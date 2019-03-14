@@ -211,10 +211,12 @@ Solr needs to be configured to use Ranger Authorization implementation. For that
 $SOLR_INSTALL_HOME/server/scripts/cloud-scripts/zkcli.sh -zkhost  $ZK_HOST:2181 -cmd put /solr/security.json '{"authentication":{"class": "org.apache.solr.security.KerberosPlugin"},"authorization":{"class": "org.apache.ranger.authorization.solr.authorizer.RangerSolrAuthorizer"}}'
 ```
 
-- Restart all the Solr instances
-- You can check the solr.log for any errors
-* You can verify by logging into the `Ranger Admin Web interface ­> Audit > Plugins`
-* Make sure to create required policies for users. If users are getting denied, please check the audit logs.
+1. Restart all the Solr instances
+2. You can check the solr.log for any errors
+3. You can verify by logging into the `Ranger Admin Web interface ­> Audit > Plugins`
+4. Make sure to create required policies for users. If users are getting denied, please check the audit logs.
+
+##########################################################################################
 
 - [Performance Tuning for Ambari Infra](https://docs.hortonworks.com/HDPDocuments/Ambari-2.6.2.0/bk_ambari-operations/content/performance_tuning_for_ambari_infra.html)
 - [Securing Solr Collections with Ranger + Kerberos](https://community.hortonworks.com/articles/15159/securing-solr-collections-with-ranger-kerberos.html)
