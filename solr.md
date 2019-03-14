@@ -34,7 +34,11 @@ curl --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=
 curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=LIST&wt=json"
 curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=CLUSTERSTATUS&wt=json"
 ```
-
+###### Usefull curl's
+```shell
+curl -ik --negotiate -u: "https://`hostname -f`:8886/solr/admin/cores?action=STATUS&wt=json&indent=true"
+curl -ik --negotiate -u: "https://`hostname -f`:8886/solr/admin/collections?action=clusterstatus&wt=json&indent=true"
+```
 ###### Disable kerberos cache for solr
 
 ```shell
@@ -77,3 +81,29 @@ JAVA_GC_LOG_DIR=/opt/solr
 GC_TUNE="-XX:+UseG1GC -XX:+PerfDisableSharedMem -XX:+ParallelRefProcEnabled -XX:G1HeapRegionSize=15m -XX:MaxGCPauseMillis=250 -XX:InitiatingHeapOccupancyPercent=75 -XX:+UseLargePages -XX:+AggressiveOpts -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=${JAVA_GC_LOG_DIR%/}/" 
 ```
 
+# Solr Triage
+
+###### attach solrconfig.xml 
+```shell
+#/usr/lib/ambari-infra-solr/server/scripts/cloud-scripts/zkcli.sh -zkhost 
+<ZkHost>:2181 -cmd getfile /infra-solr/configs/ranger_audits/solrconfig.xml solrconfig.xml 
+```
+
+`du -sch /opt/ambari_infra_solr/data/* `
+
+###### attach state.json 
+```shell
+#/usr/lib/ambari-infra-solr/server/scripts/cloud-scripts/zkcli.sh -zkhost apollo2.openstacklocal:2181 -cmd getfile /infra-solr/collections/ranger_audits/state.json state.json
+```
+###### Collecting OS related outputs ("root" required) as well ambari infra configs and logs.
+```shell
+sudo sh -xc '(date;hostname -A;uname -a;top -b -n 1 -c;ps auxwwwf;netstat -aopen;free -g;ifconfig;cat /proc/meminfo;df -h;mount;vmstat -d;nscd -g;iptables -t nat -nL;env;sysctl -a;sar -A;date)&>/tmp/os_cmds.out'
+```
+```shell
+ls -ltr /var/log/ambari-infra-solr/ > /var/tmp/solrls.txt
+```
+```shell
+tar -czvhf ./ambari_infra_$(hostname)_$(date +"%Y%m%d%H%M%S").tgz /etc/ambari-infra-solr/conf/* /var/tmp/solrls.txt  /tmp/os_cmds.out /var/log/ambari-infra-solr/solr.log /var/log/ambari-infra-solr/solr_gc.log 
+```
+
+Screenshot of `SOLR UI>>Cloud>>graph`
