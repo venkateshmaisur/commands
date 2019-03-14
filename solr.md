@@ -122,7 +122,7 @@ Screenshot of `SOLR UI>>Cloud>>graph`
 
 ## Set TTL value:
 
-Refer : https://community.hortonworks.com/articles/63853/solr-ttl-auto-purging-solr-documents-ranger-audits.html
+[Set TTL doc] (https://community.hortonworks.com/articles/63853/solr-ttl-auto-purging-solr-documents-ranger-audits.html)
 
 ###### Download the `solrconfig.xml` from Zookeeper
 ```shell
@@ -186,8 +186,8 @@ The below example will save the last 3 days of hdfs audit logs into HDFS path "/
 ```shell
 infra-solr-data-manager -m save -s http://<solr-hostname>:8886/solr -c audit_logs -f logtime -d 3 -r 10 -w 100 -q type:\”hdfs_audit\” -j hdfs_audit -k /etc/security/keytabs/ambari-infra-solr.service.keytab -n infra-solr/c6401.ambari.apache.org@AMBARI.APACHE.ORG -u hdfs -p /
 ```
-[GitHub Pages](https://pages.github.com/)
-https://docs.hortonworks.com/HDPDocuments/Ambari-2.6.2.0/bk_ambari-operations/content/amb_infra_arch_n_purge_command_line_operations.html
+[Archiving & Purging Data] (https://docs.hortonworks.com/HDPDocuments/Ambari-2.6.2.0/bk_ambari-operations/content/amb_infra_arch_n_purge_command_line_operations.html)
+
 
 ## Configuring Solr for Ranger
 Solr needs to be configured to use Ranger Authorization implementation. For that, run the following command on one of the Solr host
