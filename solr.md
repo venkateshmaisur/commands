@@ -16,10 +16,7 @@ https://bhagadepravin.github.io/commands/solr
 - [Archiving Indexed Data](https://github.com/bhagadepravin/commands/blob/master/solr.md#archiving-indexed-data)
 - [Saving Indexed Data](https://github.com/bhagadepravin/commands/blob/master/solr.md#saving-indexed-data)
 - [Configuring Solr for Ranger](https://github.com/bhagadepravin/commands/blob/master/solr.md#configuring-solr-for-ranger)
-- [Performance Tuning for Ambari Infra](https://docs.hortonworks.com/HDPDocuments/Ambari-2.6.2.0/bk_ambari-operations/content/performance_tuning_for_ambari_infra.html)
-- [Securing Solr Collections with Ranger + Kerberos](https://community.hortonworks.com/articles/15159/securing-solr-collections-with-ranger-kerberos.html)
-
-
+============================================================================================================================
 
 For a Kerberos env kinit with Ambari Infra keytab
 ###### Kinit with Ambari Infra keytab
@@ -219,11 +216,12 @@ $SOLR_INSTALL_HOME/server/scripts/cloud-scripts/zkcli.sh -zkhost  $ZK_HOST:2181 
 * You can verify by logging into the `Ranger Admin Web interface ­> Audit > Plugins`
 * Make sure to create required policies for users. If users are getting denied, please check the audit logs.
 
-## Performance Tuning for Ambari Infra
-Ref: https://docs.hortonworks.com/HDPDocuments/Ambari-2.6.2.0/bk_ambari-operations/content/performance_tuning_for_ambari_infra.html
-
-## Securing Solr Collections with Ranger + Kerberos
-Ref: https://community.hortonworks.com/articles/15159/securing-solr-collections-with-ranger-kerberos.html
-
-## Setup Ranger to use Ambari Infra Solr enabled in SSL
-Ref: https://community.hortonworks.com/articles/92987/setup-ranger-to-use-ambari-infra-solr-enabled-in-s.html
+- [Performance Tuning for Ambari Infra](https://docs.hortonworks.com/HDPDocuments/Ambari-2.6.2.0/bk_ambari-operations/content/performance_tuning_for_ambari_infra.html)
+- [Securing Solr Collections with Ranger + Kerberos](https://community.hortonworks.com/articles/15159/securing-solr-collections-with-ranger-kerberos.html)
+- [Setup Ranger to use Ambari Infra Solr enabled in SSL](https://community.hortonworks.com/articles/92987/setup-ranger-to-use-ambari-infra-solr-enabled-in-s.html)
+- [User authentication from Windows Workstation to HDP Realm Using MIT Kerberos Client (with Firefox)](https://community.hortonworks.com/articles/28537/user-authentication-from-windows-workstation-to-hd.html)
+- [Setup Ambari Infra Solr to store indices on HDFS](https://community.hortonworks.com/articles/87093/setup-ambari-infra-solr-to-store-indices-on-hdfs.html)
+- [Banana](https://github.com/lucidworks/banana/wiki/Installation-and-Quick-Start)
+- [ams-solr-metrics-mpack](https://github.com/oleewere/ams-solr-metrics-mpack)
+- []
+- []
