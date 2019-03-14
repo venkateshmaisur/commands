@@ -2,15 +2,13 @@
 
 https://bhagadepravin.github.io/commands/solr
 
-## Random Commands
-`/usr/hdp/<version>/zookeeper/bin/zkCli.sh -server `hostname -f`:2181`  
-
-For a Kerberos env kinit with with keytab
+For a Kerberos env kinit with Ambari Infra keytab
 ###### Kinit with Ambari Infra keytab
 ```shell
 kinit -kt /etc/security/keytabs/ambari-infra-solr.service.keytab $(klist -kt /etc/security/keytabs/ambari-infra-solr.service.keytab |sed -n "4p"|cut -d ' ' -f7)
 ```
 
+# Delete Collections :spider:
 ###### This is for Ranger audit collection
 ```shell
 curl --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=DELETE&name=ranger_audits"
