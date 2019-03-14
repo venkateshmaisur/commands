@@ -2,7 +2,8 @@
 
 https://bhagadepravin.github.io/commands/solr
 
-## Delete collection by running curl from solr node
+## Random Commands
+`/usr/hdp/<version>/zookeeper/bin/zkCli.sh -server `hostname -f`:2181`  
 
 For a Kerberos env kinit with with keytab
 ###### Kinit with Ambari Infra keytab
@@ -39,6 +40,8 @@ curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?act
 curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/cores?action=STATUS&wt=json&indent=true"
 curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=clusterstatus&wt=json&indent=true"
 curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=delete&name=ranger_audits"
+curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?collection=ranger_audit&shard=shard1∾tion=SPLITSHARD
+
 ```
 ###### Disable kerberos cache for solr
 
@@ -91,7 +94,7 @@ curl -iv --negotiate -u : http://<solr-hostname>:8983/solr
 
 # Solr Triage
 
-###### attach solrconfig.xml 
+###### Get solrconfig.xml 
 ```shell
 /usr/lib/ambari-infra-solr/server/scripts/cloud-scripts/zkcli.sh -zkhost 
 <ZkHost>:2181 -cmd getfile /infra-solr/configs/ranger_audits/solrconfig.xml solrconfig.xml 
@@ -102,7 +105,7 @@ grep SOLR_HOME /etc/ambari-infra-solr/conf/infra-solr-env.sh
 du -h /opt/ambari_infra_solr/data
 ```
 
-###### attach state.json 
+###### Get state.json 
 ```shell
 /usr/lib/ambari-infra-solr/server/scripts/cloud-scripts/zkcli.sh -zkhost apollo2.openstacklocal:2181 -cmd getfile /infra-solr/collections/ranger_audits/state.json state.json
 ```
@@ -141,4 +144,35 @@ Edit the file or use sed to replace the `90 Days` in the `solrconfig.xml`
 ## Enabled Audit provider summary for services.
 Example: Ambari UI > HDFS > Configs > Advanced > Advanced ranger-<service>-audit
 
+## Delete the collection: 
+```shell
+/usr/lib/ambari-infra-solr-client/solrCloudCli.sh --zookeeper-connect-string <zk>:2181,<zk>:2181,<zk>:2181/infra-solr --delete-collection --collection ranger_audits 
 
+http://<localhost>:8886/solr/admin/collections?action=CREATE&name=ranger_audits&numShards=2&replicationFactor=2&maxShardsPerNode=2&createNodeSet=<zk>:2181,<zk>:2181,<zk>:2181/infra-solr&collection.configName=ranger_audits
+```
+## Create the collection: 
+```shell
+`1. /usr/lib/ambari-infra-solr-client/solrCloudCli.sh --zookeeper-connect-string <zk>:2181,<zk>:2181,<zk>:2181/infra-solr --create-collection --collection ranger_audits --config-set ranger_audits --shards 2 --replication 2 --max-shards 2 
+
+2. /usr/lib/ambari-infra-solr-client/solrCloudCli.sh --zookeeper-connect-string <zk>:2181,<zk>:2181,<zk>:2181 --znode /infra-solr --setup-kerberos-plugin --jaas-file /etc/ambari-infra-solr/conf/infra_solr_jaas.conf --secure --security-json-location /etc/ambari-infra-solr/conf/security.json 
+
+3. /usr/lib/ambari-infra-solr-client/solrCloudCli.sh --zookeeper-connect-string <zk>:2181,<zk>:2181,<zk>:2181/infra-solr --create-collection --collection ranger_audits --config-set ranger_audits --shards 1 --replication 1 --max-shards 3 --retry 5 --interval 10 --no-sharding --jaas-file /etc/ambari-infra-solr/conf/infra_solr_jaas.conf
+
+4. /opt/lucidworks-hdpsearch/solr/bin/solr create -c collection -n configset -s 1 -rf 1
+
+5. curl -i --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=CREATE&ranger_audits=newCollection&numShards=2&replicationFactor=2"
+
+6. curl -i --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=CREATE&name=ranger&numShards=2&replicationFactor=2&maxShardsPerNode=2&createNodeSet=<zk>:2181,<zk>:2181,<zk>:2181/solr&collection.configName=ranger_audits
+
+```
+
+## Configuring Solr for Ranger
+Solr needs to be configured to use Ranger Authorization implementation. For that, run the following command on one of the Solr host
+```shell
+$SOLR_INSTALL_HOME/server/scripts/cloud-scripts/zkcli.sh -zkhost  $ZK_HOST:2181 -cmd put /solr/security.json '{"authentication":{"class": "org.apache.solr.security.KerberosPlugin"},"authorization":{"class": "org.apache.ranger.authorization.solr.authorizer.RangerSolrAuthorizer"}}'
+```
+
+* Restart all the Solr instances
+* You can check the solr.log for any errors
+* You can verify by logging into the `Ranger Admin Web interface ­> Audit > Plugins`
+* Make sure to create required policies for users. If users are getting denied, please check the audit logs.
