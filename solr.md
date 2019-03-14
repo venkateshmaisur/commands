@@ -69,4 +69,11 @@ java -cp /usr/lib/ambari-infra-solr/server/solr-webapp/webapp/WEB-INF/lib/lucene
 ```java
 java -cp /usr/lib/ambari-infra-solr/server/solr-webapp/webapp/WEB-INF/lib/lucene-core-5.5.2.jar org.apache.lucene.index.CheckIndex INDEX_DATA_PATH -exorcise
 ```
-​
+
+## Enable Heap dump
+NOTE: Please specify `JAVA_GC_LOG_DIR` to a disk volume which has at least 10GB disk space (with Xmx8GB) 
+```java
+JAVA_GC_LOG_DIR=/opt/solr 
+GC_TUNE="-XX:+UseG1GC -XX:+PerfDisableSharedMem -XX:+ParallelRefProcEnabled -XX:G1HeapRegionSize=15m -XX:MaxGCPauseMillis=250 -XX:InitiatingHeapOccupancyPercent=75 -XX:+UseLargePages -XX:+AggressiveOpts -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=${JAVA_GC_LOG_DIR%/}/" 
+```
+
