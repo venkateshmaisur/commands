@@ -2,6 +2,8 @@
 
 https://bhagadepravin.github.io/commands/solr
 
+- [download config] (https://github.com/bhagadepravin/commands/blob/master/solr.md#download-ambariinfra-config)
+
 For a Kerberos env kinit with Ambari Infra keytab
 ###### Kinit with Ambari Infra keytab
 ```shell
