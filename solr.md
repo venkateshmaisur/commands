@@ -36,8 +36,9 @@ curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?act
 ```
 ###### Usefull curl's
 ```shell
-curl -ik --negotiate -u: "https://`hostname -f`:8886/solr/admin/cores?action=STATUS&wt=json&indent=true"
-curl -ik --negotiate -u: "https://`hostname -f`:8886/solr/admin/collections?action=clusterstatus&wt=json&indent=true"
+curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/cores?action=STATUS&wt=json&indent=true"
+curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=clusterstatus&wt=json&indent=true"
+curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=delete&name=ranger_audits"
 ```
 ###### Disable kerberos cache for solr
 
@@ -80,7 +81,7 @@ NOTE: Please specify `JAVA_GC_LOG_DIR` to a disk volume which has at least 10GB 
 JAVA_GC_LOG_DIR=/opt/solr 
 GC_TUNE="-XX:+UseG1GC -XX:+PerfDisableSharedMem -XX:+ParallelRefProcEnabled -XX:G1HeapRegionSize=15m -XX:MaxGCPauseMillis=250 -XX:InitiatingHeapOccupancyPercent=75 -XX:+UseLargePages -XX:+AggressiveOpts -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=${JAVA_GC_LOG_DIR%/}/" 
 ```
-###### Kerberos Debug
+## Kerberos Debug
 ```shell
 export KRB5_TRACE=/tmp/curl-krb.log
 kinit <user-principal>
@@ -95,8 +96,11 @@ curl -iv --negotiate -u : http://<solr-hostname>:8983/solr
 /usr/lib/ambari-infra-solr/server/scripts/cloud-scripts/zkcli.sh -zkhost 
 <ZkHost>:2181 -cmd getfile /infra-solr/configs/ranger_audits/solrconfig.xml solrconfig.xml 
 ```
-
-`du -sch /opt/ambari_infra_solr/data/* `
+```java
+du -sch /opt/ambari_infra_solr/data/*
+grep SOLR_HOME /etc/ambari-infra-solr/conf/infra-solr-env.sh
+du -h /opt/ambari_infra_solr/data
+```
 
 ###### attach state.json 
 ```shell
@@ -114,3 +118,27 @@ tar -czvhf ./ambari_infra_$(hostname)_$(date +"%Y%m%d%H%M%S").tgz /etc/ambari-in
 ```
 
 Screenshot of `SOLR UI>>Cloud>>graph`
+
+## Set TTL value:
+
+Refer : https://community.hortonworks.com/articles/63853/solr-ttl-auto-purging-solr-documents-ranger-audits.html
+
+###### Download the `solrconfig.xml` from Zookeeper
+```shell
+/usr/lib/ambari-infra-solr/server/scripts/cloud-scripts/zkcli.sh --zkhost horton0.example.com:2181 -cmd getfile /infra-solr/configs/ranger_audits/solrconfig.xml solrconfig.xml
+```
+Edit the file or use sed to replace the `90 Days` in the `solrconfig.xml`
+`sed -i 's/+90DAYS/+14DAYS/g' solrconfig.xml`
+
+###### Upload the config back to Zookeeper
+
+```shell
+/usr/lib/ambari-infra-solr/server/scripts/cloud-scripts/zkcli.sh --zkhost horton0.example.com:2181 -cmd putfile /infra-solr/configs/ranger_audits/solrconfig.xml solrconfig.xml
+```
+###### Reload the config
+`curl -v --negotiate -u : "http://horton0.example.com:8983/solr/admin/collections?action=RELOAD&name=ranger_audits"`
+
+## Enabled Audit provider summary for services.
+Example: Ambari UI > HDFS > Configs > Advanced > Advanced ranger-<service>-audit
+
+
