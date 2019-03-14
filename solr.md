@@ -96,7 +96,7 @@ curl -iv --negotiate -u : http://<solr-hostname>:8983/solr
 /usr/lib/ambari-infra-solr/server/scripts/cloud-scripts/zkcli.sh -zkhost 
 <ZkHost>:2181 -cmd getfile /infra-solr/configs/ranger_audits/solrconfig.xml solrconfig.xml 
 ```
-```java
+```shell
 du -sch /opt/ambari_infra_solr/data/*
 grep SOLR_HOME /etc/ambari-infra-solr/conf/infra-solr-env.sh
 du -h /opt/ambari_infra_solr/data
