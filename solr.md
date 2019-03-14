@@ -2,7 +2,24 @@
 
 https://bhagadepravin.github.io/commands/solr
 
+- [Delete Collections](https://github.com/bhagadepravin/commands/blob/master/solr.md#delete-collections)
 - [download config](https://github.com/bhagadepravin/commands/blob/master/solr.md#download-ambariinfra-config)
+- [Upload AmbariInfra config](https://github.com/bhagadepravin/commands/blob/master/solr.md#upload-ambariinfra-config)
+- [Solr corruption](https://github.com/bhagadepravin/commands/blob/master/solr.md#solr-corruption)
+- [Enable Heap dump](https://github.com/bhagadepravin/commands/blob/master/solr.md#enable-heap-dump)
+- [Kerberos Debug](https://github.com/bhagadepravin/commands/blob/master/solr.md#kerberos-debug)
+- [Solr Triage](https://github.com/bhagadepravin/commands/blob/master/solr.md#solr-triage)
+- [Set TTL value:](https://github.com/bhagadepravin/commands/blob/master/solr.md#set-ttl-value)
+- [Enabled Audit provider summary for services.](https://github.com/bhagadepravin/commands/blob/master/solr.md#enabled-audit-provider-summary-for-services)
+- [Create the collection](https://github.com/bhagadepravin/commands/blob/master/solr.md#create-the-collection)
+- [Deleting Indexed Data](https://github.com/bhagadepravin/commands/blob/master/solr.md#deleting-indexed-data)
+- [Archiving Indexed Data](https://github.com/bhagadepravin/commands/blob/master/solr.md#archiving-indexed-data)
+- [Saving Indexed Data](https://github.com/bhagadepravin/commands/blob/master/solr.md#saving-indexed-data)
+- [Configuring Solr for Ranger](https://github.com/bhagadepravin/commands/blob/master/solr.md#configuring-solr-for-ranger)
+- [Performance Tuning for Ambari Infra](https://docs.hortonworks.com/HDPDocuments/Ambari-2.6.2.0/bk_ambari-operations/content/performance_tuning_for_ambari_infra.html)
+- [Securing Solr Collections with Ranger + Kerberos](https://community.hortonworks.com/articles/15159/securing-solr-collections-with-ranger-kerberos.html)
+
+
 
 For a Kerberos env kinit with Ambari Infra keytab
 ###### Kinit with Ambari Infra keytab
@@ -123,8 +140,7 @@ tar -czvhf ./ambari_infra_$(hostname)_$(date +"%Y%m%d%H%M%S").tgz /etc/ambari-in
 Screenshot of `SOLR UI>>Cloud>>graph`
 
 ## Set TTL value:
-
-Ref: https://community.hortonworks.com/articles/63853/solr-ttl-auto-purging-solr-documents-ranger-audits.html
+- [Follow link to configure TTL value:](https://github.com/bhagadepravin/commands/blob/master/solr.md#set-ttl-value)
 
 ###### Download the `solrconfig.xml` from Zookeeper
 ```shell
