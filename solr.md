@@ -1,4 +1,4 @@
-# Solr Commands
+:radio_button: Solr Commands
 
 https://bhagadepravin.github.io/commands/solr
 
@@ -8,7 +8,7 @@ For a Kerberos env kinit with Ambari Infra keytab
 kinit -kt /etc/security/keytabs/ambari-infra-solr.service.keytab $(klist -kt /etc/security/keytabs/ambari-infra-solr.service.keytab |sed -n "4p"|cut -d ' ' -f7)
 ```
 
-# Delete Collections :spider:
+# Delete Collections :knife:
 ###### This is for Ranger audit collection
 ```shell
 curl --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=DELETE&name=ranger_audits"
