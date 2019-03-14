@@ -16,8 +16,8 @@ https://bhagadepravin.github.io/commands/solr
 - [Archiving Indexed Data](https://github.com/bhagadepravin/commands/blob/master/solr.md#archiving-indexed-data)
 - [Saving Indexed Data](https://github.com/bhagadepravin/commands/blob/master/solr.md#saving-indexed-data)
 - [Configuring Solr for Ranger](https://github.com/bhagadepravin/commands/blob/master/solr.md#configuring-solr-for-ranger)
-============================================================================================================================
-
+====================================================================================
+                                                                                     
 For a Kerberos env kinit with Ambari Infra keytab
 ###### Kinit with Ambari Infra keytab
 ```shell
@@ -211,8 +211,8 @@ Solr needs to be configured to use Ranger Authorization implementation. For that
 $SOLR_INSTALL_HOME/server/scripts/cloud-scripts/zkcli.sh -zkhost  $ZK_HOST:2181 -cmd put /solr/security.json '{"authentication":{"class": "org.apache.solr.security.KerberosPlugin"},"authorization":{"class": "org.apache.ranger.authorization.solr.authorizer.RangerSolrAuthorizer"}}'
 ```
 
-* Restart all the Solr instances
-* You can check the solr.log for any errors
+- Restart all the Solr instances
+- You can check the solr.log for any errors
 * You can verify by logging into the `Ranger Admin Web interface ­> Audit > Plugins`
 * Make sure to create required policies for users. If users are getting denied, please check the audit logs.
 
