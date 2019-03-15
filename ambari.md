@@ -44,3 +44,9 @@ $ update host_version set state='INSTALLED' where repo_version_id=101;
 
 $ update host_version set state='CURRENT' where repo_version_id=151; 
 ```
+
+##### Ambari Kerberos Descriptor
+
+`curl -u username:password -X GET http://<ambari-hostname>:8080/api/v1/clusters/c174/artifacts/kerberos_descriptor > kerberos_descriptor.json`
+
+`curl -u username:password -X PUT -d @kerberos_descriptor.json http://<ambari-hostname>:8080/api/v1/clusters/c174/artifacts/kerberos_descriptor`
