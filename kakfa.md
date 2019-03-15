@@ -1,9 +1,9 @@
 # Kafka Commands
 
-##### List
+## List
 `/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --list --zookeeper `hostname -f`:2181`
 
-##### Create
+## Create
 `/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --create --topic ATLAS_HOOK --zookeeper `hostname -f`:2181 --partitions 1 --replication-factor 1`
 
 ##### Describe topics
@@ -74,12 +74,12 @@ Change the following value from WARN to DEBUG:
 WARN Error while fetching metadata with correlation id 30 : {test=UNKNOWN_TOPIC_OR_PARTITION} (org.apache.kafka.clients.NetworkClient)
 WARN Error while fetching metadata with correlation id 31 : {test=UNKNOWN_TOPIC_OR_PARTITION} (org.apache.kafka.clients.NetworkClient)
 ```
---> Check Ranger Permission
+##### Check Ranger Permission
 ==========================================================================================================
 
 ```
 WARN Error while fetching metadata with correlation id 26 : {test1=LEADER_NOT_AVAILABLE} (org.apache.kafka.clients.NetworkClient)
 WARN Error while fetching metadata with correlation id 27 : {test1=LEADER_NOT_AVAILABLE} (org.apache.kafka.clients.NetworkClient)[2018
 ```
---> Check server.log or check advertised.host.name
+##### Check server.log or check advertised.host.name
 ==========================================================================================================
