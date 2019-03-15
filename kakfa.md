@@ -71,7 +71,7 @@ Change the following value from WARN to DEBUG:
 # Error and its Solution
 
 ```
-[2018-05-26 07:35:39,612] WARN Error while fetching metadata with correlation id 30 : {test=UNKNOWN_TOPIC_OR_PARTITION} (org.apache.kafka.clients.NetworkClient)
-[2018-05-26 07:35:39,714] WARN Error while fetching metadata with correlation id 31 : {test=UNKNOWN_TOPIC_OR_PARTITION} (org.apache.kafka.clients.NetworkClient)
+WARN Error while fetching metadata with correlation id 30 : {test=UNKNOWN_TOPIC_OR_PARTITION} (org.apache.kafka.clients.NetworkClient)
+WARN Error while fetching metadata with correlation id 31 : {test=UNKNOWN_TOPIC_OR_PARTITION} (org.apache.kafka.clients.NetworkClient)
 ```
-* `Check Ranger Permission`
+--> Check Ranger Permission
