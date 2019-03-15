@@ -40,7 +40,7 @@ Run below command to get the information about hosts and the current repo info f
 
 Update the host_version with 'INSTALLED' state 
 
-`$ update host_version set state='INSTALLED' where repo_version_id=101; `
+$ update host_version set state='INSTALLED' where repo_version_id=101;
 
 $ update host_version set state='CURRENT' where repo_version_id=151; 
 ```
