@@ -7,7 +7,7 @@ ambari &amp; postgres cmd cheatsheet
 
 https://developer.ibm.com/hadoop/2015/10/29/removing-hung-progress-operations-ambari/
 
-```sh
+```sql
 ambari=> select distinct status from host_role_command;
   status   
 -----------
