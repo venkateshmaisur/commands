@@ -1,7 +1,7 @@
  - [x] Solr Commands https://bhagadepravin.github.io/commands/solr
  - [x] Ambari Commands https://bhagadepravin.github.io/commands/ambari
  - [x] Ranger Commands https://bhagadepravin.github.io/commands/ranger
- - [x] Haproxy Commands https://bhagadepravin.github.io/commands/haproxy
+ - [x] Haproxy Commands https://bhagadepravin.github.io/commands/haproxy-tcp-mode
  - [] 
  - [] 
  - [] 
