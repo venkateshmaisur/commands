@@ -42,4 +42,39 @@ mysql -u ambari "-pbigdata" --force ambari < /tmp/ambari.innodb.mysql
 `mysql_ssl_rsa_setup --uid=mysql`
 
 
+##### Useful Cmds
 
+`egrep -a2 -i "ranger.ldap.ad.domain|ranger.ldap.ad.url|ranger.ldap.ad.base.dn|ranger.ldap.ad.bind.dn|ranger.ldap.ad.bind.password|ranger.ldap.ad.referral" /etc/ranger/admin/conf/ranger-admin-site.xml`
+
+```sql
+SET FOREIGN_KEY_CHECKS=0;
+delete from ranger.x_portal_user where first_name = 'amb_ranger_admin';
+SET FOREIGN_KEY_CHECKS=1;
+```
+
+`/usr/hdp/current/ranger-admin/ews/ranger-admin-services.sh`
+
+
+
+##### Ranger Quicklinks
+
+```
+1. Login into Ambari enter username and password.
+
+2. Open a new tab and paste below URL and enter.
+http://<ambari-server-hostname>:8080/api/v1/stacks/HDP/versions/2.3/services/RANGER/quicklinks/quicklinks.json
+Paste the output here.
+
+3. Check below properties:
+ranger.service.https.attrib.ssl.enabled = true {should be true for HTPPS}
+ranger.service.http.enabled = false
+
+4. If above two properties are not set properly then we need to modify metainfo.xml.
+Edit " /var/lib/ambari-server/resources/common-services/RANGER/0.5.0/quicklinks/quicklinks.json "
+Set the properties accordingly and save.
+ranger.service.https.attrib.ssl.enabled = true
+ranger.service.http.enabled = false
+ 
+5. Restart Ambari Server
+ambari-server restart
+```
