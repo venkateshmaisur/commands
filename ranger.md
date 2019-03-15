@@ -38,4 +38,8 @@ DROP DATABASE ambari;
 CREATE DATABASE ambari;
 mysql -u ambari "-pbigdata" --force ambari < /tmp/ambari.innodb.mysql
 ```
+##### MYSQL SSL
+`mysql_ssl_rsa_setup --uid=mysql`
+
+
 
