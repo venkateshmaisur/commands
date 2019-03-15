@@ -17,6 +17,12 @@
 ##### Create pkcs12 cert
 `openssl pkcs12 -export -out /root/ca/intermediate/private/ranger-plugin.pkcs12 -inkey /root/ca/intermediate/private/client.key.pem -in /root/ca/intermediate/certs/client.cert.pem -certfile /root/ca/certs/ca.cert.pem -certfile /root/ca/intermediate/certs/intermediate.cert.pem`
 
+##### Create a keystore in PKCS12 format from your private key file, certificate and root public certificate
+
+```bash
+openssl pkcs12 -export -out corp_cert_chain.pfx -inkey <private-key>.key -in <cert.cer> -certfile <root_intermediate>.cer
+```
+
 ##### Export the private key file from the pfx file
 `openssl pkcs12 -in filename.pfx -nocerts -out key.pem`
 
