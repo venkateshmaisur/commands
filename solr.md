@@ -166,7 +166,7 @@ http://<localhost>:8886/solr/admin/collections?action=CREATE&name=ranger_audits&
 ```
 ## Create the collection: 
 ```shell
-`1. /usr/lib/ambari-infra-solr-client/solrCloudCli.sh --zookeeper-connect-string <zk>:2181,<zk>:2181,<zk>:2181/infra-solr --create-collection --collection ranger_audits --config-set ranger_audits --shards 2 --replication 2 --max-shards 2 
+1. /usr/lib/ambari-infra-solr-client/solrCloudCli.sh --zookeeper-connect-string <zk>:2181,<zk>:2181,<zk>:2181/infra-solr --create-collection --collection ranger_audits --config-set ranger_audits --shards 2 --replication 2 --max-shards 2 
 
 2. /usr/lib/ambari-infra-solr-client/solrCloudCli.sh --zookeeper-connect-string <zk>:2181,<zk>:2181,<zk>:2181 --znode /infra-solr --setup-kerberos-plugin --jaas-file /etc/ambari-infra-solr/conf/infra_solr_jaas.conf --secure --security-json-location /etc/ambari-infra-solr/conf/security.json 
 
