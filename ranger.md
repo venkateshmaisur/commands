@@ -19,6 +19,7 @@ mysql_secure_installation
 ```shell
 yum install mysql-connector-java -y
 ambari-server setup --jdbc-db=mysql --jdbc-driver=/usr/share/java/mysql-connector-java.jar
+```
 
 ##### Setup Mysql
 ```sql
@@ -26,4 +27,15 @@ mysql -u root -proot
 grant all privileges on *.* to 'root'@'c174-node2.squadron-labs.com' identified by 'root' with grant option;
 ```
 
+##### MySql Dump and Restoration
+
+```sql
+mysqldump -U ambari -p ambari > /tmp/ambari.original.mysql
+cp /tmp/ambari.original.mysql /tmp/ambari.innodb.mysql
+sed -ie 's/MyISAM/INNODB/g' /tmp/ambari.innodb.mysql
+mysql -u ambari -p ambari
+DROP DATABASE ambari;
+CREATE DATABASE ambari;
+mysql -u ambari "-pbigdata" --force ambari < /tmp/ambari.innodb.mysql
+```
 
