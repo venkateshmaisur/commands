@@ -19,25 +19,25 @@ https://bhagadepravin.github.io/commands/solr
 ====================================================================================
                                                                                      
 For a Kerberos env kinit with Ambari Infra keytab
-###### Kinit with Ambari Infra keytab
+## Kinit with Ambari Infra keytab
 ```shell
 kinit -kt /etc/security/keytabs/ambari-infra-solr.service.keytab $(klist -kt /etc/security/keytabs/ambari-infra-solr.service.keytab |sed -n "4p"|cut -d ' ' -f7)
 ```
 
 # Delete Collections
-###### This is for Ranger audit collection
+## This is for Ranger audit collection
 ```shell
 curl --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=DELETE&name=ranger_audits"
 ```
 
-###### This is for Atlas collection
+## This is for Atlas collection
 ```shell
 curl --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=DELETE&name=fulltext_index"
 curl --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=DELETE&name=edge_index"
 curl --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=DELETE&name=vertex_index"
 ```
 
-###### This is for Logsearch collection
+## This is for Logsearch collection
 ```shell
 curl --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=DELETE&name=history"
 curl --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=DELETE&name=hadoop_logs"
@@ -49,7 +49,7 @@ curl --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=
 curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=LIST&wt=json"
 curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=CLUSTERSTATUS&wt=json"
 ```
-###### Usefull curl's
+## Usefull curl's
 ```shell
 curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/cores?action=STATUS&wt=json&indent=true"
 curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=clusterstatus&wt=json&indent=true"
@@ -57,13 +57,13 @@ curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?act
 curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?collection=ranger_audit&shard=shard1∾tion=SPLITSHARD
 
 ```
-###### Disable kerberos cache for solr
+## Disable kerberos cache for solr
 
 ```shell
 SOLR_OPTS="$SOLR_OPTS -Xss256k -Dsun.security.krb5.rcache=none"
 ```
 
-###### Start Ambari Infra manully
+## Start Ambari Infra manully
 ```
 #/usr/lib/ambari-infra-solr/bin/solr start -cloud -noprompt -s /opt/ambari_infra_solr/data >> /var/log/ambari-infra-solr/solr-install.log 2>&1 
 ```
@@ -139,19 +139,19 @@ Screenshot of `SOLR UI>>Cloud>>graph`
 ## Set TTL value:
 - [Follow link to configure TTL value:](https://github.com/bhagadepravin/commands/blob/master/solr.md#set-ttl-value)
 
-###### Download the `solrconfig.xml` from Zookeeper
+## Download the `solrconfig.xml` from Zookeeper
 ```shell
 /usr/lib/ambari-infra-solr/server/scripts/cloud-scripts/zkcli.sh --zkhost horton0.example.com:2181 -cmd getfile /infra-solr/configs/ranger_audits/solrconfig.xml solrconfig.xml
 ```
 Edit the file or use sed to replace the `90 Days` in the `solrconfig.xml`
 `sed -i 's/+90DAYS/+14DAYS/g' solrconfig.xml`
 
-###### Upload the config back to Zookeeper
+## Upload the config back to Zookeeper
 
 ```shell
 /usr/lib/ambari-infra-solr/server/scripts/cloud-scripts/zkcli.sh --zkhost horton0.example.com:2181 -cmd putfile /infra-solr/configs/ranger_audits/solrconfig.xml solrconfig.xml
 ```
-###### Reload the config
+## Reload the config
 `curl -v --negotiate -u : "http://horton0.example.com:8983/solr/admin/collections?action=RELOAD&name=ranger_audits"`
 
 ## Enabled Audit provider summary for services.
