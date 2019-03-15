@@ -17,6 +17,10 @@ ambari=> select distinct status from host_role_command;
  FAILED
 ```
 
-`select task_id, role, role_command, status from host_role_command where status = 'QUEUED';`
+```sql
+select task_id, role, role_command, status from host_role_command where status = 'QUEUED';
+```
 
-`update host_role_command set status = 'ABORTED' where status = 'QUEUED';`
+```sql
+update host_role_command set status = 'ABORTED' where status = 'QUEUED';
+```
