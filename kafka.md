@@ -12,20 +12,23 @@
 
 ## Describe topics
 ```sh
-/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --describe --zookeeper <zkHost>:<zkPort> --topic <TopicName>
-/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --describe --zookeeper `hostname -f`:2181 --topic ATLAS_HOOK
-/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --describe --zookeeper `hostname -f`:2181 --topic ATLAS_ENTITIES
- /usr/hdp/current/kafka-broker/bin/kafka-topics.sh --describe --zookeeper `hostname -f`:2181 --topic __consumer_offsets
+cd /usr/hdp/current/kafka-broker/bin
+./kafka-topics.sh --describe --zookeeper <zkHost>:<zkPort> --topic <TopicName>
+./kafka-topics.sh --describe --zookeeper `hostname -f`:2181 --topic ATLAS_HOOK
+./kafka-topics.sh --describe --zookeeper `hostname -f`:2181 --topic ATLAS_ENTITIES
+./kafka-topics.sh --describe --zookeeper `hostname -f`:2181 --topic __consumer_offsets
 ```
 
 ## List Consumer Group
-`/usr/hdp/current/kafka-broker/bin/kafka-consumer-groups.sh --bootstrap-server <broker host>:6667 --list --security-protocol SASL_PLAINTEXT` 
+`./kafka-consumer-groups.sh --bootstrap-server <broker host>:6667 --list --security-protocol SASL_PLAINTEXT` 
 
 ## Describe Consumer Group
-`/usr/hdp/current/kafka-broker/bin/kafka-consumer-groups.sh --describe --zookeeper <zkHost>:<zkPort> --group atlas --security-protocol SASL_PLAINTEXT`
+`./kafka-consumer-groups.sh --describe --zookeeper <zkHost>:<zkPort> --group atlas --security-protocol SASL_PLAINTEXT`
 
 ## Let's see what kind of message is flowing in this topic:
-`/usr/hdp/current/kafka-broker/bin/kafka-console-consumer.sh --zookeeper `hostname -f`:2181 --topic ATLAS_HOOK --from-beginning`
+```
+./kafka-console-consumer.sh --zookeeper `hostname -f`:2181 --topic ATLAS_HOOK --from-beginning
+```
 
 ## Console Producer :
 `/usr/hdp/current/kafka-broker/bin/bin/kafka-console-producer.sh --broker-list <broker-hostname:port> --topic <topic-name>`
@@ -51,7 +54,9 @@ rmr /config/topics/ATLAS_HOOK
 ```
 
 ## Connect to Zookeeper
-`zookeeper-client -server `hostname -f`:2181`
+```sh
+zookeeper-client -server `hostname -f`:2181
+```
 
 ##  Start Kafka manually
 ```bash
