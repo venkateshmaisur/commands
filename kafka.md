@@ -4,12 +4,17 @@
 `/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --list --zookeeper `hostname -f`:2181`
 
 ## Create
-`/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --create --topic ATLAS_HOOK --zookeeper `hostname -f`:2181 --partitions 1 --replication-factor 1`
+```sh
+/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --create --topic ATLAS_HOOK --zookeeper `hostname -f`:2181 --partitions 1 --replication-factor 1
+```
 
 ## Describe topics
-`/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --describe --zookeeper <zkHost>:<zkPort> --topic <TopicName>`
-`/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --describe --zookeeper `hostname -f`:2181 --topic ATLAS_HOOK`
-`/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --describe --zookeeper `hostname -f`:2181 --topic ATLAS_ENTITIES`
+```sh
+/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --describe --zookeeper <zkHost>:<zkPort> --topic <TopicName>
+/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --describe --zookeeper `hostname -f`:2181 --topic ATLAS_HOOK
+/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --describe --zookeeper `hostname -f`:2181 --topic ATLAS_ENTITIES
+ /usr/hdp/current/kafka-broker/bin/kafka-topics.sh --describe --zookeeper `hostname -f`:2181 --topic __consumer_offsets
+```
 
 ## List Consumer Group
 `/usr/hdp/current/kafka-broker/bin/kafka-consumer-groups.sh --bootstrap-server <broker host>:6667 --list --security-protocol SASL_PLAINTEXT` 
