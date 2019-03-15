@@ -1,6 +1,6 @@
 # Ranger Commands
 
-##### Ranger installation RHEL 6
+## Ranger installation RHEL 6
 ```sh
 yum install mysql-server mysql-connector-java -y
 /etc/init.d/mysqld start
@@ -8,26 +8,26 @@ chkconfig mysqld on
 /usr/bin/mysqladmin -u root password 'root'
 ```
 
-##### Ranger installation RHEL 7
+## Ranger installation RHEL 7
 ```sh
 yum install mysql-server mysql-connector-java -y
 systemctl start mysqld
 mysql_secure_installation
 ```
 
-##### Setup Ambari
+## Setup Ambari
 ```shell
 yum install mysql-connector-java -y
 ambari-server setup --jdbc-db=mysql --jdbc-driver=/usr/share/java/mysql-connector-java.jar
 ```
 
-##### Setup Mysql
+## Setup Mysql
 ```sql
 mysql -u root -proot
 grant all privileges on *.* to 'root'@'c174-node2.squadron-labs.com' identified by 'root' with grant option;
 ```
 
-##### MySql Dump and Restoration
+## MySql Dump and Restoration
 
 ```sql
 mysqldump -U ambari -p ambari > /tmp/ambari.original.mysql
@@ -38,11 +38,11 @@ DROP DATABASE ambari;
 CREATE DATABASE ambari;
 mysql -u ambari "-pbigdata" --force ambari < /tmp/ambari.innodb.mysql
 ```
-##### MYSQL SSL
+## MYSQL SSL
 `mysql_ssl_rsa_setup --uid=mysql`
 
 
-##### Useful Cmds
+## Useful Cmds
 
 `egrep -a2 -i "ranger.ldap.ad.domain|ranger.ldap.ad.url|ranger.ldap.ad.base.dn|ranger.ldap.ad.bind.dn|ranger.ldap.ad.bind.password|ranger.ldap.ad.referral" /etc/ranger/admin/conf/ranger-admin-site.xml`
 
@@ -56,7 +56,7 @@ SET FOREIGN_KEY_CHECKS=1;
 
 
 
-##### Ranger Quicklinks
+## Ranger Quicklinks
 
 ```
 1. Login into Ambari enter username and password.
