@@ -75,3 +75,11 @@ WARN Error while fetching metadata with correlation id 30 : {test=UNKNOWN_TOPIC_
 WARN Error while fetching metadata with correlation id 31 : {test=UNKNOWN_TOPIC_OR_PARTITION} (org.apache.kafka.clients.NetworkClient)
 ```
 --> Check Ranger Permission
+==========================================================================================================
+
+```
+WARN Error while fetching metadata with correlation id 26 : {test1=LEADER_NOT_AVAILABLE} (org.apache.kafka.clients.NetworkClient)
+WARN Error while fetching metadata with correlation id 27 : {test1=LEADER_NOT_AVAILABLE} (org.apache.kafka.clients.NetworkClient)[2018
+```
+--> Check server.log or check advertised.host.name
+==========================================================================================================
