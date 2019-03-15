@@ -110,12 +110,15 @@ server hn1.hwxblr.com 10.0.1.3:6080 check
 server hn2.hwxblr.com 10.0.1.5:6080 check
 ```
 
-Please refer for brief documentation before editing this file : https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Load_Balancer_Administration/ch-haproxy-setup-VSA.html 
+Please refer for brief documentation before editing this file : 
+https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Load_Balancer_Administration/ch-haproxy-setup-VSA.html 
 
 * Step 5: Start the HAProxy service 
+
 `service haproxy start` // STARTING HAPROXY 
 
 * Step 6: To make the HAProxy service persist through reboots 
+
 `chkconfig haproxy on`
 
 
@@ -137,8 +140,11 @@ $UDPServerAddress 127.0.0.1
 
 
 ##### Get the private key from KNOX server 
+
 `keytool -importkeystore -srckeystore gateway.jks -srcstorepass admin -srckeypass admin -destkeystore keystore.p12 -deststoretype PKCS12 -srcalias gateway-identity -deststorepass Welcome -destkeypass Welcome`
+
 `openssl pkcs12 -in keystore.p12 -passin pass:Welcome -nocerts -out hostname.key -passout pass:Welcome`
+
 `openssl rsa -in hostname.key -out server.key `
 
 ##### add knox2 certificate into haproxy.cfg
