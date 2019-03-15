@@ -25,7 +25,7 @@ select task_id, role, role_command, status from host_role_command where status =
 update host_role_command set status = 'ABORTED' where status = 'QUEUED';
 ```
 
-##### Few nodes was showing incorrect version of HDP so we followed below steps: 
+## Few nodes was showing incorrect version of HDP so we followed below steps: 
 
 ```sql
 - Take ambari DB backup 
@@ -45,7 +45,7 @@ $ update host_version set state='INSTALLED' where repo_version_id=101;
 $ update host_version set state='CURRENT' where repo_version_id=151; 
 ```
 
-##### Ambari Kerberos Descriptor
+## Ambari Kerberos Descriptor
 
 `curl -u username:password -X GET http://<ambari-hostname>:8080/api/v1/clusters/c174/artifacts/kerberos_descriptor > kerberos_descriptor.json`
 
