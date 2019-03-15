@@ -1,7 +1,9 @@
 # Kafka Commands
 
 ## List
-`/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --list --zookeeper `hostname -f`:2181`
+```sh
+/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --list --zookeeper `hostname -f`:2181
+```
 
 ## Create
 ```sh
@@ -32,15 +34,17 @@
 `/usr/hdp/current/kafka-broker/bin/bin/kafka-console-consumer.sh --bootstrap-server <BROKER_HOST:PORT> --topic <TOPIC-NAME>`
 
 ## Delete
-`/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --delete --topic ATLAS_ENTITIES --zookeeper `hostname -f`:2181`
-`/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --delete --topic ATLAS_HOOK --zookeeper `hostname -f`:2181`
+```sh
+/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --delete --topic ATLAS_ENTITIES --zookeeper `hostname -f`:2181
+/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --delete --topic ATLAS_HOOK --zookeeper `hostname -f`:2181
+```
 
 delete.topic.enable=true. == it will delete the topics which are marked for delete
 
 ## Delete kafka topic from ZK
 
-`/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --delete --topic ATLAS_HOOK --zookeeper `hostname -f`:2181`
-```bash
+```sh
+/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --delete --topic ATLAS_HOOK --zookeeper `hostname -f`:2181
 rmr /brokers/topics/ATLAS_HOOK
 rmr /admin/delete_topics/ATLAS_HOOK
 rmr /config/topics/ATLAS_HOOK
