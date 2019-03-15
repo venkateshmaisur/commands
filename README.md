@@ -3,6 +3,6 @@
  - [x] Ranger Commands https://bhagadepravin.github.io/commands/ranger
  - [x] Haproxy Commands https://bhagadepravin.github.io/commands/haproxy-tcp-mode
  - [X] SSL Commands https://bhagadepravin.github.io/commands/ssl
- - [] 
- - [] 
+ - [X] Kafka Commands https://bhagadepravin.github.io/commands/kafka
+ - [] Useful Commands https://bhagadepravin.github.io/commands/commands
  - [] 
