@@ -60,6 +60,10 @@ curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?col
 ## Disable kerberos cache for solr
 
 ```shell
+Amabri UI --> Solr --> Config --> Advanced --> Advanced solr-config-env --> solr.in.sh template
+
+ADD below parameter in the end
+
 SOLR_OPTS="$SOLR_OPTS -Xss256k -Dsun.security.krb5.rcache=none"
 ```
 
