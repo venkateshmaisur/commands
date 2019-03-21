@@ -136,8 +136,9 @@ $ModLoad imudp
 $UDPServerRun 514
 $UDPServerAddress 127.0.0.1
 ```
-`/etc/init.d/rsyslog restart`
-`/etc/init.d/haproxy restart`
+`service rsyslog restart` 
+
+`service haproxy restart`
 
 
 ##### Get the private key from KNOX server 
@@ -162,11 +163,16 @@ $ModLoad imudp
 $UDPServerRun 514 
 $UDPServerAddress 127.0.0.1 
 ```
+
 ```sh
 ╰─➤ add /etc/rsyslog.d/haproxy.conf 
 local2.* /var/log/haproxy.log 
 ```
 `service rsyslog restart` 
+
 `service haproxy restart`
 
 `tailf /var/log/haproxy.log`
+
+
+
