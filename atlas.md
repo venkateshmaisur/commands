@@ -98,3 +98,13 @@ For more into please refer : https://community.hortonworks.com/questions/91145/h
 
 ---------------------------------------------------------------------------------------------------------------------------
 
+
+
+Below are the links which might be helpful to you for getting started with atlas. 
+
+1. https://community.hortonworks.com/articles/81680/atlas-tag-based-searches-utilizing-the-atlas-rest.html 
+2. https://community.hortonworks.com/articles/39759/list-atlas-tags-and-traits.html 
+3. https://community.hortonworks.com/articles/58220/howto-install-and-configure-high-availability-on-a.html 
+4. https://community.hortonworks.com/articles/61274/import-hive-metadata-into-atlas.html 
+5. https://hortonworks.com/hadoop-tutorial/cross-component-lineage-apache-atlas/ 
+6. https://hortonworks.com/tutorial/tag-based-policies-with-apache-ranger-and-apache-atlas/ 
