@@ -23,8 +23,9 @@ export HIVE_HOME=/usr/hdp/current/hive-client
 HIVE_CONF_DIR=/usr/hdp/current/hive-client/conf
 export HIVE_CONF_DIR=/usr/hdp/current/hive-client/conf
 /usr/hdp/current/atlas-server/hook-bin/import-hive.sh
-/bin/bash /usr/hdp/current/atlas-server/hook-bin/import-hive.sh -Dsun.security.jgss.debug=true -Djavax.security.auth.useSubjectCredsOnly=false -Djava.security.auth.login.config=/etc/atlas/conf/atlas_jaas.conf 
 ```
+
+`/bin/bash /usr/hdp/current/atlas-server/hook-bin/import-hive.sh -Dsun.security.jgss.debug=true -Djavax.security.auth.useSubjectCredsOnly=false -Djava.security.auth.login.config=/etc/atlas/conf/atlas_jaas.conf`
 
 ## Atlas Backup:
 ==========
