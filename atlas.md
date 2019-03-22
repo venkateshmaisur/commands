@@ -53,7 +53,7 @@ You need to restart atlas once the import is done.
 ## Export & Import REST APIs
 
 
-# Hive Database backup
+##### Hive Database backup
 ```
 curl -X POST -u admin:admin -H "Content-Type: application/json" -H "Cache-Control: no-cache" -d '{
     "itemsToExport": [
@@ -88,8 +88,11 @@ curl -X POST -u admin:admin -H "Content-Type: application/json" -H "Cache-Contro
 }' "http://apollo1.openstacklocal:21000/api/atlas/admin/export" > Atlas-export.zip
 ```
 2. If I want to take backup of Atlas by accessing its backing stores (HBase, Solr, and Kafka) instead of using Export API, what should I do? Only exporting tables of HBase is enough? Taking a backup of Solr and Kafka is also necessary? According to https://atlas.apache.org/0.8.1/InstallationSteps.html, indexes on Solr are automatically created when Atlas Metadata Server start. Therefore I think taking a backup of Solr is not necessary. About Kafka, I recognize Kafka in Atlas is just only a message bus, so there's no need to take a backup.
+
 ==> Yes, only Hbase backup is required
+
 3. If taking an "exported" tables of HBase is enough for backup of Atlas, is loading those "exported" just before starting Atlas enough to restore Atlas?
+===>
 Yes.
 For more into please refer : https://community.hortonworks.com/questions/91145/how-to-take-backup-of-apache-atlas-and-restore-it.html
 
