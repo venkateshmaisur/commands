@@ -24,7 +24,7 @@ hive.server2.authentication.ldap.Domain=lab.hortonworks.net
 
 
 
-# ERROR's
+# ERROR's/ Knonwn Issues
 
 ```
 Caused by: javax.naming.AuthenticationException: [LDAP: error code 49 - 80090308: LdapErr: DSID-0C0903D9, comment: AcceptSecurityContext error, data 52e, v2580] 
