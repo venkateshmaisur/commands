@@ -40,6 +40,7 @@ openssl pkcs12 -export -out corp_cert_chain.pfx -inkey <private-key>.key -in <ce
 
 ##### Import .p12 file in keystore
 `keytool -importkeystore -srcstoretype pkcs12 -srckeystore file.p12 -destkeystore file.jks`
+
 `keytool -importkeystore -srckeystore [MY_FILE.p12] -srcstoretype pkcs12 -srcalias [ALIAS_SRC] -destkeystore [MY_KEYSTORE.jks] -deststoretype jks -deststorepass [PASSWORD_JKS] -destalias [ALIAS_DEST]`
 
 # Internal CA
@@ -75,3 +76,9 @@ keytool -import -keystore server.keystore.jks -storepass hadoop -alias gal4.open
 8. Import root CA cert in a new truststore:
 keytool -import -keystore server.truststore.jks -storepass hadoop -alias CARoot -file ca.crt
 ```
+
+`openssl s_client -connect <HS@-hostname>:<port> -tls1`
+`openssl s_client -connect <HS@-hostname>:<port> -tls1_1`
+`openssl s_client -connect <HS@-hostname>:<port> -tls1_2`
+  
+  
