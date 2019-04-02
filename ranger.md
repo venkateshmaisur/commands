@@ -119,3 +119,14 @@ admin_password
 b - Go to Ambari UI ==> Ranger ==> Configs ==> Admin Settings 
 ranger_admin_password
 ```
+
+##### Reset rangerusersync user's password
+
+```sh
+1. Login to RangerUI --> settings --> users/groups --> change the password for the rangerusersync user. 
+2. Login to AmbariUI --> Ranger --> configs --> Advanced --> Admin settings --> Change Rangerusersync user password to the same password you changed above. 
+3. update the password using the password manager script. 
+
+$ cd /usr/hdf/<version>/ranger-usersync/ 
+$ python /usr/hdf/<version>/ranger-usersync/updatepolicymgrpassword.py 
+```
