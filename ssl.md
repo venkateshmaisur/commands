@@ -14,6 +14,7 @@ openssl pkcs12 -in certificate.pfx -out certificate.pem -nodes
 ```
 
 ##### View certificate
+
 ```sh
 openssl x509 -in certificate.pem -text -noout
 ```
