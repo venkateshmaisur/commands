@@ -9,7 +9,8 @@
 `openssl pkcs7 -print_certs -in certificate.p7b -out certificate.pem`
 
 ##### Convert PFX to PEM
-```openssl pkcs12 -in certificate.pfx -out certificate.pem -nodes
+```
+openssl pkcs12 -in certificate.pfx -out certificate.pem -nodes
 ```
 
 ##### View certificate
