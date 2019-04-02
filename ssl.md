@@ -9,13 +9,18 @@
 `openssl pkcs7 -print_certs -in certificate.p7b -out certificate.pem`
 
 ##### Convert PFX to PEM
-`openssl pkcs12 -in certificate.pfx -out certificate.pem -nodes`
+```openssl pkcs12 -in certificate.pfx -out certificate.pem -nodes
+```
 
 ##### View certificate
-`openssl x509 -in certificate.pem -text -noout`
+```sh
+openssl x509 -in certificate.pem -text -noout
+```
 
 ##### Create pkcs12 cert
-`openssl pkcs12 -export -out /root/ca/intermediate/private/ranger-plugin.pkcs12 -inkey /root/ca/intermediate/private/client.key.pem -in /root/ca/intermediate/certs/client.cert.pem -certfile /root/ca/certs/ca.cert.pem -certfile /root/ca/intermediate/certs/intermediate.cert.pem`
+```bash
+openssl pkcs12 -export -out /root/ca/intermediate/private/ranger-plugin.pkcs12 -inkey /root/ca/intermediate/private/client.key.pem -in /root/ca/intermediate/certs/client.cert.pem -certfile /root/ca/certs/ca.cert.pem -certfile /root/ca/intermediate/certs/intermediate.cert.pem
+```
 
 ##### Create a keystore in PKCS12 format from your private key file, certificate and root public certificate
 
