@@ -94,7 +94,8 @@ echo "GRANT ALL PRIVILEGES ON DATABASE ranger2 TO rangerdba;" | sudo -u postgres
 /usr/jdk64/jdk1.8.0_112/bin/java  -cp /usr/hdf/current/ranger-admin/ews/lib/postgresql-jdbc.jar:/usr/hdf/current/ranger-admin/jisql/lib/* org.apache.util.sql.Jisql -driver postgresql -cstring jdbc:postgresql://c274-node2.squadron-labs.com:5432/ranger2 -u rangeradmin -p 'rangerdba' -noheader -trim -c \; -query "SELECT 1\;"
 ```
 
-## Ranger admin login issue HDP 3.x
+## Reset Ranger admin password to default:
+##### Ranger admin login issue HDP 3.x
 
 ```
 1- Change password to default admin/admin using below sql query. 
