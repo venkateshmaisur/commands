@@ -103,8 +103,12 @@ keytool -import -keystore server.keystore.jks -storepass hadoop -alias gal4.open
 keytool -import -keystore server.truststore.jks -storepass hadoop -alias CARoot -file ca.crt
 ```
 
-`openssl s_client -connect <HS@-hostname>:<port> -tls1`
-`openssl s_client -connect <HS@-hostname>:<port> -tls1_1`
-`openssl s_client -connect <HS@-hostname>:<port> -tls1_2`
+```sh
+openssl s_client -connect <HS@-hostname>:<port> -tls1
+
+openssl s_client -connect <HS@-hostname>:<port> -tls1_1
+
+openssl s_client -connect <HS@-hostname>:<port> -tls1_2
+```
   
   
