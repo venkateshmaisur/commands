@@ -1,15 +1,21 @@
 # SSL commands
 
-`echo -n | openssl s_client -connect <hostname>:<port> | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/examplecert.crt`
+```sh
+echo -n | openssl s_client -connect <hostname>:<port> | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/examplecert.crt
+```
 
 ##### Convert DER to PEM
-`openssl x509 -inform der -in certificate.cer -out certificate.pem`
+```sh
+openssl x509 -inform der -in certificate.cer -out certificate.pem
+```
 
 ##### Convert P7B to PEM
-`openssl pkcs7 -print_certs -in certificate.p7b -out certificate.pem`
+```sh
+openssl pkcs7 -print_certs -in certificate.p7b -out certificate.pem
+```
 
 ##### Convert PFX to PEM
-```
+```sh
 openssl pkcs12 -in certificate.pfx -out certificate.pem -nodes
 ```
 
@@ -20,35 +26,48 @@ openssl x509 -in certificate.pem -text -noout
 ```
 
 ##### Create pkcs12 cert
-```bash
+```sh
 openssl pkcs12 -export -out /root/ca/intermediate/private/ranger-plugin.pkcs12 -inkey /root/ca/intermediate/private/client.key.pem -in /root/ca/intermediate/certs/client.cert.pem -certfile /root/ca/certs/ca.cert.pem -certfile /root/ca/intermediate/certs/intermediate.cert.pem
 ```
 
 ##### Create a keystore in PKCS12 format from your private key file, certificate and root public certificate
-
-```bash
+```sh
 openssl pkcs12 -export -out corp_cert_chain.pfx -inkey <private-key>.key -in <cert.cer> -certfile <root_intermediate>.cer
 ```
 
 ##### Export the private key file from the pfx file
-`openssl pkcs12 -in filename.pfx -nocerts -out key.pem`
+```sh
+openssl pkcs12 -in filename.pfx -nocerts -out key.pem
+```
 
 ##### Export the certificate file from the pfx file
-`openssl pkcs12 -in filename.pfx -clcerts -nokeys -out cert.pem`
+```sh
+openssl pkcs12 -in filename.pfx -clcerts -nokeys -out cert.pem
+```
 
 ##### Remove the passphrase from the private key
-`openssl rsa -in key.pem -out server.key`
+```sh
+openssl rsa -in key.pem -out server.key
+```
 
 ##### Convert .p7b file to .pem
-`openssl pkcs7 -print_certs -in wildcard_intermediate_ca_.p7b -out file.pem`
+```sh
+openssl pkcs7 -print_certs -in wildcard_intermediate_ca_.p7b -out file.pem
+```
 
 ##### Export .pem with private key in .p12
-`openssl pkcs12 -export -name Wildcard -in file.pem -inkey wildcard_intermediate_ca_.key -out file.p12`
+```sh
+openssl pkcs12 -export -name Wildcard -in file.pem -inkey wildcard_intermediate_ca_.key -out file.p12
+```
 
 ##### Import .p12 file in keystore
-`keytool -importkeystore -srcstoretype pkcs12 -srckeystore file.p12 -destkeystore file.jks`
+```sh
+keytool -importkeystore -srcstoretype pkcs12 -srckeystore file.p12 -destkeystore file.jks
+```
 
-`keytool -importkeystore -srckeystore [MY_FILE.p12] -srcstoretype pkcs12 -srcalias [ALIAS_SRC] -destkeystore [MY_KEYSTORE.jks] -deststoretype jks -deststorepass [PASSWORD_JKS] -destalias [ALIAS_DEST]`
+```sh
+keytool -importkeystore -srckeystore [MY_FILE.p12] -srcstoretype pkcs12 -srcalias [ALIAS_SRC] -destkeystore [MY_KEYSTORE.jks] -deststoretype jks -deststorepass [PASSWORD_JKS] -destalias [ALIAS_DEST]
+```
 
 # Internal CA
 ```shell
