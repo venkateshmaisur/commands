@@ -55,11 +55,11 @@ keytool -import -keystore server.truststore.jks -storepass hadoop -alias CARoot 
 
 ```sh
 1. Use the openssl utility, create the private key: 
-# openssl genrsa -out key/privatekey.key 2048 
+* openssl genrsa -out key/privatekey.key 2048 
 Use you can an existing privatekey if you have one. 
 
 2. Create the CSR using openssl: 
-# openssl req -new -sha256 -key key/privatekey.key -out onegov.nsw.gov.au.csr 
+* openssl req -new -sha256 -key key/privatekey.key -out onegov.nsw.gov.au.csr 
 
 This will prompt for certificate distinguished name starting with Country and then state. Please use the following details to enter in the prompt. You can keep the email empty: 
 CN=*.onegov.nsw.gov.au, OU=OneGov GLS, O=Department of Finance Services and Innovation, L=Sydney, ST=New South Wales, C=AU 
@@ -77,12 +77,12 @@ bil1VGtOjlrO2EmYhedxJX5fJKuCIIlPUeznxE0=
 3. You need to provide this file/content (CSR) to the CA authority (Thwate in your case) and then they will sign the certificate and share you the certificate. The format of the certificate may vary. 
 
 4. Please run the following command to delete the existing certificate from the keystore (hive-prd.jksjks) file: 
-# keytool -delete -alias alias -keystore /etc/hive/conf/keystore.jks 
+* keytool -delete -alias alias -keystore /etc/hive/conf/keystore.jks 
 
 
 5. The below are the steps to import the certificate issued by CA into the keystore: 
 # openssl pkcs12 -export -in certificate.crt -inkey key/privatekey.key -name "onegov.nsw.gov.au" -out onegov.nsw.gov.au.p12 
 
 6. Now import the p12 certificate in keystore using the following command: 
-# keytool -importkeystore -deststorepass <password> -destkeystore /etc/hive/conf/keystore.jks -srckeystore onegov.nsw.gov.au.p12 -srcstoretype PKCS12 
+* keytool -importkeystore -deststorepass <password> -destkeystore /etc/hive/conf/keystore.jks -srckeystore onegov.nsw.gov.au.p12 -srcstoretype PKCS12 
 ```
