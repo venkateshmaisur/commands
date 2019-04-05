@@ -52,6 +52,7 @@ keytool -import -keystore server.truststore.jks -storepass hadoop -alias CARoot 
 ```
 
 # 3. Obtain a Certificate from a Trusted Third-Party Certification Authority (CA)
+Ref: https://docs.hortonworks.com/HDPDocuments/HDP2/HDP-2.6.5/bk_security/content/ch_obtain-trusted-cert.html
 
 ```sh
 1. Use the openssl utility, create the private key: 
@@ -81,7 +82,7 @@ bil1VGtOjlrO2EmYhedxJX5fJKuCIIlPUeznxE0=
 
 
 5. The below are the steps to import the certificate issued by CA into the keystore: 
-# openssl pkcs12 -export -in certificate.crt -inkey key/privatekey.key -name "onegov.nsw.gov.au" -out onegov.nsw.gov.au.p12 
+* openssl pkcs12 -export -in certificate.crt -inkey key/privatekey.key -name "onegov.nsw.gov.au" -out onegov.nsw.gov.au.p12 
 
 6. Now import the p12 certificate in keystore using the following command: 
 * keytool -importkeystore -deststorepass <password> -destkeystore /etc/hive/conf/keystore.jks -srckeystore onegov.nsw.gov.au.p12 -srcstoretype PKCS12 
