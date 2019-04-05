@@ -3,9 +3,8 @@
 Prerequisite: Install openssl. For example, on CentOS run yum install openssl
 
 ## Create keystore with Self Signed Certificate
-```java
-keytool -genkey -keyalg RSA -alias hive -keystore keystore.jks -storepass Welcome -validity 360 -keysize 2048 -dname "CN=c174-node3.squadron-labs.com, OU=SU, O=HWX, L=BNG, ST=KN, C=IN" 
-```
+
+`keytool -genkey -keyalg RSA -alias hive -keystore keystore.jks -storepass Welcome -validity 360 -keysize 2048 -dname "CN=c174-node3.squadron-labs.com, OU=SU, O=HWX, L=BNG, ST=KN, C=IN"`
 
 ## Export certificate from the keystore
 ```sh
@@ -54,8 +53,8 @@ keytool -import -keystore server.truststore.jks -storepass hadoop -alias CARoot 
 
 # 3. Obtain a Certificate from a Trusted Third-Party Certification Authority (CA)
 
-```
-using the openssl utility, create the private key: 
+```sh
+Use the openssl utility, create the private key: 
 openssl genrsa -out key/privatekey.key 2048 
 Use you can an existing privatekey if you have one. 
 
