@@ -1,12 +1,20 @@
  - [x] Solr Commands https://bhagadepravin.github.io/commands/solr
  - [x] Ambari Commands https://bhagadepravin.github.io/commands/ambari
  - [x] Ranger Commands https://bhagadepravin.github.io/commands/ranger
- - [x] Haproxy Commands https://bhagadepravin.github.io/commands/haproxy-tcp-mode
+ - [x] Haproxy Commands https://bhagadepravin.github.io/commands/haproxy
  - [X] SSL Commands https://bhagadepravin.github.io/commands/ssl
  - [X] Kafka Commands https://bhagadepravin.github.io/commands/kafka
  - [] Useful Commands https://bhagadepravin.github.io/commands
- - [] 
+ - [X] Setup_ssl_certs Commands https://bhagadepravin.github.io/commands/setup_ssl_certs
+ - [X] Atlas Commands https://bhagadepravin.github.io/commands/atlas
+ - [X] Kerberos Commands https://bhagadepravin.github.io/commands/kerberos
+ - [X] Reset_Ranger_admin_password_to_default Commands https://bhagadepravin.github.io/commands/Reset_Ranger_admin_password_to_default
+ - [] Kafka Commands https://bhagadepravin.github.io/commands
+ - [] Kafka Commands https://bhagadepravin.github.io/commands
+ - [] Kafka Commands https://bhagadepravin.github.io/commands
+    
 
+https://github.com/bhagadepravin/commands/blob/master/setup_ssl_certs.md
 
 ```bash
 env GZIP=-9 tar cvzf ambari-log.tar.gz <log file>
