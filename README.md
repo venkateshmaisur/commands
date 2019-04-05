@@ -4,7 +4,7 @@
  - [x] Haproxy Commands https://bhagadepravin.github.io/commands/haproxy
  - [X] SSL Commands https://bhagadepravin.github.io/commands/ssl
  - [X] Kafka Commands https://bhagadepravin.github.io/commands/kafka
- - [] Useful Commands https://bhagadepravin.github.io/commands
+ - [X] Useful Commands https://bhagadepravin.github.io/commands
  - [X] Setup_ssl_certs Commands https://bhagadepravin.github.io/commands/setup_ssl_certs
  - [X] Atlas Commands https://bhagadepravin.github.io/commands/atlas
  - [X] Kerberos Commands https://bhagadepravin.github.io/commands/kerberos
