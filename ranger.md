@@ -1,5 +1,8 @@
 # Ranger Commands
 
+
+![Ranger Troubleshooting](https://github.com/bhagadepravin/commands/blob/master/Ranger%20troubleshooting.png)
+
 ## Ranger installation RHEL 6
 ```sh
 yum install mysql-server mysql-connector-java -y
