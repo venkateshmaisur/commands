@@ -8,7 +8,7 @@
  - [X] Setup_ssl_certs Commands https://bhagadepravin.github.io/commands/setup_ssl_certs
  - [X] Atlas Commands https://bhagadepravin.github.io/commands/atlas
  - [X] Kerberos Commands https://bhagadepravin.github.io/commands/kerberos
- - [X] Reset_Ranger_admin_password_to_default Commands https://bhagadepravin.github.io/commands/Reset_Ranger_admin_password_to_default
+ - [X] Reset_Ranger_admin_password https://bhagadepravin.github.io/commands/Reset_Ranger_admin_password_to_default
  - [X] Hive LDAP  https://github.com/bhagadepravin/commands/blob/master/hive-ldap
  - [] Kafka Commands https://bhagadepravin.github.io/commands
  - [] Kafka Commands https://bhagadepravin.github.io/commands
