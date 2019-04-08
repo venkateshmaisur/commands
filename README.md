@@ -9,7 +9,7 @@
  - [X] Atlas Commands https://bhagadepravin.github.io/commands/atlas
  - [X] Kerberos Commands https://bhagadepravin.github.io/commands/kerberos
  - [X] Reset_Ranger_admin_password_to_default Commands https://bhagadepravin.github.io/commands/Reset_Ranger_admin_password_to_default
- - [] Kafka Commands https://bhagadepravin.github.io/commands
+ - [X] Hive LDAP  https://github.com/bhagadepravin/commands/blob/master/hive-ldap
  - [] Kafka Commands https://bhagadepravin.github.io/commands
  - [] Kafka Commands https://bhagadepravin.github.io/commands
     
