@@ -53,6 +53,22 @@ rmr /admin/delete_topics/ATLAS_HOOK
 rmr /config/topics/ATLAS_HOOK
 ```
 
+```sh
+We can cleanup complete Kafka related znode from zookeeper if you don't have other topics 
+
+rmr /cluster 
+rmr /controller_epoch 
+rmr /controller 
+rmr /brokers 
+rmr /admin 
+rmr /isr_change_notification 
+rmr /consumers 
+rmr /log_dir_event_notification 
+rmr /latest_producer_id_block 
+rmr /config 
+rmr /kafka-acl 
+```
+
 ## Connect to Zookeeper
 ```sh
 zookeeper-client -server `hostname -f`:2181
