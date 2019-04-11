@@ -1,11 +1,11 @@
 Make sure Ambari Infra , Hbase and kafka are up and running. 
-```
-klist -kt /etc/security/keytabs/atlas.service.keytab 
-kinit -kt /etc/security/keytabs/atlas.service.keytab <principal> 
+```sh
+kinit -kt /etc/security/keytabs/atlas.service.keytab $(klist -kt /etc/security/keytabs/atlas.service.keytab |sed -n "4p"|cut -d ' ' -f7)
+
 grep -i java_home /etc/hadoop/conf/hadoop-env.sh
 ```
 +++++
-```
+```sh
 HIVE_HOME=/usr/hdp/current/hive-client
 export HIVE_HOME=/usr/hdp/current/hive-client
 HIVE_CONF_DIR=/usr/hdp/current/hive-client/conf
@@ -15,9 +15,8 @@ export HADOOP_HOME=`hadoop classpath`
 export ATLASCPPATH=/usr/hdp/current/hbase-client/lib/hbase-common.jar
 ```
 
-```
-klist -kt /etc/security/keytabs/atlas.service.keytab 
-kinit -kt /etc/security/keytabs/atlas.service.keytab <principal> 
+```sh
+kinit -kt /etc/security/keytabs/atlas.service.keytab $(klist -kt /etc/security/keytabs/atlas.service.keytab |sed -n "4p"|cut -d ' ' -f7)
 HIVE_HOME=/usr/hdp/current/hive-client
 export HIVE_HOME=/usr/hdp/current/hive-client
 HIVE_CONF_DIR=/usr/hdp/current/hive-client/conf
@@ -25,11 +24,50 @@ export HIVE_CONF_DIR=/usr/hdp/current/hive-client/conf
 /usr/hdp/current/atlas-server/hook-bin/import-hive.sh
 ```
 
-`/bin/bash /usr/hdp/current/atlas-server/hook-bin/import-hive.sh -Dsun.security.jgss.debug=true -Djavax.security.auth.useSubjectCredsOnly=false -Djava.security.auth.login.config=/etc/atlas/conf/atlas_jaas.conf`
+```bash
+/bin/bash /usr/hdp/current/atlas-server/hook-bin/import-hive.sh -Dsun.security.jgss.debug=true -Djavax.security.auth.useSubjectCredsOnly=false -Djava.security.auth.login.config=/etc/atlas/conf/atlas_jaas.conf
+```
+
+## Enable the perf logging to measure the performance
+
+```sh
+Goto Ambari UI --> Altas --> Configs --> Advanced --> Advanced atlas-log4j 
+
+Search for 
++++++ 
+<!-- uncomment this block to generate performance traces 
+<appender name="perf_appender" class="org.apache.log4j.DailyRollingFileAppender"> 
+<param name="File" value="{{log_dir}}/atlas_perf.log" /> 
+<param name="datePattern" value="'.'yyyy-MM-dd" /> 
+<param name="append" value="true" /> 
+<layout class="org.apache.log4j.PatternLayout"> 
+<param name="ConversionPattern" value="%d|%t|%m%n" /> 
+</layout> 
+</appender> 
+
+<logger name="org.apache.atlas.perf" additivity="false"> 
+<level value="debug" /> 
+<appender-ref ref="perf_appender" /> 
+</logger> 
+--> 
+
+++++ 
+
+uncomment first and last line 
+
+remove 
+
+<!-- uncomment this block to generate performance traces 
+
+--> 
+
+
+Now performance logging will be done in atlas_perf.log file. 
+```
 
 ## Atlas Backup:
 ==========
-```
+```bash
 To backup Hbase table follow below steps: 
 
 1. Create a folder in HDFS which is having an owner as HBase.
@@ -55,7 +93,7 @@ You need to restart atlas once the import is done.
 
 
 ##### Hive Database backup
-```
+```sh
 curl -X POST -u admin:admin -H "Content-Type: application/json" -H "Cache-Control: no-cache" -d '{
     "itemsToExport": [
        { "typeName": "hive_db",  "uniqueAttributes": { "name": "dummies" } }
@@ -65,6 +103,8 @@ curl -X POST -u admin:admin -H "Content-Type: application/json" -H "Cache-Contro
     }
 }' "http://apollo1.openstacklocal:21000/api/atlas/admin/export" > Atlas-export.zip
 ```
+
+```sh
 FYI: Atlas export fails after taking long time on large databases.
 In that case : Change as below
 ++++++++++
@@ -74,8 +114,10 @@ to
 +++++++++++
 +++++++++++
  Import Entities by Hive Databases.
+ ```
+ 
 eg:-
-```
+```sh
 curl -u admin:admin -g -X POST -H "Content-Type: multipart/form-data" -H "Cache-Control: no-cache" -F data=@Atlas-export.zip "http://apollo1.openstacklocal:21000/api/atlas/admin/import"
 You Multiple database backup.
 curl -X POST -u admin:admin -H "Content-Type: application/json" -H "Cache-Control: no-cache" -d '{
@@ -88,6 +130,7 @@ curl -X POST -u admin:admin -H "Content-Type: application/json" -H "Cache-Contro
     }
 }' "http://apollo1.openstacklocal:21000/api/atlas/admin/export" > Atlas-export.zip
 ```
+
 2. If I want to take backup of Atlas by accessing its backing stores (HBase, Solr, and Kafka) instead of using Export API, what should I do? Only exporting tables of HBase is enough? Taking a backup of Solr and Kafka is also necessary? According to https://atlas.apache.org/0.8.1/InstallationSteps.html, indexes on Solr are automatically created when Atlas Metadata Server start. Therefore I think taking a backup of Solr is not necessary. About Kafka, I recognize Kafka in Atlas is just only a message bus, so there's no need to take a backup.
 
 ==> Yes, only Hbase backup is required
@@ -98,8 +141,6 @@ Yes.
 For more into please refer : https://community.hortonworks.com/questions/91145/how-to-take-backup-of-apache-atlas-and-restore-it.html
 
 ---------------------------------------------------------------------------------------------------------------------------
-
-
 
 Below are the links which might be helpful to you for getting started with atlas. 
 
