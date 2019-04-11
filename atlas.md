@@ -1,8 +1,9 @@
 Make sure Ambari Infra , Hbase and kafka are up and running. 
 
-`kinit -kt /etc/security/keytabs/atlas.service.keytab $(klist -kt /etc/security/keytabs/atlas.service.keytab |sed -n "4p"|cut -d ' ' -f7)`
-
-`grep -i java_home /etc/hadoop/conf/hadoop-env.sh`
+```sh
+kinit -kt /etc/security/keytabs/atlas.service.keytab $(klist -kt /etc/security/keytabs/atlas.service.keytab |sed -n "4p"|cut -d ' ' -f7)
+grep -i java_home /etc/hadoop/conf/hadoop-env.sh
+```
 
 ## Hive import script
 ```sh
