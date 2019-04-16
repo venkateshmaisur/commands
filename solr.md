@@ -222,6 +222,42 @@ $SOLR_INSTALL_HOME/server/scripts/cloud-scripts/zkcli.sh -zkhost  $ZK_HOST:2181 
 
 ##########################################################################################
 
+## Solr performance tunnning on service side
+
+```sh
+1. Enable summarization. 
+
+Summarization 
+https://cwiki.apache.org/confluence/display/RANGER/Ranger+0.5+Audit+Configuration#Ranger0.5AuditConfiguration-Summarization 
+
+In high volume systems, like kafka a very large number of audit messages can be generated in a short amount of time. For compliance and for other practical reasons, like threat detection, it may not be desirable to throttle back the amount or granularity of auditing. 
+
+Ranger 0.5 adds the ability to summarize audit messages in such situations while preserving the distinguishing traits of each audit message. To ensure that no unique/distinguishing information is lost, during summarization, audit messages are aggregated if and only if they differ only in their time stamp. If anything else about an audit is different then it is preserved as a separate audit message. Further in interest of capturing as much information as possible the time interval on the aggregate audit message denotes the max and min time of actual audit events that were a part for that summary event. 
+
+Ambari UI --> HIVE --> Configs --> Advanced --> Advanced ranger-hive-audit --> Check [Audit provider summary enabled] 
+
+Same way you need to do it for all service for which you have enabled Ranger puginn, like HDFS, hbase,etc 
+
+2. Batching and bulk write of of audit messages 
+https://cwiki.apache.org/confluence/display/RANGER/Ranger+0.5+Audit+Configuration 
+
+It can be faster to write several messages to solr in a batch rather than write them one at a time. Similarly when writing audit messages to a database it is much faster to batch write of several messages into a single transaction. Ranger Audit framework provides this via the use of buffer queues. 
+
+batch.size 
+
+By default up to 1000 messages are given to these Audit Destination providers at a time to write. This value can be used to tune that count. 
+
+Ambari > HDFS > Configs > Advanced > Custom ranger-hdfs-audit 
+
+xasecure.audit.destination.hdfs.batch.size=10000 
+xasecure.audit.destination.solr.batch.size=10000 
+xasecure.audit.hdfs.async.max.queue.size= 30720 
+xasecure.audit.solr.async.max.queue.size= 30720 
+
+Ref: https://hortonworks.com/blog/apache-ranger-audit-framework/ 
+
+```
+
 - [Performance Tuning for Ambari Infra](https://docs.hortonworks.com/HDPDocuments/Ambari-2.6.2.0/bk_ambari-operations/content/performance_tuning_for_ambari_infra.html)
 - [Securing Solr Collections with Ranger + Kerberos](https://community.hortonworks.com/articles/15159/securing-solr-collections-with-ranger-kerberos.html)
 - [Setup Ranger to use Ambari Infra Solr enabled in SSL](https://community.hortonworks.com/articles/92987/setup-ranger-to-use-ambari-infra-solr-enabled-in-s.html)
