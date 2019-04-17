@@ -91,14 +91,14 @@ Using below query we came to know kerberos-env was not set. 
 
 So we updated to latest version tag. 
 
-`$ update clusterconfigmapping set selected = 1 where type_name = 'kerberos-env' AND version_tag = 'versionxxxxxxxxx';`
+`$ update clusterconfig set selected = 1 where type_name = 'kerberos-env' AND version_tag = 'versionxxxxxxxxx';`
 
 Same with krb5-conf 
 
 `$ ambari=> select version_tag, type_name, selected, create_timestamp from clusterconfig where type_name = 'krb5-conf'; `
 
 So we updated to latest version tag. 
-`$ update clusterconfigmapping set selected = 1 where type_name = 'kerberos-env' AND version_tag = 'versionxxxxxxxxx'; `
+`$ update clusterconfig set selected = 1 where type_name = 'krb5-conf' AND version_tag = 'versionxxxxxxxxx'; `
 
 Also: 
 ```ambari=>
