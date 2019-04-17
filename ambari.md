@@ -59,7 +59,9 @@ $ update host_version set state='CURRENT' where repo_version_id=151;
 ```sh
 If Disable Security was not completed successfully , Service startup affects.
 
-So, services still had kerberoe config. To fix the issue, We reenabled the kerberos on the cluster.
+Check why Disable Security from Ambari OPS section was failed. If its related for Authfailed in zookeeper zonde. Below contains steps to add skipacl, once Kerberos is disabled you can remove skipacl property.
+
+So, services should have kerberoe config. To fix the issue, We reenabled the kerberos on the cluster.
  
 We checked MIT KDC was uninstalled, So we reinstalled and configured with same REALM and regenerated the keytabs and successfully started zookeeper.
 
@@ -126,7 +128,7 @@ Like below.
 2. Restart ZooKeeper servers and login to zkcli 
 +++++
 
-Restart Zookeeper.
+Restart Zookeeper Service before disabling kerberos..
 
 Disable the Kerberos using Ambari UI.
 ```
