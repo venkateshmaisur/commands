@@ -20,21 +20,45 @@ cd /usr/hdp/current/kafka-broker/bin
 ```
 
 ## List Consumer Group
-`./kafka-consumer-groups.sh --bootstrap-server <broker host>:6667 --list --security-protocol SASL_PLAINTEXT` 
+```
+./kafka-consumer-groups.sh --bootstrap-server <broker host>:6667 --list --security-protocol SASL_PLAINTEXT
+```
+
+## hdp 3.0
+
+```
+cat client.properties
+security.protocol=SASL_PLAINTEXT
+```
+```sh
+/usr/hdp/current/kafka-broker/bin/kafka-consumer-groups.sh --bootstrap-server <broker host>:6667 --list --command-config /root/client.properties
+```
+
+We will collect the lag on hourly bases for 24 hrs.
+
+```bash
+while true; do date; /usr/hdp/current/kafka-broker/bin/kafka-consumer-groups.sh --describe --bootstrap-server  <broker host>:6667 --group atlas --security-protocol SASL_PLAINTEXT >> /tmp/atlas-lag.txt; sleep 3600; done  > /dev/null &
+```
 
 ## Describe Consumer Group
-`./kafka-consumer-groups.sh --describe --zookeeper <zkHost>:<zkPort> --group atlas --security-protocol SASL_PLAINTEXT`
+```sh
+./kafka-consumer-groups.sh --describe --bootstrap-server <broker host>:6667 --group atlas --security-protocol SASL_PLAINTEXT
+```
 
 ## Let's see what kind of message is flowing in this topic:
-```
+```sh
 ./kafka-console-consumer.sh --zookeeper `hostname -f`:2181 --topic ATLAS_HOOK --from-beginning
 ```
 
 ## Console Producer :
-`/usr/hdp/current/kafka-broker/bin/bin/kafka-console-producer.sh --broker-list <broker-hostname:port> --topic <topic-name>`
+```sh
+/usr/hdp/current/kafka-broker/bin/bin/kafka-console-producer.sh --broker-list <broker-hostname:port> --topic <topic-name>
+```
 
 ## Console Consumer:
-`/usr/hdp/current/kafka-broker/bin/bin/kafka-console-consumer.sh --bootstrap-server <BROKER_HOST:PORT> --topic <TOPIC-NAME>`
+```sh
+/usr/hdp/current/kafka-broker/bin/bin/kafka-console-consumer.sh --bootstrap-server <BROKER_HOST:PORT> --topic <TOPIC-NAME>
+```
 
 ## Delete
 ```sh
