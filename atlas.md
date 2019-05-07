@@ -90,6 +90,16 @@ With that being said, at the time of import, you should have the HBase tables cr
 You need to restart atlas once the import is done. 
 ```
 
+## Drop hbase tables:
+
+```sh
+
+disable 'atlas_titan'
+disable 'ATLAS_ENTITY_AUDIT_EVENTS'
+drop 'ATLAS_ENTITY_AUDIT_EVENTS' 
+drop 'atlas_titan'
+```
+
 ## Export & Import REST APIs
 
 
