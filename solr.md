@@ -189,7 +189,29 @@ In delete mode `(-m delete)`, the program deletes data from the Solr collection.
 
 The command below will delete log entries from the hadoop_logs collection, which have been created before `August 29, 2017`, we'll use the -f option to specify the field in the Solr collection to use as a filter field, and the -e option to denote the end of the range of values to remove.
 
-`infra-solr-data-manager -m delete -s http://<solr-hostname>:8886/solr -c hadoop_logs -f logtime -e 2017-08-29T12:00:00.000Z`
+```
+/usr/bin/infra-solr-data-manager --mode=delete --solr-keytab=/etc/security/keytabs/ambari-infra-solr.service.keytab --solr-principal=infra-solr/c374-node4.squadron-labs.com@HWX.COM --solr-url=http://c374-node4.squadron-labs.com:8886/solr --collection=ranger_audits --filter-field=evtTime --days=30
+You are running Solr Data Manager 1.0 with arguments:
+  mode: delete
+  solr-url: http://c374-node4.squadron-labs.com:8886/solr
+  collection: ranger_audits
+  filter-field: evtTime
+  days: 30
+  date-format: %Y-%m-%dT%H:%M:%S.%fZ
+  solr-keytab: /etc/security/keytabs/ambari-infra-solr.service.keytab
+  solr-principal: infra-solr/c374-node4.squadron-labs.com@HWX.COM
+  skip-date-usage: False
+  verbose: False
+
+2019-05-10 08:25:50,061 - The end date will be: 2019-04-10T08:25:50.061498Z
+2019-05-10 08:25:50,061 - Deleting data where evtTime <= 2019-04-10T08:25:50.061498Z
+--- 0.400218963623 seconds ---
+```
+```
+---- 
+curl -ikv --negotiate -u: "http://$(hostname -f):8886/solr/hadoop_logs/update?commit=true" -H "Content-Type: text/xml" --data-binary "<delete><query>@timestamp:[* TO NOW-1DAYS]</query></delete>" 
+--- 
+```
 
 ## Archiving Indexed Data
 
