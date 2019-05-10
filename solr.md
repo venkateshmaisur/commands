@@ -189,7 +189,49 @@ In delete mode `(-m delete)`, the program deletes data from the Solr collection.
 
 The command below will delete log entries from the hadoop_logs collection, which have been created before `August 29, 2017`, we'll use the -f option to specify the field in the Solr collection to use as a filter field, and the -e option to denote the end of the range of values to remove.
 
-```
+```sh
+Action Plan:
+
+  Delete ranger_audit collection we have two options, a curl cmd and infra-solr-data-manager cmd line tool.
+
+  For both opration, if data is huge.
+
+  Lets say you have 200GB of data, when you hit curl or infra-solr-data-manager cmd, Infra solr takes a backup of data, now you have 400GB of data, then depending upon the filter it will delete the ranger_audit data and the backup as well.
+
+  In this process most of the Infra-Solr goes down due to OOM(java heap) issue, becuase it require much memory to pergorm this task.
+
+  So, before you perfrom this task, you must increase the infra heap to 25 300GB or thrice of existig memory size, Make sure you have enough disk space as well.
+
+
+  Check the datadir used by Infra-Solr
+
+  # ps aux | grep infra-solr  | grep Dsolr.solr.home --color
+
+  By default its  /var/lib/ambari-infra-solr/data
+
+   check the size of data dir on all infra nodes:
+
+   # du -sch /var/lib/ambari-infra-solr/data/*
+
+  Purging Data of kerberos cluster
+  Ref: https://docs.hortonworks.com/HDPDocuments/Ambari-2.6.2.0/bk_ambari-operations/content/amb_infra_arch_n_purge_command_line_operations.html
+
+  # /usr/bin/infra-solr-data-manager --mode=delete --solr-keytab=/etc/security/keytabs/ambari-infra-solr.service.keytab --solr-principal=infra-solr/c374-node4.squadron-labs.com@HWX.COM --solr-url=http://c374-node4.squadron-labs.com:8886/solr --collection=ranger_audits --filter-field=evtTime --days=30 
+
+  above cmd is single line, make sure you replcase below property.
+
+  --solr-principal
+  --solr-url
+  --days    -- by default TTL is 90days, ranger_audit keeps the data of 90 days.
+
+
+  Purging Data of non-kerberos cluster
+
+  # /usr/bin/infra-solr-data-manager --mode=delete --solr-url=http://c374-node4.squadron-labs.com:8886/solr --collection=ranger_audits --filter-field=evtTime --days=30 
+
+
+  You have run above cmd on ay Infra-solr node once.
+  
 /usr/bin/infra-solr-data-manager --mode=delete --solr-keytab=/etc/security/keytabs/ambari-infra-solr.service.keytab --solr-principal=infra-solr/c374-node4.squadron-labs.com@HWX.COM --solr-url=http://c374-node4.squadron-labs.com:8886/solr --collection=ranger_audits --filter-field=evtTime --days=30
 You are running Solr Data Manager 1.0 with arguments:
   mode: delete
