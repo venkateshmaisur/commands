@@ -13,7 +13,7 @@ Check what it shows, a single certificate that was signed by an intermediate CA 
 ```sh
 $ grep "nifi.security.truststore" /etc/nifi/conf/nifi.properties  | grep "jks"
 $ keytool -v -list -keystore truststore.jks
-```sh
+```
 
 * Verify if you see trusted authority of Ranger Certs.
 
