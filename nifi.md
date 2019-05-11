@@ -4,7 +4,7 @@
 ```sh 
  openssl s_client -connect <ranger-hostname>:<ranger-port> 
 
---> Check what it shows, a single certificate that was signed by an intermediate CA (the intermediate CA was signed by a root CA)
+Check what it shows, a single certificate that was signed by an intermediate CA (the intermediate CA was signed by a root CA)
 ```
 
 2. Check the truststore used on the NiFi nodes to see if they were capable of trusting that complete certificate chain (intermediate and root CAs). 
