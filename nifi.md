@@ -81,7 +81,7 @@ $ c274-node1.squadron-labs.com@Support, O=Hortonworks, L=BNG, ST=KNK, C=IN
 * Verify by  adding a new policy, upon entering just "/" in the "NiFi resource Identifier" field triggered all available policies retrieved from NiFi to list. 
 
 
-## TIPS
+## TIPS:->
 
 If you have 3 nifi and certificate CN name of different node use regex expression.
 
