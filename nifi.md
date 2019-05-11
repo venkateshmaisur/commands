@@ -38,7 +38,7 @@ $ keytool -import -alias root-ca -file root-ca.crt -keystore <nifi-truststore.jk
 Then restart the Nifi Service.
 
 
-3.Use openssl command to see what CA authorities (trusts) the Ranger endpoint allowed: 
+##### 3.Use openssl command to see what CA authorities (trusts) the Ranger endpoint allowed: 
 
 ```bash
 $ openssl s_client -connect <ranger-hostname>:<ranger-port>
@@ -53,7 +53,7 @@ If its false which means it will not ask client to identify itself. So We need t
 * Check for all NiFi nodes successfully. 
 
 
-4. Verify if Ranger was capable of retrieving a list of policies from NiFi. 
+##### 4. Verify if Ranger was capable of retrieving a list of policies from NiFi. 
 If not
 --> * Check configured truststore being used by the "c274_nifi" service in ranger, Check if it includes NiFi CA as a trusted authority. Use opessl command above with -showcerts option to get the public cert for the NiFi CA. 
 * Import that nifi-ca.crt file in to the truststore. 
