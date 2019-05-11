@@ -6,20 +6,21 @@
 
 Check what it shows, a single certificate that was signed by an intermediate CA (the intermediate CA was signed by a root CA)
 
-2. Check the truststore used on the NiFi nodes to see if they were capable of trusting that complete certificate chain (intermediate and root CAs). 
+##### 2. Check the truststore used on the NiFi nodes to see if they were capable of trusting that complete certificate chain (intermediate and root CAs). 
 --> By using below cmds:
 * Check the truststore used by nifi.
 
-`grep "nifi.security.truststore" /etc/nifi/conf/nifi.properties  | grep "jks"`
-
-`keytool -v -list -keystore truststore.jks`
+```sh
+$ grep "nifi.security.truststore" /etc/nifi/conf/nifi.properties  | grep "jks"
+$ keytool -v -list -keystore truststore.jks
+```sh
 
 * Verify if you see trusted authority of Ranger Certs.
 
 If not, Use the openssl command to retrieve the public certificates for the intermediate and root CA for rangers certificate: 
 
 ```sh
-openssl s_client -connect <ranger-hostname>:<ranger-port> --showcerts 
+$ openssl s_client -connect <ranger-hostname>:<ranger-port> --showcerts 
 ```
 
 * The above command will output the public certificate for the server cert, intermediate cert, and root cert. 
@@ -30,8 +31,8 @@ So We need to create  a inter-ca.crt file and a root-ca.crt file on each NiFi no
 Use the keytool command to import both certificates into NiFi truststore on each nifi node.
 
 ```bash
-$ /usr/jdk64/jdk1.8.0_112/bin/keytool -import -alias inter-ca -file inter-ca.crt -keystore <nifi-truststore.jks> 
-$ /usr/jdk64/jdk1.8.0_112/bin/keytool -import -alias root-ca -file root-ca.crt -keystore <nifi-truststore.jks> 
+$ keytool -import -alias inter-ca -file inter-ca.crt -keystore <nifi-truststore.jks> 
+$ keytool -import -alias root-ca -file root-ca.crt -keystore <nifi-truststore.jks> 
 ```
 
 Then restart the Nifi Service.
@@ -39,7 +40,9 @@ Then restart the Nifi Service.
 
 3.Use openssl command to see what CA authorities (trusts) the Ranger endpoint allowed: 
 
-`$ openssl s_client -connect <ranger-hostname>:<ranger-port> `
+```bash
+$ openssl s_client -connect <ranger-hostname>:<ranger-port>
+```
 
 * We expect to see was a line in the output that matched "Acceptable client certificate CA names" followed by a list of trust authorities, but if not present. 
 * Check the Ranger configs in Ambari and checked what value was set for `ranger.service.https.attrib.clientAuth`. 
@@ -55,13 +58,17 @@ If not
 --> * Check configured truststore being used by the "c274_nifi" service in ranger, Check if it includes NiFi CA as a trusted authority. Use opessl command above with -showcerts option to get the public cert for the NiFi CA. 
 * Import that nifi-ca.crt file in to the truststore. 
 
-`/usr/jdk64/jdk1.8.0_112/bin/keytool -import -alias nifi-ca -file nifi-ca.crt -keystore truststorejks`
+```bash
+keytool -import -alias nifi-ca -file nifi-ca.crt -keystore truststorejks
+```
 
 *Click on test connection. If you see 403 response (this indicates user authentication was successful but authorization was not) 
 
 * Add new policy authorizing the ranger user (from keystore configured in service) access to read on /resources policy.
 
-`$ CN=c274-node1.squadron-labs.com, OU=Support, O=Hortonworks, L=BNG, ST=KNK, C=IN`
+```bash
+$ CN=c274-node1.squadron-labs.com, OU=Support, O=Hortonworks, L=BNG, ST=KNK, C=IN
+```
     
 If Mapping is enabled, use like below.
     
