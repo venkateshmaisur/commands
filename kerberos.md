@@ -1,5 +1,7 @@
 
-# MIT Kerberis Installation
+# MIT Kerberos Installation script
+
+Modify REALM and password
 
 ```sh
 #!/bin/sh
