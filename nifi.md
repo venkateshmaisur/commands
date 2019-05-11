@@ -9,6 +9,7 @@ Check what it shows, a single certificate that was signed by an intermediate CA 
 2. Check the truststore used on the NiFi nodes to see if they were capable of trusting that complete certificate chain (intermediate and root CAs). 
 --> By using below cmds:
 * Check the truststore used by nifi.
+
 `grep "nifi.security.truststore" /etc/nifi/conf/nifi.properties  | grep "jks"`
 
 `keytool -v -list -keystore truststore.jks`
@@ -59,6 +60,7 @@ If not
 *Click on test connection. If you see 403 response (this indicates user authentication was successful but authorization was not) 
 
 * Add new policy authorizing the ranger user (from keystore configured in service) access to read on /resources policy.
+
 `$ CN=c274-node1.squadron-labs.com, OU=Support, O=Hortonworks, L=BNG, ST=KNK, C=IN`
     
 If Mapping is enabled, use like below.
@@ -79,6 +81,7 @@ In Ranger: commonNameForCertificate=regex:c274-node[1-4]\.squadron-labs\.com
 
 In Ambari -> NiFi -> Advanced ranger-nifi-plugin-properties
 Owner for Certificate = Enter the identity `Owner:` of the certificate used by ranger
+
 `$ /usr/jdk64/jdk1.8.0_112/bin/keytool -v -list -keystore keystore.jks`
 
 In Ambari -> NiFi -> Advanced ranger-nifi-policymgr-ssl
