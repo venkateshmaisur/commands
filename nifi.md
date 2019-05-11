@@ -83,15 +83,16 @@ $ c274-node1.squadron-labs.com@Support, O=Hortonworks, L=BNG, ST=KNK, C=IN
 
 ## TIPS
 
-```bash
 If you have 3 nifi and certificate CN name of different node use regex expression.
 
-In Ranger: commonNameForCertificate=regex:c274-node[1-4]\.squadron-labs\.com
+In Ranger: `commonNameForCertificate=regex:c274-node[1-4]\.squadron-labs\.com`
 
 In Ambari -> NiFi -> Advanced ranger-nifi-plugin-properties
 Owner for Certificate = Enter the identity `Owner:` of the certificate used by ranger
 
-`$ /usr/jdk64/jdk1.8.0_112/bin/keytool -v -list -keystore keystore.jks`
+```sh
+$ /usr/jdk64/jdk1.8.0_112/bin/keytool -v -list -keystore keystore.jks
+```
 
 In Ambari -> NiFi -> Advanced ranger-nifi-policymgr-ssl
 owner.for.certificate = Enter the identity (Distinguished Name or DN) of the nifi node(s) that will communicate with Ranger. 
