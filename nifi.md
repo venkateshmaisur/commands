@@ -2,7 +2,7 @@
 
 1. Use openssl command to see what server certificate was being presented by Ranger to client (nifi): 
 ```sh 
-$ openssl s_client -connect <ranger-hostname>:<ranger-port> 
+ openssl s_client -connect <ranger-hostname>:<ranger-port> 
 
 --> Check what it shows, a single certificate that was signed by an intermediate CA (the intermediate CA was signed by a root CA)
 ```
@@ -11,9 +11,9 @@ $ openssl s_client -connect <ranger-hostname>:<ranger-port>
 ```sh
 --> By using below cmds:
 * Check the truststore used by nifi.
-$ grep "nifi.security.truststore" /etc/nifi/conf/nifi.properties  | grep "jks"
+ grep "nifi.security.truststore" /etc/nifi/conf/nifi.properties  | grep "jks"
 
-$ keytool -v -list -keystore truststore.jks
+ keytool -v -list -keystore truststore.jks
 
 * Verify if you see trusted authority of Ranger Certs.
 
