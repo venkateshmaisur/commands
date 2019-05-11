@@ -10,7 +10,7 @@
  - [X] Kerberos Commands https://bhagadepravin.github.io/commands/kerberos
  - [X] Reset_Ranger_admin_password https://bhagadepravin.github.io/commands/Reset_Ranger_admin_password_to_default
  - [X] Hive LDAP  https://github.com/bhagadepravin/commands/blob/master/hive-ldap
- - [] 
+ - [X] NiFi https://bhagadepravin.github.io/commands/nifi
 
 ```bash
 env GZIP=-9 tar cvzf ambari-log.tar.gz <log file>
