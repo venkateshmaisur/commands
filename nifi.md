@@ -1,7 +1,7 @@
-# Troubleshooting Nifi SSL using NiFi CA and Nifi, Ranger Plugin configured with InterCA using SAN entry.
+# Troubleshooting Nifi SSL using NiFi CA and Nifi, Ranger Plugin configured with InterCA using SAN entry
 
-1. Use openssl command to see what server certificate was being presented by Ranger to client (nifi): 
-```sh
+1. Use openssl command to see what server certificate was being presented by Ranger to client (nifi):
+```bash
 openssl s_client -connect <ranger-hostname>:<ranger-port> 
 
 Check what it shows, a single certificate that was signed by an intermediate CA (the intermediate CA was signed by a root CA)
@@ -59,11 +59,11 @@ $ /usr/jdk64/jdk1.8.0_112/bin/keytool -import -alias nifi-ca -file nifi-ca.crt -
 *Click on test connection. If you see 403 response (this indicates user authentication was successful but authorization was not) 
 
 * Add new policy authorizing the ranger user (from keystore configured in service) access to read on /resources policy.
-# CN=c274-node1.squadron-labs.com, OU=Support, O=Hortonworks, L=BNG, ST=KNK, C=IN
+$ CN=c274-node1.squadron-labs.com, OU=Support, O=Hortonworks, L=BNG, ST=KNK, C=IN
     
 If Mapping is enabled, use like below.
     
-# c274-node1.squadron-labs.com@Support, O=Hortonworks, L=BNG, ST=KNK, C=IN 
+$ c274-node1.squadron-labs.com@Support, O=Hortonworks, L=BNG, ST=KNK, C=IN 
 
 * Now test connection should be successful. 
 * Verify by  adding a new policy, upon entering just "/" in the "NiFi resource Identifier" field triggered all available policies retrieved from NiFi to list. 
