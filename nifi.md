@@ -1,7 +1,6 @@
 # Troubleshooting Nifi SSL using NiFi CA and Nifi, Ranger Plugin configured with InterCA using SAN entry
 
 ##### 1. Use openssl command to see what server certificate was being presented by Ranger to client (nifi):
-
 --> ```sh
 openssl s_client -connect <ranger-hostname>:<ranger-port>
 ```
