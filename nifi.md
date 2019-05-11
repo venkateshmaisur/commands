@@ -85,7 +85,10 @@ $ c274-node1.squadron-labs.com@Support, O=Hortonworks, L=BNG, ST=KNK, C=IN
 
 If you have 3 nifi and certificate CN name of different node use regex expression.
 
-In Ranger: `commonNameForCertificate=regex:c274-node[1-4]\.squadron-labs\.com`
+In Ranger: 
+```bash
+commonNameForCertificate=regex:c274-node[1-4]\.squadron-labs\.com
+```
 
 In `Ambari -> NiFi -> Advanced ranger-nifi-plugin-properties`
 
@@ -100,6 +103,7 @@ In `Ambari -> NiFi -> Advanced ranger-nifi-policymgr-ssl`
 owner.for.certificate = Enter the identity (Distinguished Name or DN) of the nifi node(s) that will communicate with Ranger. 
 Referring to multiple nodes identities this value use regex by adding a regex prefix along with the expression 
 
-(E.g.: `CN=regex:c274-node[1-4]\.squadron-labs\.com, OU=Support, O=Hortonworks, L=BNG, ST=KNK, C=IN` to match multiple DN using 1 through 9). 
+(E.g.: `CN=regex:c274-node[1-4]\.squadron-labs\.com, OU=Support, O=Hortonworks, L=BNG, ST=KNK, C=IN` 
+to match multiple DN using 1 through 4). 
 This value is not required if Kerberos is enabled on HDF.
-```
+
