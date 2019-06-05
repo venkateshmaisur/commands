@@ -1,5 +1,4 @@
-# Ambari known issue
-ambari &amp; postgres cmd cheatsheet
+# Ambari Known Issue
 
 ## Ambari KDC Credentails
 
