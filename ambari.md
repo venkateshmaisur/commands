@@ -1,6 +1,95 @@
 # ambari and postgres commands
 ambari &amp; postgres cmd cheatsheet
 
+## Ambari KDC Credentails
+
+
+```
+curl -ivk -H "X-Requested-By: ambari" -u admin:admin -X POST -d '{ "Credential" : { "principal" : "admin/admin@EXAMPLE.COM", "key" : "PASSWORD", "type" : "persisted" } }' http://hostname.example.com:8080/api/v1/clusters/CLUSTERNAME/credentials/kdc.admin.credential 
+
+
+curl -ik -u admin -H "X-Requested-By: ambari" -X DELETE  http://hostname.example.com:8080/api/v1/clusters/CLUSTERNAME/credentials/kdc.admin.credential 
+```
+## Ambari config.py
+
+```
+/var/lib/ambari-server/resources/scripts/configs.py -u admin -p admin -a get -t 8080 -l localhost -n PreProduction -c krb5-conf
+
+/var/lib/ambari-server/resources/scripts/configs.py -t 1111 -s https -a get -l `hostname -f` -n ZEUS -c hadoop-env -u admin -p admin  
+```
+
+## Ambari LDAP
+
+```
+ambari-server setup-ldap --ldap-url=172.26.126.127:389 --ldap-user-class=person --ldap-user-attr=uid --ldap-group-class=groupofnames --ldap-ssl=false --ldap-secondary-url= ""--ldap-referral="" --ldap-group-attr=cn --ldap-member-attr=member --ldap-dn=dn --ldap-base-dn=dc=pravin,dc=com --ldap-bind-anonym=false --ldap-manager-dn=cn=Manager,dc=pravin,dc=com --ldap-manager-password=Welcome --ldap-save-settings
+
+ambari-server restart
+ambari-server sync-ldap --all
+
+# Some extra filter
+ambari.ldap.isConfigured
+authentication.ldap.useSSL
+authentication.ldap.primaryUrl
+authentication.ldap.secondaryUrl
+authentication.ldap.baseDn
+authentication.ldap.bindAnonymously
+authentication.ldap.managerDn
+authentication.ldap.managerPassword
+authentication.ldap.dnAttribute
+authentication.ldap.usernameAttribute
+authentication.ldap.username.forceLowercase
+authentication.ldap.userBase
+authentication.ldap.userObjectClass
+authentication.ldap.groupBase
+authentication.ldap.groupObjectClass
+authentication.ldap.groupNamingAttr
+authentication.ldap.groupMembershipAttr
+authorization.ldap.adminGroupMappingRules
+authentication.ldap.userSearchFilter
+authentication.ldap.alternateUserSearchEnabled
+authentication.ldap.alternateUserSearchFilter
+authorization.ldap.groupSearchFilter
+authentication.ldap.referral
+authentication.ldap.pagination.enabled
+authentication.ldap.sync.userMemberReplacePattern
+authentication.ldap.sync.groupMemberReplacePattern
+authentication.ldap.sync.userMemberFilter
+authentication.ldap.sync.groupMemberFilter
+ldap.sync.username.collision.behavior
+```
+
+## Ambari Version mismatch
+
+```
+select repo_version_id, stack_id, version, display_name from repo_version; 
+select * from host_version; 
+update host_version set state='CURRENT' where repo_version_id='51' ; 
+update host_version set state='INSTALLED' where repo_version_id='1'; 
+```
+
+## Ambari backup and restore
+```
+pg_dump -U ambari -f ambari.sql
+
+create database ambarinew;
+su - postgres
+psql -d ambarinew -f /tmp/db_backup.sql
+
+GRANT CONNECT ON DATABASE ambarinew TO ambari;
+```
+
+## Delete Kerberos principal from DB
+
+```
+backup ambari server 
+select * from kerberos_principal_host where principal_name like 'oozie%'; 
+delete from kerberos_principal_host where principal_name like 'ozzie%'; 
+restart amabri server 
+regenerate missing keytabs through ambari server. 
+```
+
+
+
 ## POSTGRES CMDS
 
 * Removing Hung or In-Progress Operations in Ambari
