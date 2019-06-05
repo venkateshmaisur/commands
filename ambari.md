@@ -4,7 +4,7 @@ ambari &amp; postgres cmd cheatsheet
 ## Ambari KDC Credentails
 
 
-```
+```bash
 curl -ivk -H "X-Requested-By: ambari" -u admin:admin -X POST -d '{ "Credential" : { "principal" : "admin/admin@EXAMPLE.COM", "key" : "PASSWORD", "type" : "persisted" } }' http://hostname.example.com:8080/api/v1/clusters/CLUSTERNAME/credentials/kdc.admin.credential 
 
 
@@ -12,7 +12,7 @@ curl -ik -u admin -H "X-Requested-By: ambari" -X DELETE  http://hostname.example
 ```
 ## Ambari config.py
 
-```
+```sql
 /var/lib/ambari-server/resources/scripts/configs.py -u admin -p admin -a get -t 8080 -l localhost -n PreProduction -c krb5-conf
 
 /var/lib/ambari-server/resources/scripts/configs.py -t 1111 -s https -a get -l `hostname -f` -n ZEUS -c hadoop-env -u admin -p admin  
@@ -20,7 +20,7 @@ curl -ik -u admin -H "X-Requested-By: ambari" -X DELETE  http://hostname.example
 
 ## Ambari LDAP
 
-```
+```bash
 ambari-server setup-ldap --ldap-url=172.26.126.127:389 --ldap-user-class=person --ldap-user-attr=uid --ldap-group-class=groupofnames --ldap-ssl=false --ldap-secondary-url= ""--ldap-referral="" --ldap-group-attr=cn --ldap-member-attr=member --ldap-dn=dn --ldap-base-dn=dc=pravin,dc=com --ldap-bind-anonym=false --ldap-manager-dn=cn=Manager,dc=pravin,dc=com --ldap-manager-password=Welcome --ldap-save-settings
 
 ambari-server restart
@@ -60,7 +60,7 @@ ldap.sync.username.collision.behavior
 
 ## Ambari Version mismatch
 
-```
+```sql
 select repo_version_id, stack_id, version, display_name from repo_version; 
 select * from host_version; 
 update host_version set state='CURRENT' where repo_version_id='51' ; 
@@ -68,7 +68,7 @@ update host_version set state='INSTALLED' where repo_version_id='1'; 
 ```
 
 ## Ambari backup and restore
-```
+```sql
 pg_dump -U ambari -f ambari.sql
 
 create database ambarinew;
@@ -80,7 +80,7 @@ GRANT CONNECT ON DATABASE ambarinew TO ambari;
 
 ## Delete Kerberos principal from DB
 
-```
+```sql
 backup ambari server 
 select * from kerberos_principal_host where principal_name like 'oozie%'; 
 delete from kerberos_principal_host where principal_name like 'ozzie%'; 
