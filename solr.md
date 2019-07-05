@@ -322,6 +322,43 @@ Ref: https://hortonworks.com/blog/apache-ranger-audit-framework/
 
 ```
 
+```
+Option 1: Clean removal 
+
+The smoother way that we can handle this is to delete the entire ranger_audit collection and restart "ranger admin" service. Upon restarting ranger admin, the collection "ranger_audits" will be re-created. 
+This solution is suggested because there will not be any data loss as the audit information is also stored in parallel inside HDFS. 
+
+Steps: 
+1) Issue the following asynchronous call delete the collection 
+$ curl --negotiate -u : "http://azslvedlkdcdd01.d01saedl.manulife.com:8886/solr/admin/collections?action=DELETE&name=ranger_audits&async=del_ranger_audits" 
+
+2) Verify if the task for the delete call is completed in background. Since there is large amount of data, it could take approximately 30min - 1hr 
+$ curl --negotiate -u : "http://azslvedlkdcdd01.d01saedl.manulife.com:8886/solr/admin/collections?action=REQUESTSTATUS&requestid=del_ranger_audits" 
+
+3) Login to zookeeper shell and remove ranger_audit solr configs 
+Kinit to infra-solr or rangeradmin keytab 
+$ /usr/hdp/current/zookeeper-client/bin/zkCli.sh -server $ZkHost:2181 
+$ ls /infra-solr/configs/ranger_audits (verify the location of ranger_audits collection configuration) 
+$ rmr /infra-solr/configs/ranger_audits 
+
+4) Restart ranger admin service. This will upload ranger_audits configuration and create collection in infra solr. All the audit operations will be resumed automatically and new audits will being to be added to solr. This will limit the amount of data that is required for backup/restore during upgrade operation 
+
+
+Option 2: Solr Delete query 
+
+We can use the delete query to purge ranger_audit data older than 30 days. However, this query is very expensive operation for solr and may take a long time to run. 
+Also, we may have to increase the heap size for infra solr significantly for the solr to be able to perform this query. 
+
+Step1: Increase both min and max heap to at least 32GB (if not set) and restart infra solr. 
+
+Step2: Issue the following delete query. This query is designed to purge entries having "_expire_at_" older than 30 days. 
+
+$ curl --negotiate -u : "http://azslvedlkdcdd01.d01saedl.manulife.com:8886/solr/ranger_audits/update?commit=true&async=del_old_data" -H "Content-Type: text/xml" --data-binary "<delete><query>_expire_at_:[* TO NOW/DAY-30DAYS]</query></delete>" 
+
+Step 3: Verify the status of purge query using the following command 
+$ curl --negotiate -u : "http://azslvedlkdcdd01.d01saedl.manulife.com:8886/solr/admin/collections?action=REQUESTSTATUS&requestid=del_old_data" 
+```
+
 - [Performance Tuning for Ambari Infra](https://docs.hortonworks.com/HDPDocuments/Ambari-2.6.2.0/bk_ambari-operations/content/performance_tuning_for_ambari_infra.html)
 - [Securing Solr Collections with Ranger + Kerberos](https://community.hortonworks.com/articles/15159/securing-solr-collections-with-ranger-kerberos.html)
 - [Setup Ranger to use Ambari Infra Solr enabled in SSL](https://community.hortonworks.com/articles/92987/setup-ranger-to-use-ambari-infra-solr-enabled-in-s.html)
