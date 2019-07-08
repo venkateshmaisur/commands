@@ -44,7 +44,7 @@ curl --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=
 curl --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=DELETE&name=audit_logs"
 ```
 
-###### CLUSTERSTATUS
+## CLUSTERSTATUS
 ```shell
 curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=LIST&wt=json"
 curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=clusterstatus&wt=json&indent=true"
