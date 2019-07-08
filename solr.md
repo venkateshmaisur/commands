@@ -47,12 +47,13 @@ curl --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=
 ###### CLUSTERSTATUS
 ```shell
 curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=LIST&wt=json"
-curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=CLUSTERSTATUS&wt=json"
+curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=clusterstatus&wt=json&indent=true"
+curl -s --negotiate -k -u admin:adminpasswd \"http://$(hostname -f):8886/solr/admin/collections?action=CLUSTERSTATUS&wt=json\" | python -m json.tool | grep -E '\"state\"' | cut -d ':' -f 2
 ```
 ## Usefull curl's
 ```shell
 curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/cores?action=STATUS&wt=json&indent=true"
-curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=clusterstatus&wt=json&indent=true"
+
 curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=delete&name=ranger_audits"
 curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?collection=ranger_audit&shard=shard1∾tion=SPLITSHARD
 
