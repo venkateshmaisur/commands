@@ -133,3 +133,13 @@ ranger_admin_password
 $ cd /usr/hdf/<version>/ranger-usersync/ 
 $ python /usr/hdf/<version>/ranger-usersync/updatepolicymgrpassword.py 
 ```
+
+## Ranger Usersync
+
+```sh
+Execute below cmd on Usersync node and attach the tar file 
+
+# top -b -c -n 1 -p `cat /var/run/ranger/usersync.pid` > /tmp/usersync-top.txt 
+# ps aux | grep usersync > /tmp/usersync-process.txt 
+# tar cvzf rangerusersync-config-logs.tar.gz /etc/ranger/usersync/conf/* /var/log/ranger/usersync/usersync.log /tmp/usersync-process.txt /tmp/usersync-top.txt 
+```
