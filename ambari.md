@@ -86,8 +86,10 @@ delete from kerberos_principal_host where principal_name like 'ozzie%'; 
 restart amabri server 
 regenerate missing keytabs through ambari server. 
 ```
-
-
+```sh
+ambari 2.7.3
+select * from kkp_mapping_service where kkp_id in (select kkp_id  from kerberos_keytab_principal where principal_name like 'zookeeper%');
+```
 
 ## POSTGRES CMDS
 
