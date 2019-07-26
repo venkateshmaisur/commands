@@ -134,7 +134,7 @@ $ cd /usr/hdf/<version>/ranger-usersync/
 $ python /usr/hdf/<version>/ranger-usersync/updatepolicymgrpassword.py 
 ```
 
-## Ranger Usersync
+# Ranger Usersync
 
 ```sh
 Execute below cmd on Usersync node and attach the tar file 
@@ -143,3 +143,12 @@ Execute below cmd on Usersync node and attach the tar file
 # ps aux | grep usersync > /tmp/usersync-process.txt 
 # tar cvzf rangerusersync-config-logs.tar.gz /etc/ranger/usersync/conf/* /var/log/ranger/usersync/usersync.log /tmp/usersync-process.txt /tmp/usersync-top.txt 
 ```
+
+##### Analysis
+```sh
+ grep "completed with user count:" usersync.log
+ grep "group count" usersync.log
+ grep "Updating user count:" usersync.log
+ egrep -A1 ranger.usersync.[ldap\|group] etc/ranger/usersync/conf/ranger-ugsync-site.xml | tr -d " "
+```
+
