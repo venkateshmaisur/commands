@@ -138,3 +138,7 @@ WARN Error while fetching metadata with correlation id 27 : {test1=LEADER_NOT_AV
 ```
 ##### Check server.log or check advertised.host.name
 ========================================================================================
+```
+# grep atlas.kafka.security.protocol /etc/atlas/conf/atlas-application.properties 
+# grep listeners /etc/kafka/conf/server.properties 
+```
