@@ -57,3 +57,73 @@ chkconfig krb5kdc on
 chkconfig kadmin on
 
 ```
+
+
+# Windows Kerberos 
+
+##### Windows kerberos spn
+
+```
+These are the steps to configure Windows clients with KDC realm. These KDC settings are not stored in configuration files but in the Windows registry keys. 
+
+1) Run following Windows ksetup commands with AD Administrator privileges. 
+
+In General: 
+- ksetup /AddKdc <RealmName> <KDC_HostName> 
+- ksetup /addhosttorealmmap <KDC_HostName> <RealmName> 
+- ksetup /mapuser * * 
+
+Your Specific KDC configuration: 
+- ksetup /AddKdc HDPDV.US.KELLOGG.COM usawshdpdv402.us.kellogg.com 
+- ksetup /addhosttorealmmap usawshdpdv402.us.kellogg.com HDPDV.US.KELLOGG.COM 
+- ksetup /mapuser * * 
+
+2) Reboot the Windows client after above ksetup changes. 
+```
+
+```
+#ksetup /addhosttorealmmap <Hostname> <Realm>
+
+Example:
+#ksetup /addhosttorealmmap hdpl07oozie.service.group GLOBAL.LLOYDSTSB.COM 
+
+```
+
+## Remove realm from windows
+
+```
+When ksetup command was run on your Windows laptop it will sample MIT KDC realms, which need to be removed first. 
+
+> ksetup 
+
+ATHENA.MIT.EDU 
+kdc = kerberos.mit.edu 
+kdc = kerberos-1.mit.edu 
+kdc = kerberos-2.mit.edu 
+
+CSAIL.MIT.EDU 
+kdc = kerberos-1.csail.mit.edu 
+kdc = kerberos-2.csail.mit.edu 
+
+Failed to create Kerberos key: 5 (0x5) 
+Failed to open Kerberos Key: 0x5 
+
+
+Since the Kerberos client was not uninstalled yet from your Windows laptop, we were expecting the two sample KDC realms and their KDC hosts would need to be removed manually via the following commands. 
+
+- ksetup /delkdc <RealmName> <KDCName> 
+- ksetup /removerealm <RealmName> 
+
+Remove each KDC host individually: 
+
+- ksetup /delkdc ATHENA.MIT.EDU kerberos.mit.edu 
+- ksetup /delkdc ATHENA.MIT.EDU kerberos-1.mit.edu 
+- ksetup /delkdc ATHENA.MIT.EDU kerberos-2.mit.edu 
+- ksetup /delkdc CSAIL.MIT.EDU kerberos-1.csail.mit.edu 
+- ksetup /delkdc CSAIL.MIT.EDU kerberos-2.csail.mit.edu 
+
+Remove the sample KDC realms: 
+
+- ksetup /removerealm ATHENA.MIT.EDU 
+- ksetup /removerealm CSAIL.MIT.EDU 
+```
