@@ -143,3 +143,20 @@ WARN Error while fetching metadata with correlation id 27 : {test1=LEADER_NOT_AV
 # grep atlas.kafka.security.protocol /etc/atlas/conf/atlas-application.properties 
 # grep listeners /etc/kafka/conf/server.properties 
 ```
+
+##### Kafka Ranger Group permission not working
+```
+Use below command to find if kafka ranger plugin is able to get the group info for the user, without debug. 
+
+On Kafka host : 
+
+#su - <EffectedUser> 
+# id -Gn 
+
+#KAFKA_RANGER_CLASSPATH=`echo /usr/hdp/current/kafka-broker/libs/ranger-kafka-plugin-impl/*.jar|tr ' ' ':'` 
+#export KAFKA_RANGER_CLASSPATH=$KAFKA_RANGER_CLASSPATH:/usr/hdp/current/kafka-broker/libs/slf4j-api-1.7.25.jar:/usr/hdp/current/kafka-broker/libs/slf4j-log4j12-1.7.25.jar:/usr/hdp/current/kafka-broker/libs/log4j-1.2.17.jar:/usr/hdp/current/kafka-broker/libs/guava-20.0.jar 
+#/usr/jdk64/jdk1.8.0_112/bin/java -cp ${KAFKA_RANGER_CLASSPATH} org.apache.hadoop.security.UserGroupInformation 
+
+
+This should return the group info for the user, id -Gn should show the group names without any name resolution error.
+```
