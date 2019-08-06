@@ -127,3 +127,54 @@ Remove the sample KDC realms: 
 - ksetup /removerealm ATHENA.MIT.EDU 
 - ksetup /removerealm CSAIL.MIT.EDU 
 ```
+
+##### Windows kerberos debug:
+```
+Use below java code to get the kerberos debug from windows client. 
+
+#vi GetURL.java 
+
+import java.io.*; 
+import java.net.*; 
+
+public class GetURL { 
+public static void main(String[] args) { 
+InputStream in = null; 
+OutputStream out = null; 
+System.setProperty("sun.security.krb5.debug","true"); 
+System.setProperty("sun.security.spnego.debug","true"); 
+try { 
+if ((args.length < 1)) 
+throw new IllegalArgumentException("Provide URL to access"); 
+
+URL url = new URL(args[0]); 
+in = url.openStream(); 
+out = System.out; 
+
+byte[] buffer = new byte[4096]; 
+int bytes_read; 
+while((bytes_read = in.read(buffer)) != -1) 
+out.write(buffer, 0, bytes_read); 
+} 
+catch (Exception e) { 
+System.err.println(e); 
+System.err.println("Usage: java GetURL <URL> "); 
+} 
+finally { 
+try { in.close(); out.close(); } catch (Exception e) {} 
+} 
+} 
+} 
+
+
+#javac GetURL.java 
+
+#java -Djavax.net.ssl.trustStore=<truststorePath> -Djavax.net.ssl.trustStorePassword=<Password> GetURL https://hdpl07oozie.service.group:11443/oozie 
+
+trsuststore path is a jks file where SSL CA cert chain of Oozie is imported. trustStorePassword is the truststore password. 
+
+A temp jks can be created on Linux and transferred to Windows client (windows java will also have keytool command that can be used to create jks on windows client from PEM certs) . 
+
+
+Above command will print kerberos debug on stdout, collect the output for both working and not working oozie urls.
+```
