@@ -8,6 +8,7 @@ AD_OU="dc=support,dc=com"
 AD_REALM=${AD_DOMAIN^^}
 
 echo hadoop12345! | kinit test1@SUPPORT.COM
+yum clean all
 yum -y install epel-release sssd oddjob-mkhomedir authconfig sssd-krb5 sssd-ad sssd-tools adcli -q
 adcli join -v --domain-controller=${AD_DC} --domain-ou="${AD_OU}" --login-ccache="/tmp/krb5cc_0" --login-user="${AD_USER}" -v --show-details
 sudo tee /etc/sssd/sssd.conf > /dev/null <<EOF
