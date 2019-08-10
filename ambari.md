@@ -91,6 +91,18 @@ ambari 2.7.3
 select * from kkp_mapping_service where kkp_id in (select kkp_id  from kerberos_keytab_principal where principal_name like 'zookeeper%');
 ```
 
+```sh
+CREATE TABLE kkp_mapping_service_BKP AS SELECT * FROM kkp_mapping_service; 
+CREATE TABLE kerberos_keytab_principal_BKP AS SELECT * FROM kerberos_keytab_principal; 
+CREATE TABLE kerberos_keytab_BKP AS SELECT * FROM kerberos_keytab; 
+CREATE TABLE kerberos_principal_BKP AS SELECT * FROM kerberos_principal; 
+
+DELETE FROM kkp_mapping_service; 
+DELETE FROM kerberos_keytab_principal; 
+DELETE FROM kerberos_keytab; 
+DELETE FROM kerberos_principal; 
+```
+
 ## POSTGRES CMDS
 
 * Removing Hung or In-Progress Operations in Ambari
