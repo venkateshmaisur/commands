@@ -1,6 +1,7 @@
 #/bin/bash
 
 ## wget https://raw.githubusercontent.com/bhagadepravin/commands/master/sssd.sh && chmod +x sssd.sh && ./sssd.sh
+## Update the Krb5.conf accordingly
 AD_USER="test1"
 AD_DOMAIN="support.com"
 AD_DC="sme-2012-ad.support.com"
