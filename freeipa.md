@@ -1,52 +1,28 @@
 # Setup freeipa
 
-Welcome@123
-Use centos 7.3, upgrade it.
+Used centos 7.3, upgrade it.
 
+```sh
 yum update
-
-# yum install ipa-server ipa-server-dns -y
 yum install -y ipa-server bind bind-dyndb-ldap bind-utils vim ipa-server-dns bindipa-server  rng-tools
-
 systemctl start rngd
 systemctl enable rngd
 systemctl status rngd
-
 systemctl start named
 systemctl enable named
-# ipa-server-install --setup-dns
+systemctl restart  dbus
+```
+##### Install Free IPA
+```
+ipa-server-install --setup-dns
+```
 
+##### Uninstall Free IPA
+```
+ipa-server-install --uninstall
+```
 
-   34  systemctl status dbus
-   35  systemctl restart  dbus
-   36  systemctl status dbus
-   37  certmonger -S -d 10
-
-   ipa-server-install --uninstall
-
-Skipping synchronizing time with NTP server.
-New SSSD config will be created
-Configured sudoers in /etc/nsswitch.conf
-Configured /etc/sssd/sssd.conf
-trying https://c174-node2.squadron-labs.com/ipa/json
-[try 1]: Forwarding 'schema' to json server 'https://c174-node2.squadron-labs.com/ipa/json'
-trying https://c174-node2.squadron-labs.com/ipa/session/json
-[try 1]: Forwarding 'ping' to json server 'https://c174-node2.squadron-labs.com/ipa/session/json'
-[try 1]: Forwarding 'ca_is_enabled' to json server 'https://c174-node2.squadron-labs.com/ipa/session/json'
-Systemwide CA database updated.
-Adding SSH public key from /etc/ssh/ssh_host_rsa_key.pub
-Adding SSH public key from /etc/ssh/ssh_host_ecdsa_key.pub
-Adding SSH public key from /etc/ssh/ssh_host_ed25519_key.pub
-[try 1]: Forwarding 'host_mod' to json server 'https://c174-node2.squadron-labs.com/ipa/session/json'
-SSSD enabled
-Configured /etc/openldap/ldap.conf
-Configured /etc/ssh/ssh_config
-Configured /etc/ssh/sshd_config
-Configuring squadron-labs.com as NIS domain.
-Client configuration complete.
-The ipa-client-install command was successful
-
-==============================================================================
+```bash
 Setup complete
 
 Next steps:
@@ -69,14 +45,16 @@ Be sure to back up the CA certificates stored in /root/cacert.p12
 These files are required to create replicas. The password for these
 files is the Directory Manager password
 [root
+```
+##### Update hostname
+```
+echo "172.26.81.236 pbhagade-freeipa.openstacklocal" >> /etc/hosts
+echo "nameserver 172.25.39.166" > /etc/resolv.conf
+```
 
-8.8.8.8
-
-1.168.192.in-addr.arpa.
-
-
+# Install Free client
+```sh
 yum install ipa-client -y
-
 
 ipa-client-install --uninstall
 ipa-client-install --domain=squadron-labs.com \
@@ -85,23 +63,19 @@ ipa-client-install --domain=squadron-labs.com \
     --principal=admin@SQUADRON-LABS.COM \
     --enable-dns-updates
     
+ipa-client-install --domain=openstacklocal --server=pbhagade-freeipa.openstacklocal --realm=OPENSTACKLOCAL --principal=admin@OPENSTACKLOCAL --enable-dns-updates
+```
 
-    ipa-client-install --domain=openstacklocal --server=pbhagade-freeipa.openstacklocal --realm=OPENSTACKLOCAL --principal=admin@OPENSTACKLOCAL --enable-dns-updates
-
- echo "172.26.81.236 pbhagade-freeipa.openstacklocal" >> /etc/hosts
-
-echo "nameserver 172.25.39.166" > /etc/resolv.conf
-
-hostnamectl set-hostname pravin.squadron-labs.com
-
+```
 pssh -h pssh-hosts -l root -A -i "echo "nameserver 172.26.81.236" > /etc/resolv.conf"
 pssh -h pssh-hosts -l root -A -i "echo "nameserver 127.0.0.11" > /etc/resolv.conf"
 pssh -h pssh-hosts -l root -A -i "yum clean all && yum update all"
 ipa group-add ambari-managed-principals
+```
 
 
-
-
+##### DNS
+```
 136.42.25.172.in-addr.arpa.
 ipa dnszone-add 0/26.100.51.198.in-addr.arpa.
 
@@ -115,30 +89,11 @@ Ref: https://www.freeipa.org/page/Howto/DNS_classless_IN-ADDR.ARPA_delegation
 # SetUP DNS Server:
 
 yum install bind bind-utils -y
+```
 
+# Ldapsearch cmds
 
-
-ipa-client-install --domain=squadron-labs.com 
---server=c274-node4.squadron-labs.com 
---realm=SQUADRON-LABS.COM 
---principal=admin@SQUADRON-LABS.COM 
---enable-dns-updates
-
-zone "pravin.local" IN {
-type master;
-file "forward.pravin";
-allow-update { none; };
-};
-zone "1.168.192.in-addr.arpa" IN {
-type master;
-file "reverse.pravin";
-allow-update { none; };
-};
-
-
-
-
-
+```sh
 For user:
 uid=pravin,cn=users,cn=accounts,dc=openstacklocal
 
@@ -185,5 +140,5 @@ dAPPbkA7L0iztnqUZ0r7Lr3JWTmr2OUqtXgvGtmJXl+cEZquikg5KgaigaXgG3vp
 5jaVlBAMEL7DUdJF9d+m8pLQKbTKSqZtUai6KuGtbm0OSEC1bzLWYP8zacXuR5eq
 EbADqTXRkY8=
 -----END CERTIFICATE-----
-
+```
 
