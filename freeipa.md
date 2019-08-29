@@ -48,8 +48,9 @@ files is the Directory Manager password
 ```
 ##### Update hostname
 ```
-echo "172.26.81.236 pbhagade-freeipa.openstacklocal" >> /etc/hosts
-echo "nameserver 172.25.39.166" > /etc/resolv.conf
+echo "172.26.87.80	     pbhagade-freeipa.openstacklocal" >> /etc/hosts
+echo "nameserver 172.26.87.80" >> /etc/resolv.conf
+echo "172.26.87.78   dataplane.openstacklocal" >> /etc/hosts
 ```
 
 # Install Free client
@@ -101,44 +102,82 @@ For groups:
 dn: cn=support,cn=groups,cn=compat,dc=openstacklocal
 
 ldapsearch -x -D "cn=Directory Manager" -w Welcome@123 -b "cn=users,cn=accounts,dc=openstacklocal"   "(uid=pravin)"
-
 ldapsearch -x -D "cn=Directory Manager" -w Welcome@123 -b "cn=groups,cn=compat,dc=openstacklocal"   "(cn=support)"
 
-
 echo -n | openssl s_client -connect 172.26.87.80:636 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/freeipacert.crt
-
-#ldapsearch -h 172.26.87.80 -p 636 -D "cn=Directory Manager" -w Welcome@123 -b "cn=users,cn=accounts,dc=openstacklocal"
-Does not work
-
-
-cat /etc/openldap/ldap.conf
-SASL_NOCANON	on
-URI ldaps://pbhagade-freeipa.openstacklocal
-BASE dc=openstacklocal
-TLS_CACERT /etc/ipa/ca.crt
-
-[root@pbhagade-freeipa ~]# cat /etc/ipa/ca.crt
------BEGIN CERTIFICATE-----
-MIIDlDCCAnygAwIBAgIBATANBgkqhkiG9w0BAQsFADA5MRcwFQYDVQQKDA5PUEVO
-U1RBQ0tMT0NBTDEeMBwGA1UEAwwVQ2VydGlmaWNhdGUgQXV0aG9yaXR5MB4XDTE5
-MDgyMzE0MDM1MVoXDTM5MDgyMzE0MDM1MVowOTEXMBUGA1UECgwOT1BFTlNUQUNL
-TE9DQUwxHjAcBgNVBAMMFUNlcnRpZmljYXRlIEF1dGhvcml0eTCCASIwDQYJKoZI
-hvcNAQEBBQADggEPADCCAQoCggEBAMo/PGPrvv8GRGiLdqjPz1UX7E2oOgmwloI0
-Ma2uAzIdsBnqoDE6iht+qQmGDSelZZAMRSYvUu7j9JK1D/MgwP78csCyk4RqxXki
-1Ftsb2+cO28K7KsxqL9nrcKBdXalM85JlDJXUmKi0BEfzmnVlnjlAV1xf1OpnNZl
-ZBmTXTmMr1/BUmA3EDLyu0HeKlP5kt45YAwvicc/KuatXSnPoBEUFYu/E2b1ScUa
-yugh2BcQxpwsdtnbrmmh7Fv5iTVhIWUK/w5QnfVawtLSmfU9//e5Fk6ajWAFkMV1
-3oUcrMotkh3gYnNJG2pl9OaIQMCdeX63UVlFFh9hwp7sPbIPfB8CAwEAAaOBpjCB
-ozAfBgNVHSMEGDAWgBQO45YRux789h+XRnNF9yxqA2KxNzAPBgNVHRMBAf8EBTAD
-AQH/MA4GA1UdDwEB/wQEAwIBxjAdBgNVHQ4EFgQUDuOWEbse/PYfl0ZzRfcsagNi
-sTcwQAYIKwYBBQUHAQEENDAyMDAGCCsGAQUFBzABhiRodHRwOi8vaXBhLWNhLm9w
-ZW5zdGFja2xvY2FsL2NhL29jc3AwDQYJKoZIhvcNAQELBQADggEBAIpiVwaUYeuZ
-umA71+bBC5+q7vNCUtUK8zbuAtS8xT+/k1HjRcBfwvYm2P8T+kmANH+GRyMAC0ns
-8XCc84uuUygFgzpkD6qX5oi9c85r5QFOG0L2Mv5PiSICSotFqQ7tEY7PqAr31yln
-4nUsDpx4+X8aEzerd9dqFMb1b+7uzQgQZqFgW3/1ORhvOGx9FHkwm9OSCtAw8z06
-dAPPbkA7L0iztnqUZ0r7Lr3JWTmr2OUqtXgvGtmJXl+cEZquikg5KgaigaXgG3vp
-5jaVlBAMEL7DUdJF9d+m8pLQKbTKSqZtUai6KuGtbm0OSEC1bzLWYP8zacXuR5eq
-EbADqTXRkY8=
------END CERTIFICATE-----
 ```
 
+##### LDAP Setting/Atlas
+```sh
+ldaps://172.26.87.80:636
+person
+uid
+cn=users,cn=accounts,dc=openstacklocal
+memberUid
+cn
+posixGroup
+cn=groups,cn=compat,dc=openstacklocal
+
+(memberOf=cn={0},cn=groups,cn=compat,dc=openstacklocal)
+
+
++++++++ ATLAS LDAP +++++++++
+atlas.authentication.method.ldap.url = ldaps://172.26.87.80:636
+atlas.authentication.method.ldap.userDNpattern=uid={0},cn=users,cn=accounts,dc=openstacklocal
+atlas.authentication.method.ldap.groupSearchBase=cn=groups,cn=compat,dc=openstacklocal
+atlas.authentication.method.ldap.groupSearchFilter=(memberOf=cn={0},cn=groups,cn=compat,dc=openstacklocal)
+atlas.authentication.method.ldap.groupRoleAttribute=cn
+atlas.authentication.method.ldap.base.dn=dc=openstacklocal
+atlas.authentication.method.ldap.bind.dn=cn=Directory Manager
+atlas.authentication.method.ldap.bind.password=Welcome@123
+atlas.authentication.method.ldap.referral=ignore
+atlas.authentication.method.ldap.user.searchfilter=(uid={0})
+atlas.authentication.method.ldap.default.role=ROLE_USER
+```
+
+##### keytool
+```
+echo -n | openssl s_client -connect 172.26.87.80:636 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/freeipacert.crt
+keytool -import -file /tmp/freeipacert.crt -keystore /etc/pki/java/cacerts -alias LDAPS -storepass changeit
+/usr/jdk64/jdk1.8.0_112/bin/keytool -import -file /tmp/freeipacert.crt -keystore /usr/jdk64/jdk1.8.0_112/jre/lib/security/cacerts -alias LDAPS -storepass 	changeit
+```
+
+##### Latest Ambari 2.7.4 ######
+
+```
+$ ambari-server setup-ldap \
+--ldap-url=pbhagade-freeipa.openstacklocal:636  \
+--ldap-user-class=person \
+--ldap-user-attr=uid \
+--ldap-group-class=posixGroup \
+--ldap-ssl=true \
+--ldap-referral="ignore" \
+--ldap-group-attr=cn \
+--ldap-member-attr=memberUid \
+--ldap-dn=dn \
+--ldap-base-dn=cn=users,cn=accounts,dc=openstacklocal \
+--ldap-bind-anonym=false \
+--ldap-manager-dn="cn=Directory Manager" \
+--ldap-manager-password=Welcome@123 \
+--ldap-save-settings \
+--ldap-sync-username-collisions-behavior=convert  \
+--ldap-force-setup \
+--ldap-force-lowercase-usernames=true \
+--ldap-pagination-enabled=false \
+--ambari-admin-username=admin \
+--ambari-admin-password=pbhagade \
+--truststore-type=jks \
+--truststore-path=/etc/pki/java/cacerts \
+--truststore-password=changeit \
+--ldap-secondary-host="" \
+--ldap-secondary-port=0 \
+--ldap-sync-disable-endpoint-identification=true
+
+# ambari-server restart
+# ambari-server sync-ldap --all
+
+ambari=> UPDATE users SET user_type = 'LOCAL' WHERE user_id = '1';
+UPDATE 1
+ambari=> \q
+
+```
