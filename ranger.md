@@ -16,6 +16,13 @@ chkconfig mysqld on
 yum install mysql-server mysql-connector-java -y
 systemctl start mysqld
 mysql_secure_installation
+
+yum install mariadb-server -y 
+systemctl start mariadb
+systemctl enable mariadb
+systemctl status mariadb
+mysql_secure_installation
+
 ```
 
 ## Setup Ambari
