@@ -1,0 +1,30 @@
+<topology>
+    <name>tokensso</name>
+    <gateway>
+        <provider>
+            <role>federation</role>
+            <name>JWTProvider</name>
+            <enabled>true</enabled>
+        </provider>
+        <provider>
+            <role>identity-assertion</role>
+            <name>Default</name>
+            <enabled>true</enabled>
+        </provider>
+    </gateway>
+    <service>
+        <role>KNOXSSO</role>
+        <param>
+            <name>knoxsso.cookie.secure.only</name>
+            <value>true</value>
+        </param>
+        <param>
+            <name>knoxsso.token.ttl</name>
+            <value>600000</value>
+        </param>
+        <param>
+            <name>knoxsso.redirect.whitelist.regex</name>
+            <value>^https?:\/\/(.+\.squadron-labs\.com|.+\.openstacklocal|localhost|127\.0\.0\.1|0:0:0:0:0:0:0:1|::1):[0-9].*$</value>
+        </param>
+    </service>
+</topology> 

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topology>
+   <uri>https://c174-node2.squadron.support.hortonworks.com:8443/gateway/token</uri>
+   <name>token</name>
+   <gateway>
+      <provider>
+         <role>federation</role>
+         <name>SSOCookieProvider</name>
+         <enabled>true</enabled>
+         <param>
+            <name>sso.authentication.provider.url</name>
+            <value>https://c174-node2.squadron.support.hortonworks.com:8443/gateway/knoxsso/api/v1/websso</value>
+         </param>
+         <param>
+            <name>sso.token.verification.pem</name>
+            <value>
+                MIIE/jCCAuagAwIBAgIJALipovFRZ2OVMA0GCSqGSIb3DQEBCwUAMBQxEjAQBgNV
+BAMMCWRhdGFwbGFuZTAeFw0xOTA4MjMxMzExMzJaFw0yMDA4MjIxMzExMzJaMBQx
+EjAQBgNVBAMMCWRhdGFwbGFuZTCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoC
+ggIBAOXPOOKgwQME8e9MRuSEosNhGaRvEbbd45dXp2GbUE9q5DdzoudvIdRDDA1b
+jXOFghi4So5FtFfr9watb2StW7EeW2kr/WH8+tTrXSFUSvwvKwGVx9MZoRLHUdJX
+4JwRsEKEC3GRsYAWzJ0SQf45EUdZ1sleUfPN1eMT1UDEORgZeQXVaDcbSFZN7ji4
+vosmlUcCv2TiPt/rq4FqWA5L2HBrLsDBHoCADLiNjDzKtEQ9mGSbJbrhXG++V9cJ
+fKoXDlBs+EBsBLLmJjOVhh85yB9Ee6EBh31rNIw64ScPDqLVkA6bGxQaDnvIvdHB
+uEM/O0JFq96BJkePjKHsfUL+4kOeHW5Ged0s5oUmKeK1rUb2HEZ9Qsw/h4a9stql
+AUjvjbygxrp/4GNT+MB3SmvLRKGsvCKUpSYak7C7SjzGPTms30LJI2q9T7pDDxY6
+rYkoox4QIcF141SND56GqGEPQxH2fZSfcPmbYTvZ6q7LC/DmTshMVC09YgU05LZs
+xb3TfEkk6rBwkdrL2QI8zEf8duMOPkkiS+oFANVwNqiTbDcPvdsWGhLHsBxdWrQ4
+rtapC3l8UtWB91TEuuGKJbfppk5CRD04xm8R8SsSqme+eIQiJbYpTP6i/vAyA+/a
+hJ0n87+c575bQwXYB6P3pv+JVdzaCF+oh2L8/vGvMhQ53ld/AgMBAAGjUzBRMB0G
+A1UdDgQWBBSsnL8XfcMCxhz0cLrFk8KhxU5dhjAfBgNVHSMEGDAWgBSsnL8XfcMC
+xhz0cLrFk8KhxU5dhjAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IC
+AQA74y/vi/U/SgO7iJ64HUFmgI0MKkaVaHw2yPsTh5TyR4FZjLEOKzordJ1UpL2M
+hN94O+scvOc0+o9aSRYNOfDZCe2xDllVMJ1n5zu6LkT6TeRcsWaiLCfM9pHPUjHf
+rngjBnaVOjDLqStoiPVqk+d73HL3Iu8PXIZMJMjEAfglAlzn2r13M2fYJtULeiis
+r18NB2DvxqctJQek6UDjnBm7DVFSegZe/sihB4aTl4bIqztydoxEShBitkiZEBT7
+Qu0ClBwFlsiJOKyPQPW7zBTv5W7lpaBLPA5wcB3mEXQ4kOI4rmss28HoQavvwVCZ
+8M/K/kc/0+z2mopsCJB7KbZ4NPM8yPEmpB0xD2tI5Wozi6abDvdCK4vInjFtNVen
+nhS0F9f6ughZN8gaVc2sZx+b7Y+WZU+BuicIGAPPdV/hePc8t6a/wAfKg2JCdzc6
+z+uYucEVk/t5S5rwt/tr0miyPvLT4doWgrw5uZoJxy3bfz9VELmVjg8g+WZyu3XA
+7Hu/OzaqNugAObea2eeefTx29Wl4WZuTZw4NxnXFKSGlzDqCEPzAJ5h8T6ZnvxEq
++WhXJ2N3j/eEsWi1ZKVZzYHCUqkUsGrEeMr+NK90JBMQwYK9yOa14my7Uo+q6Iz9
+AKhfisIG7Dad/Jnv2+65/u5nKGj1y5RRlBl5GpjeLI+pUQ==
+            </value>
+         </param>
+      </provider>
+      <provider>
+         <role>identity-assertion</role>
+         <name>HadoopGroupProvider</name>
+         <enabled>true</enabled>
+      </provider>
+
+   </gateway>
+   <service>
+      <role>KNOXTOKEN</role>
+      <param>
+         <name>knox.token.ttl</name>
+         <value>5000000</value>
+      </param>
+      <param>
+         <name>knox.token.client.data</name>
+         <value>cookie.name=hadoop-jwt</value>
+      </param>
+   </service>
+</topology>

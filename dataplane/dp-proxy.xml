@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topology>
+  <gateway>
+    <provider>
+        <role>federation</role>
+        <name>SSOCookieProvider</name>
+        <enabled>true</enabled>
+        <param>
+            <name>sso.authentication.provider.url</name>
+            <value>https://c174-node2.squadron.support.hortonworks.com:8443/gateway/knoxsso/api/v1/websso</value>
+        </param>
+      </provider>
+    <provider><role>identity-assertion</role>
+      <name>Default</name>
+      <enabled>true</enabled>
+    </provider>
+                <provider>
+                    <role>authorization</role>
+                    <name> AclsAuthz</name>
+                    <enabled>true</enabled>
+                </provider>
+   </gateway>
+
+  <service>
+    <role>AMBARI</role>
+    <url>http://c174-node1.squadron.support.hortonworks.com:8080</url>
+  </service>
+  <service>
+    <role>AMBARIUI</role>
+    <url>http://c174-node1.squadron.support.hortonworks.com:8080</url>
+  </service>
+  <service>
+    <role>RANGER</role>
+    <url>http://c174-node2.squadron.support.hortonworks.com:6080</url>
+  </service>
+  <service>
+    <role>RANGERUI</role>
+    <url>http://c174-node2.squadron.support.hortonworks.com:6080</url>
+  </service>
+  <service>
+    <role>ATLAS</role>
+    <url>http://c174-node3.squadron.support.hortonworks.com:21000</url>
+  </service>
+  <service>
+    <role>ATLAS-API</role>
+    <url>http://c174-node3.squadron.support.hortonworks.com:21000</url>
+  </service>
+  <service>
+   <role>BEACON</role>    ##The DLM Engine
+   <url>http://c174-node3.squadron.support.hortonworks.com:25968</url>
+  </service>
+<!-- 
+  <service>
+   <role>PROFILER-AGENT</role>    The DSS Agent 
+   <url>http://<localhost>:21900</url>
+  </service>
+-->
+</topology>
