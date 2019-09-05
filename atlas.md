@@ -151,6 +151,29 @@ curl -X POST -u admin:admin -H "Content-Type: application/json" -H "Cache-Contro
 Yes.
 For more into please refer : https://community.hortonworks.com/questions/91145/how-to-take-backup-of-apache-atlas-and-restore-it.html
 
+
+# Atlas Migration step customer Uses json file rather than complete directory path and migration fails:
+```
+Steps:
+
+Stop HDP 3.x Atlas.
+
+Drop Atlas' Solr collections
+
+Drop Atlas' HBase table ('atlas_janus').
+
+Start HDP 3.x Atlas in migration mode.
+
+Once migration succeeds, perform import-hive.sh to import Hive tables that were created after migration.
+
+Tags and Glossary are manually applied. Migration import will preserve the tags from earlier version. However, there isn't a way of tagging entities after migration.
+
+If the entities tagged post migration is a small number, then user can re-apply the tags.
+
+Other than this, I don't see any other concern.
+
+```
+
 ---------------------------------------------------------------------------------------------------------------------------
 
 Below are the links which might be helpful to you for getting started with atlas. 
