@@ -152,7 +152,8 @@ Yes.
 For more into please refer : https://community.hortonworks.com/questions/91145/how-to-take-backup-of-apache-atlas-and-restore-it.html
 
 
-# Atlas Migration step customer Uses json file rather than complete directory path and migration fails:
+# Atlas Migration Recovery
+##### When does the issue occurs. When customer Uses json file rather than complete directory path and migration fails:
 ```
 Steps:
 
