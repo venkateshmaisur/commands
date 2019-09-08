@@ -1,10 +1,11 @@
 # Install Gnome Desktop on CentOS 6, Configure VNC Server and install Oracle Database 11g Release 2
 
 ```sh
+yum clean all & yum update all & yum update -y
 yum groupinstall "X Window System" -y
 yum -y groupinstall "Desktop"
 yum -y groupinstall "General Purpose Desktop"
-yum install -y xorg-x11-apps java gnome-core xfce4 firefox expect tigervnc-server
+yum install -y xorg-x11-apps java gnome-core xfce4 firefox expect tigervnc-server wget ntp mlocate
 service messagebus restart
 chkconfig vncserver on
 ```
@@ -40,7 +41,6 @@ echo "exec gnome-session &" >> /home/oracle/.vnc/xstartup
 
 ```sh
 cd /etc/yum.repos.d
-yum install wget ntp mlocate -y
 wget https://public-yum.oracle.com/public-yum-ol6.repo
 wget https://public-yum.oracle.com/RPM-GPG-KEY-oracle-ol6 -O /etc/pki/rpm-gpg/RPM-GPG-KEY-oracle
 yum install oracle-rdbms-server-11gR2-preinstall -y
