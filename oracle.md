@@ -53,7 +53,7 @@ sed -i 's/enforcing/disabled/g' /etc/selinux/config /etc/selinux/config
 sestatus
 /etc/init.d/network restart
 
-cat > ~/.bash_profile <<EOF
+cat >> ~/.bash_profile <<EOF
 HOSTNAME=$(hostname -f)
 TMP=/tmp; export TMP
 TMPDIR=$TMP; export TMPDIR
