@@ -1,7 +1,6 @@
-#!/bin/sh
-
 # Install Gnome Desktop on CentOS 6
 
+```sh
 yum groupinstall "X Window System" -y
 yum -y groupinstall "Desktop"
 yum -y groupinstall "General Purpose Desktop"
@@ -88,6 +87,6 @@ ssh -L 5901:127.0.0.1:5901 -N -f -l oracle <db-hostname>
 ##### Acess VNC server using localhost:5901
 cd database
 ./runInstaller
-
+```
 Ref: https://www.tecmint.com/oracle-database-11g-release-2-installation-in-linux/
 
