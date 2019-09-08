@@ -7,8 +7,9 @@ yum -y groupinstall "General Purpose Desktop"
 yum install -y xorg-x11-apps java gnome-core xfce4 firefox expect tigervnc-server
 service messagebus restart
 chkconfig vncserver on
-
-# Configure VNC Server
+```
+##### Configure VNC Server
+```sh
 useradd -p $(echo Welcome | openssl passwd -1 -stdin) oracle
 su oracle
 #!/bin/sh
@@ -34,8 +35,10 @@ echo 'VNCSERVERARGS[1]="-geometry 1024x768"' >> /etc/sysconfig/vncservers
 service vncserver restart
 pkill vnc
 echo "exec gnome-session &" >> /home/pravin/.vnc/xstartup
+```
+##### Install Oracle 11.g R2
 
-# Install Oracle 11.g R2
+```sh
 cd /etc/yum.repos.d
 yum install wget ntp mlocate -y
 wget https://public-yum.oracle.com/public-yum-ol6.repo
@@ -79,12 +82,15 @@ unzip linux_11gR2_database_2of2.zip
 
 
 DISPLAY=hostname:0.0;export DISPLAY
+```
 
 ##### Login into VNC server, enable port forwarding:
-
+```sh
 ssh -L 5901:127.0.0.1:5901 -N -f -l oracle <db-hostname>
+```
 
 ##### Acess VNC server using localhost:5901
+```sh
 cd database
 ./runInstaller
 ```
