@@ -2,10 +2,10 @@
 
 ```sh
 yum clean all & yum update all & yum update -y
-yum groupinstall "X Window System" -y
+yum -y groupinstall "X Window System" 
 yum -y groupinstall "Desktop"
 yum -y groupinstall "General Purpose Desktop"
-yum install -y xorg-x11-apps java gnome-core xfce4 firefox expect tigervnc-server wget ntp mlocate
+yum -y install xorg-x11-apps java gnome-core xfce4 firefox expect tigervnc-server wget ntp mlocate
 service messagebus restart
 chkconfig vncserver on
 ```
