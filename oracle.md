@@ -1,4 +1,4 @@
-# Install Gnome Desktop on CentOS 6
+# Install Gnome Desktop on CentOS 6, Configure VNC Server and install Oracle Database 11g Release 2
 
 ```sh
 yum groupinstall "X Window System" -y
