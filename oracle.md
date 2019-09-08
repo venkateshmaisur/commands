@@ -36,6 +36,7 @@ echo 'VNCSERVERARGS[1]="-geometry 1024x768"' >> /etc/sysconfig/vncservers
 service vncserver restart
 pkill vnc
 echo "exec gnome-session &" >> /home/oracle/.vnc/xstartup
+# reboot
 ```
 ##### Install Oracle 11.g R2
 
