@@ -111,4 +111,11 @@ openssl s_client -connect <HS@-hostname>:<port> -tls1_1
 openssl s_client -connect <HS@-hostname>:<port> -tls1_2
 ```
   
-  
+  ##### Create a keystore JKS
+  ```sh
+  Create a keystore in PKCS12 format from your private key file, certificate and root public certificate
+[~]$ openssl pkcs12 -export -out corp_cert_chain.pfx -inkey <private-key>.key -in <cert.cer> -certfile <root_intermediate>.cer
+
+Generate  keystore
+[~]$ keytool -importkeystore  -srckeystore corp_cert_chain.pfx -srcstoretype pkcs12 -destkeystore keystore.jks -deststoretype jks -srcstorepass password -deststorepass password -destkeypass <password>
+```
