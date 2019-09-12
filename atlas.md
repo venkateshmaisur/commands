@@ -175,6 +175,40 @@ Other than this, I don't see any other concern.
 
 ```
 
+##### Triage
+```
+
+I will assume that this cluster is not kerberized and will share few below cmds and share me the output of the same.
+
+1. Could you please confirm Ambari Infra and kafka are up and running?
+
+Share me the output of below cmds in text file and attach the text to the case.
+
+
+/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --list --zookeeper ZK-Hostname:2181
+
+cd /usr/hdp/current/kafka-broker/bin
+./kafka-topics.sh --describe --zookeeper ZK-Hostname:2181 --topic ATLAS_HOOK
+./kafka-topics.sh --describe --zookeeper ZK-Hostname:2181 --topic ATLAS_ENTITIES
+./kafka-topics.sh --describe --zookeeper ZK-Hostname:2181 --topic __consumer_offsets
+./kafka-consumer-groups.sh --bootstrap-server <broker host>:6667 --list
+./kafka-consumer-groups.sh --describe --bootstrap-server <broker host>:6667 --group atlas
+
+
+Login into Ambari infra Node:
+curl -ik "http://$(hostname -f):8886/solr/admin/collections?action=clusterstatus&wt=json&indent=true"
+
+
+Attach atlas logs /var/log/atlas/application.log
+
+Also, attach below config files.
+
+hive,atlas,kafka
+
+tar -cvzf configs.tar.gz /etc/kafka/conf/* /etc/atlas/conf/* /etc/hive/conf/*
+
+```
+
 ---------------------------------------------------------------------------------------------------------------------------
 
 Below are the links which might be helpful to you for getting started with atlas. 
