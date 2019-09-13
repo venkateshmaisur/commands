@@ -174,5 +174,10 @@ mysqldump --databases ranger -u USERNAME -p > /tmp/ranger.original.mysql
 env GZIP=-9 tar cvzf  ranger-db.tar.gz /tmp/ranger.original.mysql
  
 # ls -ltrh ranger-db.tar.gz
+
+# Restore
+mysql -u root -proot
+create database ranger1;
+mysqldump -u root -proot ranger1 < ranger-db.sql
 ```
 
