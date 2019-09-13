@@ -168,3 +168,11 @@ SHOW OPEN TABLES WHERE `Table` LIKE '%[TABLE_NAME]%' AND `Database` LIKE '[DBNAM
 will show all process currently running, including process that has acquired lock on tables.
 ```
 
+##### Ranger Mysql DB DUMP
+```mysql
+mysqldump --databases ranger -u USERNAME -p > /tmp/ranger.original.mysql
+env GZIP=-9 tar cvzf  ranger-db.tar.gz /tmp/ranger.original.mysql
+ 
+# ls -ltrh ranger-db.tar.gz
+```
+
