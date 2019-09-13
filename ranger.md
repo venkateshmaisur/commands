@@ -160,9 +160,11 @@ Execute below cmd on Usersync node and attach the tar file
 ```
 
 ##### mysql lock
-```
-# SHOW PROCESSLIST
-# SHOW OPEN TABLES WHERE In_use > 0;
+```sh
+SHOW PROCESSLIST
+SHOW OPEN TABLES WHERE In_use > 0;
+SHOW OPEN TABLES WHERE `Table` LIKE '%[TABLE_NAME]%' AND `Database` LIKE '[DBNAME]' AND In_use > 0;
+
 will show all process currently running, including process that has acquired lock on tables.
 ```
 
