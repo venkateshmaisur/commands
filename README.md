@@ -86,7 +86,7 @@ tshark -r /var/tmp/ldap.pcap  -frame == 7
 ```
 
 
-## Hive beeline command
+## Knox Hive beeline command
 ```
 beeline -u "jdbc:hive2://KnoxserverInternalHostName:8443/;ssl=true;transportMode=http;httpPath=gateway/default/hive" -n <username> -p <password>
 ```
