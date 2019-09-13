@@ -159,3 +159,10 @@ Execute below cmd on Usersync node and attach the tar file
  egrep -A1 ranger.usersync.[ldap\|group] etc/ranger/usersync/conf/ranger-ugsync-site.xml | tr -d " "
 ```
 
+##### mysql lock
+```
+# SHOW PROCESSLIST
+# SHOW OPEN TABLES WHERE In_use > 0;
+will show all process currently running, including process that has acquired lock on tables.
+```
+
