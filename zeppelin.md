@@ -22,3 +22,4 @@ SELECT * FROM authors;
 %livy
 sc.version
 ```
+https://community.cloudera.com/t5/Community-Articles/How-to-configure-zeppelin-livy-interpreter-for-secure-HDP/ta-p/249267
