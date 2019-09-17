@@ -225,7 +225,18 @@ org.apache.commons.exec.ExecuteException: Process exited with an error: 1 (Exit 
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
 	at java.lang.Thread.run(Thread.java:745)
 ```
+## kinit in shell interpreter
 
+```sh
+Zeppelin shell interpreter cannot do kinit for the users. User should execute kinit either by using below command, or create a .bash profile to execute kinit on login. 
 
+echo "password" | kinit >> ~/.bash_profile
 
+or create a shell script with restricted permissions and set it in bash_profile. 
+
+vi ~/kinit_script.sh or
+echo "password" | kinit
+chmod 700 ~/kinit_script.sh 
+chown <user> ~/kinit_script.sh 
+```
 
