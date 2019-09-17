@@ -144,7 +144,7 @@ activeDirectoryRealm.groupRolesMap = "CN=support,OU=groups,OU=hortonworks,DC=sup
 activeDirectoryRealm.authorizationCachingEnabled = true 
 ```
 
-## sh impersonation
+## SH impersonation
 
 https://zeppelin.apache.org/docs/0.7.0/manual/userimpersonation.html
 ```
@@ -240,3 +240,10 @@ chmod 700 ~/kinit_script.sh
 chown <user> ~/kinit_script.sh 
 ```
 
+## JDBC Impersonnation
+
+```
+from Zeppelin UI ---> credentials tab in zeppelin UI set the user name and password with below line.
+
+jdbc.jdbc <userName> <Password>
+```
