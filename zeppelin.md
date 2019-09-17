@@ -27,6 +27,20 @@ sc.version
 ```
 https://community.cloudera.com/t5/Community-Articles/How-to-configure-zeppelin-livy-interpreter-for-secure-HDP/ta-p/249267
 
+## Python Interpreter
+
+```sh
+# su - zeppelin 
+# cd /usr/hdp/current/zeppelin-server/bin/ 
+# ./install-interpreter.sh -n python 
+
+After installing python it was not showing in interpreter group so we added the blow property in 
+zeppelin.interpreters in Advance zeppelin configs 
+
+" org.apache.zeppelin.python.PythonInterpreter " 
+
+Then after restarting zeppelin we were able to see python in interpreter groups and we created Python interpreter with python as interpreter group. 
+```
 
 ## AD authentication
 
