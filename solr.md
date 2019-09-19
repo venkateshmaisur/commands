@@ -360,6 +360,80 @@ Step 3: Verify the status of purge query using the following command
 $ curl --negotiate -u : "http://azslvedlkdcdd01.d01saedl.manulife.com:8886/solr/admin/collections?action=REQUESTSTATUS&requestid=del_old_data" 
 ```
 
+## HDPSearch Solr Instllation and Enabling Ranger Solr plugin
+##### Solr HDP 2.6.5
+https://docs.cloudera.com/HDPDocuments/HDP2/HDP-2.6.5/bk_solr-search-installation/content/hdp-search30-install-mpack.html
+
+```sh
+cd /tmp
+wget http://public-repo-1.hortonworks.com/HDP-SOLR/hdp-solr-ambari-mp/solr-service-mpack-3.0.0.tar.gz
+ambari-server install-mpack --mpack=/tmp/solr-service-mpack-3.0.0.tar.gz
+ambari-server restart
+
+Goto Ambari UI and install the Solr Service.
+
+yum install ranger-solr-plugin.noarch -y
+yum install mysql-connector-java -y
+
+cd /usr/hdp/2*/ranger-solr-plugin
+cd /usr/hdp/3*/ranger-solr-plugin
+
+cd /usr/hdp/2.6.5.0-292/ranger-solr-plugin
+cd /usr/hdp/3.1.0.0-78/ranger-solr-plugin
+
+Edit install.properties and make sure the following settings at least are properly configured:
+
+POLICY_MGR_URL=http://<ranger-host>:6080 
+SQL_CONNECTOR_JAR=/usr/share/java/mysql-connector-java.jar
+Edit solr-plugin-install.properties and set correct value for install dir:
+
+COMPONENT_INSTALL_DIR_NAME=/opt/lucidworks-hdpsearch/solr/server 
+Next source the environment and enable the plugin:
+
+source /etc/hadoop/conf/hadoop-env.sh
+export JAVA_HOME=/usr/jdk64/jdk1.8.0_112
+./enable-solr-plugin.sh
+
+kinit -kt /etc/security/keytabs/ambari-infra-solr.service.keytab $(klist -kt /etc/security/keytabs/ambari-infra-solr.service.keytab |sed -n "4p"|cut -d ' ' -f7)
+
+/opt/lucidworks-hdpsearch/solr/server/scripts/cloud-scripts/zkcli.sh -z 'c374-node3.squadron.support.hortonworks.com:2181' -cmd put /solr/security.json '{"authentication":{"class": "org.apache.solr.security.KerberosPlugin"},"authorization":{"class": "org.apache.ranger.authorization.solr.authorizer.RangerSolrAuthorizer"}}'
+
+# Create Solr Policy in Ranger UI:
+
+tag.download.auth.users = solr
+policy.download.auth.users = solr
+ambari.service.check.user = ambari-qa
+
+# Enable Solr auidts if you are using Infra-solr Cloud
+
+Make sure you replace "ZK" with your zookeeper string
+vi install.properties
+
+XAAUDIT.SOLR.ENABLE=true
+XAAUDIT.SOLR.URL=NONE
+XAAUDIT.SOLR.USER=admin
+XAAUDIT.SOLR.PASSWORD=admin
+XAAUDIT.SOLR.ZOOKEEPER=ZK1:2181,ZK2:2181/infra-solr
+
+then re-install ranger solr plugin.
+./disable-solr-plugin.sh
+./enable-solr-plugin.sh
+
+===============> 
+Goto Ambari UI -> Solr -> solr-config-env, add below in the end.
+
+SOLR_OPTS="$SOLR_OPTS -Dsun.security.krb5.rcache=none"
+then save and restart Solr instance.
+
+===============> 
+Goto Ambari UI -> Infra Solr -> Advanced infra-solr-security-json
+
+in infra-solr-security-json section
+
+change Ranger audit service users from {default_ranger_audit_users} to {default_ranger_audit_users},solr
+then restart Infra-solr
+```
+
 - [Performance Tuning for Ambari Infra](https://docs.hortonworks.com/HDPDocuments/Ambari-2.6.2.0/bk_ambari-operations/content/performance_tuning_for_ambari_infra.html)
 - [Securing Solr Collections with Ranger + Kerberos](https://community.hortonworks.com/articles/15159/securing-solr-collections-with-ranger-kerberos.html)
 - [Setup Ranger to use Ambari Infra Solr enabled in SSL](https://community.hortonworks.com/articles/92987/setup-ranger-to-use-ambari-infra-solr-enabled-in-s.html)
