@@ -119,3 +119,25 @@ openssl s_client -connect <HS@-hostname>:<port> -tls1_2
 Generate  keystore
 [~]$ keytool -importkeystore  -srckeystore corp_cert_chain.pfx -srcstoretype pkcs12 -destkeystore keystore.jks -deststoretype jks -srcstorepass password -deststorepass password -destkeypass <password>
 ```
+
+## LLAP Slider agent SSL
+```java
+openssl genrsa -des3 -passout pass:**** -out /tmp/sec1568724372347/security/ca.key 4096 
+
+openssl req -passin pass:**** -new -key /tmp/sec1568724372347/security/ca.key -out /tmp/sec1568724372347/security/ca.csr -config /tmp/sec1568724372347/security/ca.config -subj /CN=squadron.support.hortonworks.com/OU=container_e13_1568701214962_0001_01_000001/OU=llap0 -batch 
+
+openssl ca -create_serial -out /tmp/sec1568724372347/security/ca.crt -days 365 -keyfile /tmp/sec1568724372347/security/ca.key -key kQY4KiLDQBOHmE5o86l1PjLQcghWrvpPJ7btZKm04evyhBbgv1 -selfsign -extensions jdk7_ca -config /tmp/sec1568724372347/security/ca.config -batch -infiles /tmp/sec1568724372347/security/ca.csr 
+
+openssl pkcs12 -export -in /tmp/sec1568724372347/security/ca.crt -inkey /tmp/sec1568724372347/security/ca.key -certfile /tmp/sec1568724372347/security/ca.crt -out /tmp/sec1568724372347/security/keystore.p12 -password pass:**** -passin pass:**** 
+
+
+# keytool -importkeystore -deststorepass changeit -destkeypass changeit -destkeystore myServerKeystore.jks -srckeystore /etc/pki/tls/tomcat6-CAS-certs/216-113-229-31-serverCertAsPK12.p12  -srcstoretype PKCS12 -alias servercertificate 
+
+++++++++++++++++++
+keytool -list -keystore keystore1.p12 -storetype PKCS12 -v -storepass hadoop@12345
+
+# keytool -importkeystore -deststorepass hadoop@12345 -destkeypass hadoop@12345 -destkeystore myServerKeystore.jks -srckeystore keystore1.p12  -srcstoretype PKCS12 -alias 1 
+
+# keytool -list -keystore myServerKeystore.jks -storepass hadoop@12345 -v
+
+```
