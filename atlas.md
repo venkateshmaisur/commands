@@ -208,6 +208,109 @@ hive,atlas,kafka
 tar -cvzf configs.tar.gz /etc/kafka/conf/* /etc/atlas/conf/* /etc/hive/conf/*
 
 ```
+## Atlas/Infra Solr issue after Upgrading Ambari to 2.7.3
+
+```sh
+
++++++++ERROR++++++++
+shards can be added only to 'implicit' collections
+
+Cause: 
+=====
+This issue occurs when the infra-solr is not upgraded although Ambari is upgraded. When Ambari uploads the latest version of security.json to Zookeeper, it will be incompatible with the old version of Infra-Solr. 
+Note: 
+This classpath issue happens only if Solr is restarted after ambari upgrade 
+
+
+Resolution: 
+
+Perform below steps to resolve this issue: 
+
+1) Take a backup of security.json: 
+$ kinit -kt <infra-solr-keytab> <principal> 
+
+$ /usr/hdp/current/zookeeper-client/bin/zkCli.sh -server `hostname -f` get /infra-solr/security.json > /var/tmp/security.json 
+
+
+2) Disable the authorization by replacing the following in infra-solr-env 
+
+Replcace: 
+#------------------------ 
+SOLR_AUTH_TYPE="kerberos" 
+#------------------------ 
+
+With: 
+#+++++++++++++++++++++++++ 
+SOLR_KERB_NAME_RULES="{{infra_solr_kerberos_name_rules}}" 
+SOLR_AUTHENTICATION_CLIENT_CONFIGURER="org.apache.solr.client.solrj.impl.Krb5HttpClientConfigurer" 
+#+++++++++++++++++++++++++ 
+
+
+
+3) If ambari version is at least 2.7.1, replace logj4 props as well in infra-solr-env 
+Replcae: 
+#------------------------ 
+LOG4J_PROPS={{infra_solr_conf}}/log4j2.xml 
+#------------------------ 
+
+With: 
+#+++++++++++++++++++++++++ 
+LOG4J_PROPS={{infra_solr_conf}}/log4j.properties 
+#+++++++++++++++++++++++++ 
+
+
+4) In Infra-Solr Config-> Advanced infra-solr-security-json, 
+Select "Manually Managed" 
+
+5) Update security.json: 
+/usr/hdp/current/zookeeper-client/bin/zkCli.sh -server `hostname -f` set /infra-solr/security.json "{ "authentication": { "class": "org.apache.solr.security.KerberosPlugin" } }" 
+
+IMPORTANT: 
+Please note that these should be reverted after the solr instances are upgraded. 
+
+
+6) Restart infra-solr. 	
+
+
+7) Run migrationConfigGenerator.py script 
+
+wget --no-check-certificate -O /usr/lib/ambari-infra-solr-client/migrationConfigGenerator.py https://raw.githubusercontent.com/apache/ambari/release-2.7.3/ambari-infra/ambari-infra-solr-client/src/main/python/migrationConfigGenerator.py
+chmod +x /usr/lib/ambari-infra-solr-client/migrationConfigGenerator.py
+
+wget --no-check-certificate -O /usr/lib/ambari-infra-solr-client/migrationHelper.py https://raw.githubusercontent.com/apache/ambari/release-2.7.3/ambari-infra/ambari-infra-solr-client/src/main/python/migrationHelper.py
+
+$ cd /usr/lib/ambari-infra-solr-client 
+$ export CONFIG_INI_LOCATION=/usr/lib/ambari-infra-solr-client/ambari_solr_migration.ini 
+
+$ ./migrationConfigGenerator.py --ini-file $CONFIG_INI_LOCATION --host c3157-node1.squadron-labs.com --port 8080 --cluster c3157 --username admin --password ashelke --backup-base-path=/root --java-home /usr/jdk64/jdk1.8.0_112 
+
+Start generating config file: /usr/lib/ambari-infra-solr-client/ambari_solr_migration.ini ... 
+Get Ambari cluster details ... 
+Set JAVA_HOME: /usr/jdk64/jdk1.8.0_112 
+Service detected: ZOOKEEPER 
+Zookeeper connection string: 
+Service detected: AMBARI_INFRA_SOLR 
+Infra Solr znode: /infra-solr 
+Service detected: RANGER 
+Ranger Solr collection: ranger_audits 
+Ranger backup path: /var/tmp/ranger 
+Service detected: ATLAS 
+Atlas Solr collections: fulltext_index, edge_index, vertex_index 
+Atlas backup path: /var/tmp/atlas 
+Kerberos: enabled 
+Config file generation has finished successfully 
+
+
+# Back up Ambari Infra Solr Data
+/usr/lib/ambari-infra-solr-client/ambariSolrMigration.sh --ini-file $CONFIG_INI_LOCATION --mode backup | tee backup_output.txt
+
+Migration helper command FINISHED
+Total Runtime: 00:01:02
+
+
+# Remove Existing Collections & Upgrade Binaries
+ 
+````
 
 ---------------------------------------------------------------------------------------------------------------------------
 
