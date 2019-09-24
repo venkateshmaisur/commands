@@ -25,6 +25,11 @@ mysql_secure_installation
 
 ```
 
+## RESET MYSQL Ranger passsword
+```
+echo -n 'PASSWORD{USERNAME}' | md5sum
+```
+
 ## Setup Ambari
 ```shell
 yum install mysql-connector-java -y
