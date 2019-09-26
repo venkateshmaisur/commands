@@ -185,4 +185,20 @@ mysql -u root -proot
 create database ranger1;
 mysqldump -u root -proot ranger1 < ranger-db.sql
 ```
+## HSM
 
+```
+ Luna client folder need open permission for kms account.
+$sudo chmod -R 655 /usr/safenet
+
+And I think this document is helpful. http://techdocs.broadcom.com/content/broadcom/techdocs/us/en/ca-enterprise-software/layer7-api-management/api-gateway/9-2/install-configure-upgrade/configure-the-appliance-gateway/configure-hardware-security-modules-hsm/configure-the-safenet-luna-sa-hsm.html
+
+Our document missed a few important configuration for JDK.
+So eventually I did,
+
+$ sudo cp -p /usr/safenet/lunaclient/jsp/lib/LunaProvider.jar /usr/lib/jvm/java/lib/
+$ sudo cp -p /usr/safenet/lunaclient/jsp/lib/LunaProvider.jar /usr/lib/jvm/java/lib/
+$ sudo vim /usr/lib/jvm/java/jre/lib/security/java.security
+security.provider.10=com.safenetinc.luna.provider.LunaProvider
+$ sudo chmod -R 655 /usr/safenet
+```
