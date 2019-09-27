@@ -187,18 +187,21 @@ mysqldump -u root -proot ranger1 < ranger-db.sql
 ```
 ## HSM
 
-```
+```sh
  Luna client folder need open permission for kms account.
-$sudo chmod -R 655 /usr/safenet
 
-And I think this document is helpful. http://techdocs.broadcom.com/content/broadcom/techdocs/us/en/ca-enterprise-software/layer7-api-management/api-gateway/9-2/install-configure-upgrade/configure-the-appliance-gateway/configure-hardware-security-modules-hsm/configure-the-safenet-luna-sa-hsm.html
+1. make sure libLunaAPI.so file is present under $JAVA_HOME/jre/lib/ext/
+copy libLunaAPI.so from lunaclient lib folder /usr/safenet/lunaclient/jsp/lib
 
-Our document missed a few important configuration for JDK.
-So eventually I did,
+2. LunaProvider.jar also present right under lib
 
 $ sudo cp -p /usr/safenet/lunaclient/jsp/lib/LunaProvider.jar /usr/lib/jvm/java/lib/
-$ sudo cp -p /usr/safenet/lunaclient/jsp/lib/LunaProvider.jar /usr/lib/jvm/java/lib/
+
 $ sudo vim /usr/lib/jvm/java/jre/lib/security/java.security
 security.provider.10=com.safenetinc.luna.provider.LunaProvider
 $ sudo chmod -R 655 /usr/safenet
+
+ http://techdocs.broadcom.com/content/broadcom/techdocs/us/en/ca-enterprise-software/layer7-api-management/api-gateway/9-2/install-configure-upgrade/configure-the-appliance-gateway/configure-hardware-security-modules-hsm/configure-the-safenet-luna-sa-hsm.html
+ 
+ https://cwiki.apache.org/confluence/display/RANGER/Ranger+KMS+Luna+HSM+Support
 ```
