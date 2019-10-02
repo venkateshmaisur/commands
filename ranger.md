@@ -200,6 +200,11 @@ $ sudo cp -p /usr/safenet/lunaclient/jsp/lib/LunaProvider.jar /usr/lib/jvm/java/
 $ sudo vim /usr/lib/jvm/java/jre/lib/security/java.security
 security.provider.10=com.safenetinc.luna.provider.LunaProvider
 $ sudo chmod -R 655 /usr/safenet
+
+## Set env variable:
+export PATH=/usr/lib/jvm/java/bin/:$PATH
+export JAVA_HOME=/usr/lib/jvm/java
+bash -x ./HSMMK2DB.sh LunaProvider HAHSMMSLA
 ```
  http://techdocs.broadcom.com/content/broadcom/techdocs/us/en/ca-enterprise-software/layer7-api-management/api-gateway/9-2/install-configure-upgrade/configure-the-appliance-gateway/configure-hardware-security-modules-hsm/configure-the-safenet-luna-sa-hsm.html
  
