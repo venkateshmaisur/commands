@@ -312,6 +312,19 @@ Total Runtime: 00:01:02
  
 ````
 
+## Tag sync performannce 
+```
+he consumer lag stats every 1 hour for a day so that we can see the current performance. (along with that timeframe tagsync logs)
+Along with that please get the kafka dump for ATLAS_ENTITIES topic
+
+--
+#date; /usr/hdp/current/kafka-broker/bin/kafka-consumer-groups.sh --bootstrap-server <broker>:6667 --describe --group ranger_entities_consumer --security-protocol <protocol>
+--
+
+--
+/usr/hdp/current/kafka-broker/bin/kafka-console-consumer.sh --bootstrap-server <broker>:6667 --topic ATLAS_ENTITIES --security-protocol <protocol> --from-beginning > /tmp/atlas_entities.log
+```
+
 ---------------------------------------------------------------------------------------------------------------------------
 
 Below are the links which might be helpful to you for getting started with atlas. 
