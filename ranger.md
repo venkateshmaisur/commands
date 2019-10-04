@@ -202,7 +202,7 @@ security.provider.10=com.safenetinc.luna.provider.LunaProvider
 $ sudo chmod -R 655 /usr/safenet
 
 ## Set env variable:
-export PATH=/usr/lib/jvm/java/bin/:$PATH
+export PATH=/usr/lib/jvm/java/bin/:$PATH 
 export JAVA_HOME=/usr/lib/jvm/java
 bash -x ./HSMMK2DB.sh LunaProvider HAHSMMSLA
 ```
