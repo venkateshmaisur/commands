@@ -437,12 +437,8 @@ then restart Infra-solr
 ##### Solr jar verbose output
 ```
 Goto Ambari UI -> Ambari Infra -> Configs --> Advanced -> Advanced infra-solr-env --> infra-solr-env template
-
-
 Add below in the end:
-
 SOLR_OPTS="$SOLR_OPTS -verbose:class"
-
 just before {% endif %} and attach the solr-8886-console.log log file.
 ```
 
