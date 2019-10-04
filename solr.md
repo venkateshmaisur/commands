@@ -434,7 +434,7 @@ change Ranger audit service users from {default_ranger_audit_users} to {default_
 then restart Infra-solr
 ```
 
-## Solr jar verbose output
+##### Solr jar verbose output
 ```
 Goto Ambari UI -> Ambari Infra -> Configs --> Advanced -> Advanced infra-solr-env --> infra-solr-env template
 
@@ -454,4 +454,4 @@ just before {% endif %} and attach the solr-8886-console.log log file.
 - [Banana](https://github.com/lucidworks/banana/wiki/Installation-and-Quick-Start)
 - [ams-solr-metrics-mpack](https://github.com/oleewere/ams-solr-metrics-mpack)
 - []
-- []
+
