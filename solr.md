@@ -434,6 +434,18 @@ change Ranger audit service users from {default_ranger_audit_users} to {default_
 then restart Infra-solr
 ```
 
+## Solr jar verbose output
+```
+Goto Ambari UI -> Ambari Infra -> Configs --> Advanced -> Advanced infra-solr-env --> infra-solr-env template
+
+
+Add below in the end:
+
+SOLR_OPTS="$SOLR_OPTS -verbose:class"
+
+just before {% endif %} and attach the solr-8886-console.log log file.
+```
+
 - [Performance Tuning for Ambari Infra](https://docs.hortonworks.com/HDPDocuments/Ambari-2.6.2.0/bk_ambari-operations/content/performance_tuning_for_ambari_infra.html)
 - [Securing Solr Collections with Ranger + Kerberos](https://community.hortonworks.com/articles/15159/securing-solr-collections-with-ranger-kerberos.html)
 - [Setup Ranger to use Ambari Infra Solr enabled in SSL](https://community.hortonworks.com/articles/92987/setup-ranger-to-use-ambari-infra-solr-enabled-in-s.html)
