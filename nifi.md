@@ -1,3 +1,63 @@
+# Setup NiFi SSL
+
+##### 1. Enabling SSL with a NiFi Certificate Authority
+https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-authentication/content/enabling_ssl_with_a_nifi_certificate_authority.html
+
+```sh
+If you want to enable SSL with a NiFi CA installed, and are not yet using Ranger to manage authorization:
+1. Check the Enable SSL? box.
+2. Specify the NiFi CA Token.
+3. Verify that the authorizations.xml file on each node does not contain policies. The authorizations.xml is located in {nifi_internal_dir}/conf. By default, this location is /var/lib/nifi/conf/, and the value of {nifi_internal_dir} is specified in the NiFi internal dir field under Advanced nifi-ambari-config.
+
+
+Note
+If authorizations.xml does contain policies, you must delete it from each node. If you do not, your Initial Admin Identity and Node Identities changes do not take effect.
+
+4. Specify the Initial Admin Identity. The Initial Admin Identity is the identity of an initial administrator and is granted access to the UI and has the ability to create additional users, groups, and policies. This is a required value when you are not using the Ranger plugin for NiFi for authorization.
+The Initial Admin Identity format is CN=admin, OU=NIFI.
+After you have added the Initial Admin Identity, you must immediately generate certificate for this user.
+5. Specify the Node Identities. This indicates the identity of each node in a NiFi cluster and allows clustered nodes to communicate. This is a required value when you are not using the Ranger plugin for NiFi for authorization.
+<property name="Node Identity 1">CN=node1.fqdn, OU=NIFI</property>
+<property name="Node Identity 2">CN=node2.fqdn, OU=NIFI</property>
+<property name="Node Identity 3">CN=node3.fqdn, OU=NIFI</property>
+Replace node1.fqdn, node2.fqdn, and node3.fqdn with their respective fully qualified domain names.
+
+```
+
+##### 2. Generating Client Certificates
+https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-authentication/content/generating_client_certificates.html
+
+```sh
+[root@c374-node4 nifi-toolkit-1.5.0.3.1.2.0-7]# bin/tls-toolkit.sh
+tls-toolkit.sh: JAVA_HOME not set; results may vary
+Expected at least a service argument.
+
+Usage: tls-toolkit service [-h] [args]
+
+Services:
+   standalone: Creates certificates and config files for nifi cluster.
+   server: Acts as a Certificate Authority that can be used by clients to get Certificates
+   client: Generates a private key and gets it signed by the certificate authority.
+   status: Checks the status of an HTTPS endpoint by making a GET request using a supplied keystore and truststore.
+```
+
+## ERROR:
+
+```sh
+[root@c374-node4 nifi-toolkit-1.5.0.3.1.2.0-7]# bin/tls-toolkit.sh client -c c374-node4.squadron.support.hortonworks.com -D "CN=admin, OU=NIFI" -t nifi -p 10443 -T pkcs12
+2019/10/04 11:45:26 INFO [main] org.apache.nifi.toolkit.tls.commandLine.BaseTlsToolkitCommandLine: Command line argument --keyStoreType=pkcs12 only applies to keystore, recommended truststore type of JKS unaffected.
+2019/10/04 11:45:26 INFO [main] org.apache.nifi.toolkit.tls.service.client.TlsCertificateAuthorityClient: Requesting new certificate from c374-node4.squadron.support.hortonworks.com:10443
+2019/10/04 11:45:27 INFO [main] org.apache.nifi.toolkit.tls.service.client.TlsCertificateSigningRequestPerformer: Requesting certificate with dn CN=admin,OU=NIFI from c374-node4.squadron.support.hortonworks.com:10443
+Service client error: Received response code 403 with payload {"hmac":null,"pemEncodedCertificate":null,"error":"forbidden"}
+```
+## Resolution:
+```sh
+-t nifi
+We need to pass the NiFi token password:
+Step 2>>create keystore for that user bin/tls-toolkit.sh client -c <NIFI CA HOSTNAME> -D 'CN=username, OU=NIFI' -p <NIFI CA port> -t <<toolkit token>> -T pkcs12
+```
+
+
 # Troubleshooting Nifi SSL using NiFi CA and Nifi, Ranger Plugin configured with Internal/Public CA using SAN entry
 
 ##### 1. Use openssl command to see what server certificate was being presented by Ranger to client (nifi):
