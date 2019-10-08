@@ -117,6 +117,48 @@ nifi.security.identity.mapping.value.dn=$1@$2
 nifi.security.identity.mapping.pattern.kerb=^(.*?)/instance@(.*?)$
 nifi.security.identity.mapping.value.kerb=$1@$2
 ```
+## 3. [Configuring NiFi Authentication and Proxying with Apache Knox](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-knox/content/configuring_nifi_for_knox_authentication.html)
+
+```sh
+We recommend that NiFi is installed on a different host than Knox.
+
+1. In Advanced nifi-ambari-ssl-config, the Initial Admin Identity value must specify a user that Apache Knox can authenticate.
+2. In Advanced nifi-ambari-ssl-config, add a node identity for the Knox node:
+<property name="Node Identity 1">CN=$NIFI_HOSTNAME, OU=NIFI</property>
+<property name="Node Identity 2">CN=$NIFI_HOSTNAME, OU=NIFI</property>
+<property name="Node Identity 3">CN=$NIFI_HOSTNAME, OU=NIFI</property>
+<property name="Node Identity 4">CN=$KNOX_HOSTNAME, OU=KNOX</property>
+3. Update the nifi.web.proxy.context.path property in Advanced nifi-properties:
+nifi.web.proxy.context.path=/$GATEWAY_CONTEXT/flow-management/nifi-app
+nifi.web.proxy.context.path=/gateway/flow-management/nifi-app
+$GATEWAY_CONTEXT is the value in the Advanced gateway-site gateway.path field in the Ambari Configs for Knox.
+4. Update the nifi.web.proxy.host property in Advanced nifi-properties with a comma-separated list of the host name and port for each Knox host, if you are deploying in a container or cloud environment.
+For example:
+knox-host1:18443, knox-host2:443
+```
+
+## 4. [Preparing to Generate Knox Certificates using the TLS Toolkit](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-knox/content/creating-knox-certificates-using-the-tls-toolkit.html)
+
+```sh
+
+sudo su - knox
+vi /home/knox/nifi-ca-config.json 
+
+{
+  "dn" : "CN=c374-node4.squadron.support.hortonworks.com, OU=KNOX",
+  "keyStore" : "/home/knox/knox-nifi-keystore.jks",
+  "keyStoreType" : "jks",
+  "keyStorePassword" : "Welcome@12345",
+  "keyPassword" : "Welcome@12345",
+  "token" : "Welcome@12345",
+  "caHostname" : "c374-node4.squadron.support.hortonworks.com",
+  "port" : 10443,
+  "trustStore" : "/home/knox/knox-nifi-truststore.jks",
+  "trustStorePassword" : "Welcome@12345",
+  "trustStoreType" : "jks"
+}
+```
+
 
 
 # Troubleshooting Nifi SSL using NiFi CA and Nifi, Ranger Plugin configured with Internal/Public CA using SAN entry
