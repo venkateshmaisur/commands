@@ -1,5 +1,9 @@
-# Setup NiFi SSL
+# Setup NiFi:
 
+ - [x] Setup NiFi SSL https://github.com/bhagadepravin/commands/blob/master/nifi.md#setup-nifi-ssl
+ - [x] NiFi LDAP https://github.com/bhagadepravin/commands/blob/master/nifi.md#nifi-lightweight-directory-access-protocol-ldap
+ - [x] NiFi SSL Troubleshooting https://github.com/bhagadepravin/commands/blob/master/nifi.md#troubleshooting-nifi-ssl-using-nifi-ca-and-nifi-ranger-plugin-configured-with-internalpublic-ca-using-san-entry
+ 
 https://www.evernote.com/l/AjKET3tRTm1IUKLpKbDFQag-BRbMWbdvU9E
 
 ## 1. [Enabling SSL with a NiFi Certificate Authority](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-authentication/content/enabling_ssl_with_a_nifi_certificate_authority.html)
@@ -55,7 +59,7 @@ Service client error: Received response code 403 with payload {"hmac":null,"pemE
 ```sh
 -t nifi
 We need to pass the NiFi token password:
-Step 2>>create keystore for that user bin/tls-toolkit.sh client -c <NIFI CA HOSTNAME> -D 'CN=username, OU=NIFI' -p <NIFI CA port> -t <<toolkit token>> -T pkcs12
+Step 2>>create keystore for that user bin/tls-toolkit.sh client -c <NIFI CA HOSTNAME> -D 'CN=username, OU=NIFI' -p <NIFI CA port> -t "toolkit token" -T pkcs12
 
 
 ++++++++++
