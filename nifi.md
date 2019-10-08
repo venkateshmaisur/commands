@@ -2,7 +2,7 @@
 
 ## 1. [Enabling SSL with a NiFi Certificate Authority](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-authentication/content/enabling_ssl_with_a_nifi_certificate_authority.html)
 
-```sh
+```bash
 If you want to enable SSL with a NiFi CA installed, and are not yet using Ranger to manage authorization:
 1. Check the Enable SSL? box.
 2. Specify the NiFi CA Token.
@@ -26,7 +26,7 @@ Replace node1.fqdn, node2.fqdn, and node3.fqdn with their respective fully quali
 ## 2. [Generating Client Certificates](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-authentication/content/generating_client_certificates.html)
 
 
-```sh
+```java
 [root@c374-node4 nifi-toolkit-1.5.0.3.1.2.0-7]# bin/tls-toolkit.sh
 tls-toolkit.sh: JAVA_HOME not set; results may vary
 Expected at least a service argument.
@@ -42,7 +42,7 @@ Services:
 
 ##### ERROR:
 
-```sh
+```java
 [root@c374-node4 nifi-toolkit-1.5.0.3.1.2.0-7]# bin/tls-toolkit.sh client -c c374-node4.squadron.support.hortonworks.com -D "CN=admin, OU=NIFI" -t nifi -p 10443 -T pkcs12
 2019/10/04 11:45:26 INFO [main] org.apache.nifi.toolkit.tls.commandLine.BaseTlsToolkitCommandLine: Command line argument --keyStoreType=pkcs12 only applies to keystore, recommended truststore type of JKS unaffected.
 2019/10/04 11:45:26 INFO [main] org.apache.nifi.toolkit.tls.service.client.TlsCertificateAuthorityClient: Requesting new certificate from c374-node4.squadron.support.hortonworks.com:10443
