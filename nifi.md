@@ -287,7 +287,7 @@ As the Knox user, create `flow-management.xml` in `usr/hdp/current/knox-server/c
 ## 7 [Configuring Knox SSO](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-knox/content/configuring_knox_sso.html)
 
 If you want to use Knox SSO authentication, perform the following steps:
-1. On each cluster node with Knox installed, replace the ShiroProvider federation provider in the flow-management.xml file with the following content:
+1. On each cluster node with Knox installed, replace the ShiroProvider federation provider in the 1flow-management.xml1 file with the following content:
 
 ```xml
 <provider>
@@ -348,16 +348,17 @@ Your new flow-management.xml file looks similar to the following:
 </topology>
 ```
 ```sh
-    1. If you want to access NiFi directly and still use Knox SSO:
-        * Export the Knox SSO certificate:
- $KNOX_INSTALL_DIR/bin/knoxcli.sh export-cert 
-        * Set the following properties in the Advanced nifi-properties section in Ambari:
+1. If you want to access NiFi directly and still use Knox SSO:
+  * Export the Knox SSO certificate:
+$KNOX_INSTALL_DIR/bin/knoxcli.sh export-cert 
+  * Set the following properties in the Advanced nifi-properties section in Ambari:
 nifi.security.user.knox.url=https://c374-node4.squadron.support.hortonworks.com:8443/gateway/knoxsso/api/v1/websso
 nifi.security.user.knox.publicKey=/home/knox/gateway-identity.pem
 nifi.security.user.knox.cookieName=hadoop-jwt
 nifi.security.user.knox.audiences=
 
-The cookieName property must align with what is configured in Knox. The audiences property is used to only accept tokens from a particular audience. The audiences value is configured as part of Knox SSO.
+The cookieName property must align with what is configured in Knox. 
+The audiences property is used to only accept tokens from a particular audience. The audiences value is configured as part of Knox SSO.
 2. Save the configuration and restart Knox.
 ```
 
@@ -371,12 +372,12 @@ Knox DOWN —> Nifi and KNox are on same host
 ##### Resolution:--->
 
 ```java
-The error usually occurs when we importing a new certificate, which private key password is different from gateway.jks's password, into Knox's keystore gateway.jks. If this is the case, then could you please try changing the private key password by using something similar to the following command and try to restart the knox-server again and share the result.
+The error usually occurs when we importing a new certificate, which private key password is different from gateway.jks's password, into Knox's keystore gateway.jks. 
+If this is the case, then could you please try changing the private key password by using something similar to the following command and try to restart the knox-server again and share the result.
 
 keytool -keypasswd -alias gateway-identity -new <same_as_store_pass> -keystore gateway.jks
 
-Rename _gateway-credentials.jceks
-
+Rename _gateway-credentials.jceks\
 
 keytool -keypasswd -alias gateway-identity -new Welcome@12345 -keystore /usr/hdp/current/knox-server/data/security/keystores/gateway.jks
 ```
