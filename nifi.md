@@ -159,6 +159,284 @@ vi /home/knox/nifi-ca-config.json
 }
 ```
 
+https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-knox/content/creating_certificates_for_knox.html
+```java
+1.
+export JAVA_HOME=/usr/jdk64/jdk1.8.0_112
+/var/lib/ambari-agent/tmp/nifi-toolkit-1.5.0.3.1.2.0-7/bin/tls-toolkit.sh client --subjectAlternativeNames "CN=c374-node4.squadron.support.hortonworks.com, OU=KNOX" -F -f /home/knox/nifi-ca-config.json
+
+/home/knox
+-rw------- 1 knox hadoop 3246 Oct  5 08:50 knox-nifi-keystore.jks
+-rw------- 1 knox hadoop  979 Oct  5 08:50 knox-nifi-truststore.jks
+-rw-r--r-- 1 knox hadoop  674 Oct  5 08:50 nifi-ca-config.json
+-rw------- 1 knox hadoop 1294 Oct  5 08:50 nifi-cert.pem
+2. Import the Knox certificate for NiFi into the Knox gateway.jks file:
+keytool -importkeystore -srckeystore /home/knox/knox-nifi-keystore.jks -destkeystore /usr/hdp/current/knox-server/data/security/keystores/gateway.jks -deststoretype JKS -srcstorepass Welcome@12345 -deststorepass Welcome@12345
+
+3. Import the NiFi CA truststore into the Knox gateway.jks file:
+keytool -importkeystore -srckeystore /home/knox/knox-nifi-truststore.jks -destkeystore /usr/hdp/current/knox-server/data/security/keystores/gateway.jks -deststoretype JKS -srcstorepass Welcome@12345 -deststorepass Welcome@12345
+
+4. Verify that the proper keys are in the gateway.jks file:
+keytool -keystore /usr/hdp/current/knox-server/data/security/keystores/gateway.jks -storepass Welcome@12345 -list -v
+```
+
+## [Configuring the Knox SSO Topology](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-knox/content/configuring_the_knox_admin_ui.html)
+
+```sh
+Navigate to Advanced knoxsso-topology and, in the KNOXSSO service definition, edit the Knox SSO token time-to-live value. For example, for a 10 hour time-to-live:
+<param>
+   <name>knoxsso.token.ttl</name>
+   <value>36000000</value>
+</param>
+
+
+Update the knoxsso.redirect.whitelist.regex property with a regex value that represents the host or domain in which the NiFi host is running. If the knoxsso.redirect.whitelist.regex property does not exist, you must add it. For example:
+```
+
+## [Creating an Advanced Topology](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-knox/content/creating-an-advanced-topology.html)
+
+As the Knox user, create `flow-management.xml` in `usr/hdp/current/knox-server/conf/topologies`
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<topology>
+  <gateway>
+    <provider>
+      <role>authentication</role>
+      <name>ShiroProvider</name>
+      <enabled>true</enabled>
+      <param>
+        <name>sessionTimeout</name>
+        <value>30</value>
+      </param>
+      <param>
+        <name>redirectToUrl</name>
+        <value>/gateway/knoxsso/knoxauth/login.html</value>
+      </param>
+      <param>
+        <name>restrictedCookies</name>
+        <value>rememberme,WWW-Authenticate</value>
+      </param>
+      <param>
+        <name>main.ldapRealm</name>
+        <value>org.apache.hadoop.gateway.shirorealm.KnoxLdapRealm</value>
+      </param>
+      <param>
+        <name>main.ldapContextFactory</name>
+        <value>org.apache.hadoop.gateway.shirorealm.KnoxLdapContextFactory</value>
+      </param>
+      <param>
+        <name>main.ldapRealm.contextFactory</name>
+        <value>$ldapContextFactory</value>
+      </param>
+      <param>
+        <name>main.ldapRealm.userDnTemplate</name>
+        <value>uid={0},ou=people,dc=hadoop,dc=apache,dc=org</value>
+      </param>
+      <param>
+        <name>main.ldapRealm.contextFactory.url</name>
+        <value>ldap://localhost:33389</value>
+      </param>
+      <param>
+        <name>main.ldapRealm.authenticationCachingEnabled</name>
+        <value>false</value>
+      </param>
+      <param>
+        <name>main.ldapRealm.contextFactory.authenticationMechanism</name>
+        <value>simple</value>
+      </param>
+      <param>
+        <name>urls./**</name>
+        <value>authcBasic</value>
+      </param>
+    </provider>
+    <provider>
+      <role>identity-assertion</role>
+      <name>Default</name>
+      <enabled>true</enabled>
+    </provider>
+  </gateway>
+  <service>
+    <role>NIFI</role>
+    <url>https://c374-node4.squadron.support.hortonworks.com:9091</url>
+    <param name="useTwoWaySsl" value="true"/>
+  </service>
+</topology>
+```
+
+## [Configuring Knox SSO](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-knox/content/configuring_knox_sso.html)
+
+If you want to use Knox SSO authentication, perform the following steps:
+1. On each cluster node with Knox installed, replace the ShiroProvider federation provider in the flow-management.xml file with the following content:
+
+```xml
+<provider>
+   <role>federation</role>
+   <name>SSOCookieProvider</name>
+   <enabled>true</enabled>
+   <param>
+      <name>sso.authentication.provider.url</name>
+      <value>https://c374-node4.squadron.support.hortonworks.com:8443/gateway/knoxsso/api/v1/websso</value>
+   </param>
+</provider>
+```
+Your new flow-management.xml file looks similar to the following:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<topology>
+  <gateway>
+    <provider>
+      <role>federation</role>
+      <name>SSOCookieProvider</name>
+      <enabled>true</enabled>
+      <param>
+        <name>sso.authentication.provider.url</name>
+        <value>https://c374-node4.squadron.support.hortonworks.com:8443/gateway/knoxsso/api/v1/websso</value>
+      </param>
+    </provider>
+    <provider>
+      <role>identity-assertion</role>
+      <name>Default</name>
+      <enabled>true</enabled>
+    </provider>
+  </gateway>
+  <service>
+    <role>NIFI</role>
+    <url>https://c374-node4.squadron.support.hortonworks.com:9091</url>
+    <param>
+      <name>useTwoWaySsl</name>
+      <value>true</value>
+    </param>
+  </service>
+</topology>
+```
+```sh
+    1. If you want to access NiFi directly and still use Knox SSO:
+        * Export the Knox SSO certificate:
+ $KNOX_INSTALL_DIR/bin/knoxcli.sh export-cert 
+        * Set the following properties in the Advanced nifi-properties section in Ambari:
+nifi.security.user.knox.url=https://c374-node4.squadron.support.hortonworks.com:8443/gateway/knoxsso/api/v1/websso
+nifi.security.user.knox.publicKey=/home/knox/gateway-identity.pem
+nifi.security.user.knox.cookieName=hadoop-jwt
+nifi.security.user.knox.audiences=
+
+The cookieName property must align with what is configured in Knox. The audiences property is used to only accept tokens from a particular audience. The audiences value is configured as part of Knox SSO.
+2. Save the configuration and restart Knox.
+```
+
+##### ERROR
+
+```java
+Knox DOWN —> Nifi and KNox are on same host
+9-10-05 09:17:05,479 FATAL hadoop.gateway (GatewayServer.java:main(164)) - Failed to start gateway: java.security.UnrecoverableKeyException: Cannot recover key
+```
+
+##### Resolution:--->
+
+```java
+The error usually occurs when we importing a new certificate, which private key password is different from gateway.jks's password, into Knox's keystore gateway.jks. If this is the case, then could you please try changing the private key password by using something similar to the following command and try to restart the knox-server again and share the result.
+
+keytool -keypasswd -alias gateway-identity -new <same_as_store_pass> -keystore gateway.jks
+
+Rename _gateway-credentials.jceks
+
+
+keytool -keypasswd -alias gateway-identity -new Welcome@12345 -keystore /usr/hdp/current/knox-server/data/security/keystores/gateway.jks
+```
+https://community.cloudera.com/t5/Community-Articles/Replace-Cloudbreak-Mini-Knox-self-signed-certificate-with-CA/ta-p/247110
+
+## [Adding a NiFi Policy for Knox](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-knox/content/adding_a_nifi_policy_for_knox.html)
+
+```xml
+<property name="Node Identity 1">CN=c374-node4.squadron.support.hortonworks.com, OU=NIFI</property>
+<property name="Node Identity 2">CN=c374-node4.squadron.support.hortonworks.com, OU=KNOX</property>
+```
+https://$KNOX_HOST:$KNOX_PORT/$GATEWAY_CONTEXT/default/nifi-app/nifi
+
+##### ERROR:
+
+```java
+/var/log/nifi/nifi-user.log
+2019-10-05 14:13:43,727 ERROR [NiFi Web Server-386] o.a.nifi.web.api.config.ThrowableMapper An unexpected error has occurred: javax.ws.rs.core.UriBuilderException: The provided context path [/gateway/default/nifi-app] was not whitelisted [/gateway/flow-management/nifi-app]. Returning Internal Server Error response.
+javax.ws.rs.core.UriBuilderException: The provided context path [/gateway/default/nifi-app] was not whitelisted [/gateway/flow-management/nifi-app]
+```
+
+##### Resolution:--->
+
+```sh
+Used below url to access the Nifi UI.
+https://c374-node4.squadron.support.hortonworks.com:8443/gateway/flow-management/nifi-app/nifi/
+```
+
+# NiFI Lightweight Directory Access Protocol (LDAP)
+
+```xml
+            <provider>
+            <identifier>ldap-provider</identifier>
+            <class>org.apache.nifi.ldap.LdapProvider</class>
+            <property name="Identity Strategy">USE_USERNAME</property>
+            <property name="Authentication Strategy">SIMPLE</property>
+    <property name="Manager DN">test1@SUPPORT.COM</property>
+    <property name="Manager Password">hadoop12345!</property>
+     <property name="Authentication Strategy">SIMPLE</property>
+    <property name="TLS - Keystore"></property>
+    <property name="TLS - Keystore Password"></property>
+    <property name="TLS - Keystore Type"></property>
+    <property name="TLS - Truststore"></property>
+    <property name="TLS - Truststore Password"></property>
+    <property name="TLS - Truststore Type"></property>
+    <property name="TLS - Client Auth"></property>
+    <property name="TLS - Protocol"></property>
+    <property name="TLS - Shutdown Gracefully"></property>
+
+    <property name="Referral Strategy">FOLLOW</property>
+    <property name="Connect Timeout">10 secs</property>
+    <property name="Read Timeout">10 secs</property>
+
+    <property name="Url">ldap://172.26.126.78:389</property>
+    <property name="User Search Base">OU=hortonworks,DC=support,DC=com</property>
+    <property name="User Search Filter">(samaccountname={0})</property>
+
+    <property name="Identity Strategy">USE_USERNAME</property>
+    <property name="Authentication Expiration">12 hours</property>
+</provider>
+```
+
+With this configuration, username/password authentication can be enabled by referencing this provider in nifi.properties.
+`nifi.security.user.login.identity.provider=ldap-provider`
 
 
 # Troubleshooting Nifi SSL using NiFi CA and Nifi, Ranger Plugin configured with Internal/Public CA using SAN entry
