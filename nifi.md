@@ -1,12 +1,14 @@
 # Setup NiFi:
 
- - [x] [Setup NiFi SSL](https://github.com/bhagadepravin/commands/blob/master/nifi.md#1-enabling-ssl-with-a-nifi-certificate-authority)
- - [x] [Setup NiFi+Knox](https://github.com/bhagadepravin/commands/blob/master/nifi.md#3-configuring-nifi-authentication-and-proxying-with-apache-knox)
- - [x] [NiFi LDAP](https://github.com/bhagadepravin/commands/blob/master/nifi.md#9-nifi-lightweight-directory-access-protocol-ldap)
- - [x] [NiFi SSL Troubleshooting](https://github.com/bhagadepravin/commands/blob/master/nifi.md#ii-troubleshooting-nifi-ssl-using-nifi-ca-and-nifi-ranger-plugin-configured-with-internalpublic-ca-using-san-entry)
+- [x] [Setup NiFi SSL](https://github.com/bhagadepravin/commands/blob/master/nifi.md#1-enabling-ssl-with-a-nifi-certificate-authority)
+- [x] [Setup NiFi+Knox](https://github.com/bhagadepravin/commands/blob/master/nifi.md#3-configuring-nifi-authentication-and-proxying-with-apache-knox)
+- [x] Knox Proxy Setup
+- [x] [NiFi LDAP](https://github.com/bhagadepravin/commands/blob/master/nifi.md#9-nifi-lightweight-directory-access-protocol-ldap)
+- [x] [NiFi SSL Troubleshooting](https://github.com/bhagadepravin/commands/blob/master/nifi.md#ii-troubleshooting-nifi-ssl-using-nifi-ca-and-nifi-ranger-plugin-configured-with-internalpublic-ca-using-san-entry)
  
- - [x] [NiFi Known Issue](https://risdenk.github.io/2018/03/18/apache-knox-proxying-apache-nifi.html)
- - [x] [Evernote Link](https://www.evernote.com/l/AjKET3tRTm1IUKLpKbDFQag-BRbMWbdvU9E)
+- [x] [NiFi Known Issue](https://risdenk.github.io/2018/03/18/apache-knox-proxying-apache-nifi.html)
+- [x] [Evernote Link](https://www.evernote.com/l/AjKET3tRTm1IUKLpKbDFQag-BRbMWbdvU9E)
+- [x] Knox
 
 ## 1. [Enabling SSL with a NiFi Certificate Authority](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-authentication/content/enabling_ssl_with_a_nifi_certificate_authority.html)
 
@@ -406,6 +408,55 @@ javax.ws.rs.core.UriBuilderException: The provided context path [/gateway/defaul
 ```sh
 Used below url to access the Nifi UI.
 https://c374-node4.squadron.support.hortonworks.com:8443/gateway/flow-management/nifi-app/nifi/
+```
+
+## 8.1 Knox Proxy Setup for Customer
+
+```sh
+On knox
+-Add below lines in Advance topology as service
+
+<service>
+<role>NIFI</role>
+<url>https://<nifi-hostname>:9091</url>
+<param name="useTwoWaySsl" value="true"/>
+</service>
+
+-Import nifi ca certificate to gateway.jks and cacerts file on knox server
+-Restart nifi
+On NIFI
+
+-Please change below property in Ambari>>NiFi>>configs
+nifi.web.proxy.context.path=/gateway/default/nifi-app
+
+-Import knox certificate to nifi truststore
+-Restart nifi
+
+On Ranger
+-Please add knox node identity on Ranger with below details or file base authoriser (which you are using)
+
+resource= /proxy
+Access= read
+```
+You can use below documents as reference
+https://risdenk.github.io/2018/03/18/apache-knox-proxying-apache-nifi.html
+https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-knox/hdf-nifi-knox.pdf
+
+## 8.2 KnoxSSO Proxy Setup for Customer
+
+```sh
+We confirmed that our sso is working fine for other services like ranger
+-We got knox public key using below command
+openssl s_client -connect ${knoxserver}:8443</dev/null| openssl x509 -out /tmp/knox.pem
+cp /tmp/knox.pem /etc/knox.pem
+chmod nifi:nifi /etc/knox.pem
+-We changed knoxsso.token.ttl to 36000000 in knox configs
+Advanced nifi-properties
+-nifi.security.user.knox.cookieName set to hadoop-jwt
+-nifi.security.user.knox.publicKey /etc/knox.pem
+- nifi.security.user.knox.url to https://<knox-host>:<knox-port>/gateway/knoxsso/api/v1/websso
+-we set nifi.security.user.login.identity.provider to blank
+-Changed knoxsso.redirect.whitelist.regex in knox sso to match NiFi nodes
 ```
 
 # 9. NiFI Lightweight Directory Access Protocol (LDAP)
