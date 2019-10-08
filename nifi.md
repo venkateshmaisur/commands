@@ -2,7 +2,8 @@
 
 - [x] [Setup NiFi SSL](https://github.com/bhagadepravin/commands/blob/master/nifi.md#1-enabling-ssl-with-a-nifi-certificate-authority)
 - [x] [Setup NiFi+Knox](https://github.com/bhagadepravin/commands/blob/master/nifi.md#3-configuring-nifi-authentication-and-proxying-with-apache-knox)
-- [x] Knox Proxy Setup
+- [x] [Knox Proxy Setup for customer](https://github.com/bhagadepravin/commands/blob/master/nifi.md#81-knox-proxy-setup-for-customer)
+- [x] [KnoxSSO Proxy Setup for customer](https://github.com/bhagadepravin/commands/blob/master/nifi.md#82-knoxsso-proxy-setup-for-customer)
 - [x] [NiFi LDAP](https://github.com/bhagadepravin/commands/blob/master/nifi.md#9-nifi-lightweight-directory-access-protocol-ldap)
 - [x] [NiFi SSL Troubleshooting](https://github.com/bhagadepravin/commands/blob/master/nifi.md#ii-troubleshooting-nifi-ssl-using-nifi-ca-and-nifi-ranger-plugin-configured-with-internalpublic-ca-using-san-entry)
  
