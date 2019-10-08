@@ -1,5 +1,7 @@
 # Setup NiFi SSL
 
+https://www.evernote.com/l/AjKET3tRTm1IUKLpKbDFQag-BRbMWbdvU9E
+
 ## 1. [Enabling SSL with a NiFi Certificate Authority](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-authentication/content/enabling_ssl_with_a_nifi_certificate_authority.html)
 
 ```bash
@@ -49,11 +51,71 @@ Services:
 2019/10/04 11:45:27 INFO [main] org.apache.nifi.toolkit.tls.service.client.TlsCertificateSigningRequestPerformer: Requesting certificate with dn CN=admin,OU=NIFI from c374-node4.squadron.support.hortonworks.com:10443
 Service client error: Received response code 403 with payload {"hmac":null,"pemEncodedCertificate":null,"error":"forbidden"}
 ```
-##### Resolution:
+##### Resolution:--->
 ```sh
 -t nifi
 We need to pass the NiFi token password:
 Step 2>>create keystore for that user bin/tls-toolkit.sh client -c <NIFI CA HOSTNAME> -D 'CN=username, OU=NIFI' -p <NIFI CA port> -t <<toolkit token>> -T pkcs12
+
+
+++++++++++
+[root@c374-node4 nifi-toolkit-1.5.0.3.1.2.0-7]# bin/tls-toolkit.sh client -c c374-node4.squadron.support.hortonworks.com -D "CN=admin, OU=NIFI" -t Welcome@12345 -p 10443 -T pkcs12
+2019/10/04 11:50:20 INFO [main] org.apache.nifi.toolkit.tls.commandLine.BaseTlsToolkitCommandLine: Command line argument --keyStoreType=pkcs12 only applies to keystore, recommended truststore type of JKS unaffected.
+2019/10/04 11:50:20 INFO [main] org.apache.nifi.toolkit.tls.service.client.TlsCertificateAuthorityClient: Requesting new certificate from c374-node4.squadron.support.hortonworks.com:10443
+2019/10/04 11:50:22 INFO [main] org.apache.nifi.toolkit.tls.service.client.TlsCertificateSigningRequestPerformer: Requesting certificate with dn CN=admin,OU=NIFI from c374-node4.squadron.support.hortonworks.com:10443
+2019/10/04 11:50:22 INFO [main] org.apache.nifi.toolkit.tls.service.client.TlsCertificateSigningRequestPerformer: Got certificate with dn CN=admin, OU=NIFI
+
+========================================
+
+[root@c374-node4 nifi-toolkit-1.5.0.3.1.2.0-7]# ls -ltr
+total 56
+-rw-r--r-- 1 root root  5473 Oct  4 11:23 NOTICE
+-rw-r--r-- 1 root root 14253 Oct  4 11:23 LICENSE
+drwxr-xr-x 2 root root  8192 Oct  4 11:23 lib
+drwxr-xr-x 2 root root    58 Oct  4 11:23 conf
+drwxr-xr-x 2 root root  4096 Oct  4 11:23 bin
+drwxr-xr-x 3 root root    69 Oct  4 11:23 classpath
+-rw------- 1 root root  3554 Oct  4 11:50 keystore.pkcs12
+-rw------- 1 root root   979 Oct  4 11:50 truststore.jks
+-rw------- 1 root root   649 Oct  4 11:50 config.json
+-rw------- 1 root root  1294 Oct  4 11:50 nifi-cert.pem
+[root@c374-node4 nifi-toolkit-1.5.0.3.1.2.0-7]#
+
+[root@c374-node4 nifi-toolkit-1.5.0.3.1.2.0-7]# cat config.json
+{
+  "days" : 1095,
+  "keySize" : 2048,
+  "keyPairAlgorithm" : "RSA",
+  "signingAlgorithm" : "SHA256WITHRSA",
+  "dn" : "CN=admin, OU=NIFI",
+  "domainAlternativeNames" : null,
+  "keyStore" : "keystore.pkcs12",
+  "keyStoreType" : "pkcs12",
+  "keyStorePassword" : "ARgQMZD/1BVQZKnQOZuQrYn6K95HOGs9K5CT3llK1m0",
+  "keyPassword" : null,
+  "token" : "Welcome@12345",
+  "caHostname" : "c374-node4.squadron.support.hortonworks.com",
+  "port" : 10443,
+  "dnPrefix" : "CN=",
+  "dnSuffix" : ", OU=NIFI",
+  "reorderDn" : true,
+  "trustStore" : "truststore.jks",
+  "trustStorePassword" : "kEJJvyomDKbPGCjz8ROtTJxn/tHbcVoGE12gRv9d0QU",
+  "trustStoreType" : "jks"
+```
+Issue: After enabling SSL on Nifi, UI still popup for Usernmae password:
+—> Open the UI in `Incognito Mode` and check
+For me it worked for default CA cert.
+
+## Setting Up Identity Mapping
+
+```java
+
+The following examples demonstrate normalizing DNs from certificates and principals from Kerberos:
+nifi.security.identity.mapping.pattern.dn=^CN=(.*?), OU=(.*?), O=(.*?), L=(.*?), ST=(.*?), C=(.*?)$
+nifi.security.identity.mapping.value.dn=$1@$2
+nifi.security.identity.mapping.pattern.kerb=^(.*?)/instance@(.*?)$
+nifi.security.identity.mapping.value.kerb=$1@$2
 ```
 
 
