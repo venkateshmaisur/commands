@@ -1,6 +1,6 @@
 # Setup NiFi SSL
 
-##### 1. Enabling SSL with a NiFi Certificate Authority
+## 1. Enabling SSL with a NiFi Certificate Authority
 https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-authentication/content/enabling_ssl_with_a_nifi_certificate_authority.html
 
 ```sh
@@ -24,7 +24,7 @@ Replace node1.fqdn, node2.fqdn, and node3.fqdn with their respective fully quali
 
 ```
 
-##### 2. Generating Client Certificates
+## 2. Generating Client Certificates
 https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-authentication/content/generating_client_certificates.html
 
 ```sh
@@ -41,7 +41,7 @@ Services:
    status: Checks the status of an HTTPS endpoint by making a GET request using a supplied keystore and truststore.
 ```
 
-## ERROR:
+##### ERROR:
 
 ```sh
 [root@c374-node4 nifi-toolkit-1.5.0.3.1.2.0-7]# bin/tls-toolkit.sh client -c c374-node4.squadron.support.hortonworks.com -D "CN=admin, OU=NIFI" -t nifi -p 10443 -T pkcs12
@@ -50,7 +50,7 @@ Services:
 2019/10/04 11:45:27 INFO [main] org.apache.nifi.toolkit.tls.service.client.TlsCertificateSigningRequestPerformer: Requesting certificate with dn CN=admin,OU=NIFI from c374-node4.squadron.support.hortonworks.com:10443
 Service client error: Received response code 403 with payload {"hmac":null,"pemEncodedCertificate":null,"error":"forbidden"}
 ```
-## Resolution:
+##### Resolution:
 ```sh
 -t nifi
 We need to pass the NiFi token password:
