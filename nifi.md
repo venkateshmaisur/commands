@@ -1,12 +1,12 @@
 # Setup NiFi:
 
- - [x] Setup NiFi SSL https://github.com/bhagadepravin/commands/blob/master/nifi.md#1-enabling-ssl-with-a-nifi-certificate-authority
- - [x] Setup NiFi+Knox https://github.com/bhagadepravin/commands/blob/master/nifi.md#3-configuring-nifi-authentication-and-proxying-with-apache-knox
- - [x] NiFi LDAP https://github.com/bhagadepravin/commands/blob/master/nifi.md#9-nifi-lightweight-directory-access-protocol-ldap
- - [x] NiFi SSL Troubleshooting https://github.com/bhagadepravin/commands/blob/master/nifi.md#ii-troubleshooting-nifi-ssl-using-nifi-ca-and-nifi-ranger-plugin-configured-with-internalpublic-ca-using-san-entry
+ - [x] [Setup NiFi SSL](https://github.com/bhagadepravin/commands/blob/master/nifi.md#1-enabling-ssl-with-a-nifi-certificate-authority)
+ - [x] [Setup NiFi+Knox](https://github.com/bhagadepravin/commands/blob/master/nifi.md#3-configuring-nifi-authentication-and-proxying-with-apache-knox)
+ - [x] [NiFi LDAP](https://github.com/bhagadepravin/commands/blob/master/nifi.md#9-nifi-lightweight-directory-access-protocol-ldap)
+ - [x] [NiFi SSL Troubleshooting](https://github.com/bhagadepravin/commands/blob/master/nifi.md#ii-troubleshooting-nifi-ssl-using-nifi-ca-and-nifi-ranger-plugin-configured-with-internalpublic-ca-using-san-entry)
  
- - [x] NiFi Known Issue https://risdenk.github.io/2018/03/18/apache-knox-proxying-apache-nifi.html
- - [x] Evernote Link https://www.evernote.com/l/AjKET3tRTm1IUKLpKbDFQag-BRbMWbdvU9E
+ - [x] [NiFi Known Issue](https://risdenk.github.io/2018/03/18/apache-knox-proxying-apache-nifi.html)
+ - [x] [Evernote Link](https://www.evernote.com/l/AjKET3tRTm1IUKLpKbDFQag-BRbMWbdvU9E)
 
 ## 1. [Enabling SSL with a NiFi Certificate Authority](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-authentication/content/enabling_ssl_with_a_nifi_certificate_authority.html)
 
