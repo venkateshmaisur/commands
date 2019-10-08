@@ -184,7 +184,7 @@ keytool -importkeystore -srckeystore /home/knox/knox-nifi-truststore.jks -destke
 keytool -keystore /usr/hdp/current/knox-server/data/security/keystores/gateway.jks -storepass Welcome@12345 -list -v
 ```
 
-## [Configuring the Knox SSO Topology](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-knox/content/configuring_the_knox_admin_ui.html)
+## 5 [Configuring the Knox SSO Topology](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-knox/content/configuring_the_knox_admin_ui.html)
 
 ```sh
 Navigate to Advanced knoxsso-topology and, in the KNOXSSO service definition, edit the Knox SSO token time-to-live value. For example, for a 10 hour time-to-live:
@@ -197,7 +197,7 @@ Navigate to Advanced knoxsso-topology and, in the KNOXSSO service definition, ed
 Update the knoxsso.redirect.whitelist.regex property with a regex value that represents the host or domain in which the NiFi host is running. If the knoxsso.redirect.whitelist.regex property does not exist, you must add it. For example:
 ```
 
-## [Creating an Advanced Topology](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-knox/content/creating-an-advanced-topology.html)
+## 6 [Creating an Advanced Topology](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-knox/content/creating-an-advanced-topology.html)
 
 As the Knox user, create `flow-management.xml` in `usr/hdp/current/knox-server/conf/topologies`
 
@@ -284,7 +284,7 @@ As the Knox user, create `flow-management.xml` in `usr/hdp/current/knox-server/c
 </topology>
 ```
 
-## [Configuring Knox SSO](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-knox/content/configuring_knox_sso.html)
+## 7 [Configuring Knox SSO](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-knox/content/configuring_knox_sso.html)
 
 If you want to use Knox SSO authentication, perform the following steps:
 1. On each cluster node with Knox installed, replace the ShiroProvider federation provider in the flow-management.xml file with the following content:
@@ -382,7 +382,7 @@ keytool -keypasswd -alias gateway-identity -new Welcome@12345 -keystore /usr/hdp
 ```
 https://community.cloudera.com/t5/Community-Articles/Replace-Cloudbreak-Mini-Knox-self-signed-certificate-with-CA/ta-p/247110
 
-## [Adding a NiFi Policy for Knox](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-knox/content/adding_a_nifi_policy_for_knox.html)
+## 8 [Adding a NiFi Policy for Knox](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-knox/content/adding_a_nifi_policy_for_knox.html)
 
 ```xml
 <property name="Node Identity 1">CN=c374-node4.squadron.support.hortonworks.com, OU=NIFI</property>
@@ -405,7 +405,7 @@ Used below url to access the Nifi UI.
 https://c374-node4.squadron.support.hortonworks.com:8443/gateway/flow-management/nifi-app/nifi/
 ```
 
-# NiFI Lightweight Directory Access Protocol (LDAP)
+# 9 NiFI Lightweight Directory Access Protocol (LDAP)
 
 ```xml
             <provider>
