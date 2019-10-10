@@ -3,7 +3,7 @@
 ```java
 echo -n | openssl s_client -connect localhost:8443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/knoxcert.crt
 
-# keytool -import -file /tmp/knoxcert.crt -keystore /tmp/knox_truststore.jks -alias knox-Cert -storepass changeit
+keytool -import -file /tmp/knoxcert.crt -keystore /tmp/knox_truststore.jks -alias knox-Cert -storepass changeit
 
 
 /usr/hdp/current/phoenix-client/bin/sqlline-thin.py https://<KNOX_HOST>:8443/gateway/default/avatica\;authentication=BASIC\;avatica_user=admin\;avatica_password=admin-password\;truststore=/tmp/test.jks\;truststore_password=hadoop
