@@ -1,6 +1,6 @@
 # Setup pheonix
 
-```java
+```bash
 echo -n | openssl s_client -connect localhost:8443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/knoxcert.crt
 
 keytool -import -file /tmp/knoxcert.crt -keystore /tmp/knox_truststore.jks -alias knox-Cert -storepass changeit
