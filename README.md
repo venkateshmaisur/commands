@@ -159,3 +159,10 @@ MTU=9000
 hostname:/ on /HDFS_ROOT type nfs (rw,relatime,sync,vers=3,rsize=1048576,wsize=1048576,namlen=255,hard,nolock,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=ip-address,mountvers=3,mountport=4242,mountproto=tcp,local_lock=all,addr=ip-address)
 ```
 
+## Zepplein
+
+Zepplein corrupt notebooks
+```sh
+grep ERROR zeppelin-zeppelin-xx.internal.log | awk '{print $8}' | awk -F'.' '{print $NF}' | grep -v for | grep -v 2019* | grep -v but | grep -v handle | sort | uniq
+2E8HJX6UA
+```
