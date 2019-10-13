@@ -164,5 +164,4 @@ hostname:/ on /HDFS_ROOT type nfs (rw,relatime,sync,vers=3,rsize=1048576,wsize=1
 Zepplein corrupt notebooks
 ```sh
 grep ERROR zeppelin-zeppelin-xx.internal.log | awk '{print $8}' | awk -F'.' '{print $NF}' | grep -v for | grep -v 2019* | grep -v but | grep -v handle | sort | uniq
-2E8HJX6UA
 ```
