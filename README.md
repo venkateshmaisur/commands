@@ -24,6 +24,7 @@ echo -n | openssl s_client -connect ${knoxserver}:8443 | sed -ne '/-BEGIN CERTIF
 watch -n 1 'netstat -anp | grep `cat /var/run/knox/gateway.pid` | grep ESTABLISHED | wc -l' 
 {GATEWAY_HOME}/bin/knoxcli.sh create-alias ldcSystemPassword --cluster hdp --value hadoop
 ldapsearch -h <ldap-hostname> -p <port> -D <bind-dn> -w <bind_DN_password> -b <base_search> "(cn=<username>)"
+strace -o /var/tmp/strace.keytool /usr/java/latest/bin/keytool -list -keystore keystore1.p12 -storepass PASSWORD
 ```
 
 ```
