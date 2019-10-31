@@ -160,3 +160,29 @@ On Kafka host :
 
 This should return the group info for the user, id -Gn should show the group names without any name resolution error.
 ```
+
+## Triage
+```
+Replace `hostname -f` with zookeeper hostname:
+
+List
+/usr/hdp/current/kafka-broker/bin/kafka-topics.sh --list --zookeeper `hostname -f`:2181
+
+Describe topics
+
+cd /usr/hdp/current/kafka-broker/bin
+./kafka-topics.sh --describe --zookeeper `hostname -f`:2181 --topic ATLAS_HOOK
+./kafka-topics.sh --describe --zookeeper `hostname -f`:2181 --topic ATLAS_ENTITIES
+./kafka-topics.sh --describe --zookeeper `hostname -f`:2181 --topic __consumer_offsets
+
+vi client.properties
+security.protocol=SASL_PLAINTEXT
+
+/usr/hdp/current/kafka-broker/bin/kafka-consumer-groups.sh --bootstrap-server <broker host>:6667 --list --command-config client.properties
+
+Share the output of the above cmds in a text file.
+
+Login into Kafka node:
+
+tar -cvzf kafka.tar.gz /etc/kafka/conf/* /etc/ranger/*
+```
