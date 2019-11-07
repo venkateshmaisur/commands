@@ -234,3 +234,77 @@ Restart Zookeeper Service before disabling kerberos..
 
 Disable the Kerberos using Ambari UI.
 ```
+
+## Adding Hiveserver2 using Ambari REST in a Kerberos Env:
+
+```sh
+1. We need to make sure kerberos credentials are stored in ambari db.
+Use below curl cmd to check the same
+
+curl -ik -u admin -H "X-Requested-By: ambari" -X DELETE  http://AMBARI_SERVER_HOST:8080/api/v1/clusters/CLUSTERNAME/credentials/kdc.admin.credential 
+
+Ex:
+curl -ik -u admin:pbhagade -H "X-Requested-By: ambari" -X GET  http://172.25.34.129:8080/api/v1/clusters/c174/credentials/kdc.admin.credential 
+
+if you dont see credentials we need to add them using below curl cmd:
+
+curl -ivk -H "X-Requested-By: ambari" -u admin:admin -X POST -d '{ "Credential" : { "principal" : "admin/admin@EXAMPLE.COM", "key" : "PASSWORD", "type" : "temporary" } }' http://AMBARI_SERVER_HOST:8080/api/v1/clusters/CLUSTERNAME/credentials/kdc.admin.credential 
+
+Make sure you replcace admin kerberos credential. principal and PASSWORD.
+
+Ex: 
+curl -ivk -H "X-Requested-By: ambari" -u admin:pbhagade -X POST -d '{ "Credential" : { "principal" : "admin/admin@HWX.COM", "key" : "hadoop", "type" : "temporary" } }' http://172.25.34.129:8080/api/v1/clusters/c174/credentials/kdc.admin.credential 
+
+
+Cross-check if its added or not, it shuld look like below:
+
+curl -ik -u admin:pbhagade -H "X-Requested-By: ambari" -X GET  http://172.25.34.129:8080/api/v1/clusters/c174/credentials/kdc.admin.credential
+
+{
+  "href" : "http://172.25.34.129:8080/api/v1/clusters/c174/credentials/kdc.admin.credential",
+  "Credential" : {
+    "alias" : "kdc.admin.credential",
+    "cluster_name" : "c174",
+    "type" : "temporary"
+  }
+
+
+
+# Ensure the host is added to the cluster.
+curl --user admin:admin -i -X GET http://AMBARI_SERVER_HOST:8080/api/v1/clusters/CLUSTER_NAME/hosts/NEW_HOST_ADDED
+
+Ex: 
+
+curl --user admin:pbhagade -i -X GET http://172.25.34.129:8080/api/v1/clusters/c174/hosts/c174-node2.squadron.support.hortonworks.com
+
+
+# Add the necessary host components to the host.
+curl --user admin:admin -i -H "X-Requested-By: ambari" -X POST http://AMBARI_SERVER_HOST:8080/api/v1/clusters/CLUSTER_NAME/hosts/NEW_HOST_ADDED/host_components/HIVE_SERVER
+
+Ex:
+curl -ik --user admin:pbhagade -H "X-Requested-By: ambari"  -X POST http://172.25.34.129:8080/api/v1/clusters/c174/hosts/c174-node2.squadron.support.hortonworks.com/host_components/HIVE_SERVER
+
+You should see HiveServer2 in ambari under the host you added
+
+#Install the components.
+curl --user admin:admin -i -X PUT -d '{"HostRoles": {"state": "INSTALLED"}}' http://AMBARI_SERVER_HOST:8080/api/v1/clusters/CLUSTER_NAME/hosts/NEW_HOST_ADDED/host_components/HIVE_SERVER
+
+Ex:
+curl --user admin:pbhagade -i  -H "X-Requested-By: ambari" -X PUT -d '{"HostRoles": {"state": "INSTALLED"}}' http://172.25.34.129:8080/api/v1/clusters/c174/hosts/c174-node2.squadron.support.hortonworks.com/host_components/HIVE_SERVER
+
+You will get below response:
+
+{
+  "href" : "http://172.25.34.129:8080/api/v1/clusters/c174/requests/152",
+  "Requests" : {
+    "id" : 152,
+    "status" : "Accepted"
+  }
+
+it will install Hiveserver2, and you can use curl cmd to start it.
+
+#Start the components.
+curl --user admin:admin -i -H "X-Requested-By: ambari" -X PUT -d '{"HostRoles": {"state": "STARTED"}}' http://AMBARI_SERVER_HOST:8080/api/v1/clusters/CLUSTER_NAME/hosts/NEW_HOST_ADDED/host_components/HIVE_SERVER
+
+curl --user admin:pbhagade -i  -H "X-Requested-By: ambari" -X PUT -d '{"HostRoles": {"state": "STARTED"}}' http://172.25.34.129:8080/api/v1/clusters/c174/hosts/c174-node2.squadron.support.hortonworks.com/host_components/HIVE_SERVER
+```
