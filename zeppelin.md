@@ -27,6 +27,9 @@ sc.version
 ```
 https://community.cloudera.com/t5/Community-Articles/How-to-configure-zeppelin-livy-interpreter-for-secure-HDP/ta-p/249267
 
+### Setup HWC with livy interpreter
+https://github.com/bhagadepravin/commands/blob/master/spark.md#7-integrate-hwc-in-livy2-interpreter-in-zeppelin
+
 ## Python Interpreter
 
 ```sh
