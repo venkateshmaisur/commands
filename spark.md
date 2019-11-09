@@ -55,14 +55,14 @@ LOAD DATA INPATH '/tmp/data.txt' OVERWRITE INTO TABLE employee;
 
 ## 2) kinit to the spark user and run 
 
-```sh
+```java
 spark-shell --master yarn --conf "spark.security.credentials.hiveserver2.enabled=false" --conf "spark.sql.hive.hiveserver2.jdbc.url=jdbc:hive2://c174-node2.squadron.support.hortonworks.com:2181,c174-node3.squadron.support.hortonworks.com:2181,c174-node4.squadron.support.hortonworks.com:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2-interactive" --conf "spark.datasource.hive.warehouse.metastoreUri=thrift://c174-node3.squadron.support.hortonworks.com:9083" --conf "spark.datasource.hive.warehouse.load.staging.dir=/tmp/" --conf "spark.hadoop.hive.llap.daemon.service.hosts=@llap0" --conf "spark.hadoop.hive.zookeeper.quorum=c174-node2.squadron.support.hortonworks.com:2181,c174-node3.squadron.support.hortonworks.com:2181,c174-node4.squadron.support.hortonworks.com:2181" --jars /usr/hdp/current/hive_warehouse_connector/hive-warehouse-connector-assembly-1.0.0.3.1.4.0-315.jar
 ```
 
 ##### Note: spark.security.credentials.hiveserver2.enabled should be set to false for YARN client deploy mode, and true for YARN cluster deploy mode (by default). This configuration is required for a Kerberized cluster
 
 ## 3) run following code in scala shell to view the table data
-```bash
+```java
 import com.hortonworks.hwc.HiveWarehouseSession
 val hive = HiveWarehouseSession.session(spark).build()
 hive.execute("show tables").show
@@ -71,7 +71,7 @@ hive.executeQuery("select * from employee").show
 
 ## 4) To apply common properties by default, add following setting into ambari spark2 custom conf
 
-```bash
+```java
 spark.hadoop.hive.llap.daemon.service.hosts @llap0
 spark.sql.hive.hiveserver2.jdbc.url  jdbc:hive2://c174-node2.squadron.support.hortonworks.com:2181,c174-node3.squadron.support.hortonworks.com:2181,c174-node4.squadron.support.hortonworks.com:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2-interactive
 spark.datasource.hive.warehouse.metastoreUri thrift://c174-node3.squadron.support.hortonworks.com:9083
@@ -80,13 +80,13 @@ spark.datasource.hive.warehouse.load.staging.dir=/tmp/
 ```
 
 ## 5) 
-```sh
+```java
 spark-shell --master yarn  --conf "spark.security.credentials.hiveserver2.enabled=false" --jars  /usr/hdp/current/hive_warehouse_connector/hive-warehouse-connector-assembly-1.0.0.3.1.4.0-315.jar
 ```
 ##### Note: Common properties are read from spark default properties
 
 ### Pyspark example :
-```sh
+```java
 pyspark --master yarn --jars /usr/hdp/current/hive_warehouse_connector/hive-warehouse-connector-assembly-1.0.0.3.1.4.0-315.jar  --py-files  /usr/hdp/current/hive_warehouse_connector/pyspark_hwc-1.0.0.3.1.4.0-315.zip --conf spark.security.credentials.hiveserver2.enabled=false
 
 from pyspark_llap.sql.session import HiveWarehouseSession
@@ -94,7 +94,7 @@ hive = HiveWarehouseSession.session(spark).build()
 ```
 
 ## 6) run following code in scala shell to view the hive table data
-```sh
+```java
 import com.hortonworks.hwc.HiveWarehouseSession
 val hive = HiveWarehouseSession.session(spark).build()
 hive.execute("show tables").show
