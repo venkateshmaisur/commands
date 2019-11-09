@@ -101,7 +101,11 @@ hive.execute("show tables").show
 hive.executeQuery("select * from employee").show
 ```
 
-## 7) To integrate HWC in Livy2
+# 7) Integrate HWC in Livy2 Interpreter in Zeppelin
+
+Ref: https://community.cloudera.com/t5/Community-Articles/How-to-configure-zeppelin-livy-interpreter-for-secure-HDP/ta-p/249267
+
+Ref: https://zeppelin.apache.org/docs/0.6.1/interpreter/livy.html
 
 ```
   a) add following property in Custom livy2-conf
