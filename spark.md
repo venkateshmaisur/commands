@@ -93,6 +93,8 @@ from pyspark_llap.sql.session import HiveWarehouseSession
 hive = HiveWarehouseSession.session(spark).build()
 ```
 
+![pyspark cmdline](https://github.com/bhagadepravin/commands/blob/master/jpeg/pyspark%20cmdline.png)
+
 ## 6) run following code in scala shell to view the hive table data
 ```java
 import com.hortonworks.hwc.HiveWarehouseSession
@@ -121,7 +123,12 @@ Ref: https://zeppelin.apache.org/docs/0.6.1/interpreter/livy.html
      livy.spark.sql.hive.hiveserver2.jdbc.url.principal=hive/_HOST@HWX.COM
      livy.spark.yarn.security.credentials.hiveserver2.enabled=true
      livy.spark.jars=file:///usr/hdp/current/hive_warehouse_connector/hive-warehouse-connector-assembly-1.0.0.3.1.4.0-315.jar
+```
 
+![Livy Interpreter Setting](https://github.com/bhagadepravin/commands/blob/master/jpeg/Livy%20Interpreter%20Setting.png)
+
+
+```
  Note: Ensure to change the version of hive-warehouse-connector-assembly to match your HWC version
 
   d) Restart livy2 interpreter 
@@ -135,5 +142,66 @@ Ref: https://zeppelin.apache.org/docs/0.6.1/interpreter/livy.html
      %livy2
      hive.executeQuery("select * from employee").show
 ```
+
+
 ##### Note: There is an Ambari defect: AMBARI-22801, which reset the proxy configs on  keytab regenration/service addition. Please follow the step  7.c again in such scenarios
+
+![Livy zepplein example](https://github.com/bhagadepravin/commands/blob/master/jpeg/Livy%20zepplein%20example.png)
+
+
+![livy.pyspark](https://github.com/bhagadepravin/commands/blob/master/jpeg/livy.pyspark.png)
+
+# Known Error's
+
+1. 
+```
+scala> hive.execute("show tables").show
+java.lang.RuntimeException: java.sql.SQLException: Cannot create PoolableConnectionFactory (Bad URL format: Multiple values for property principal)
+  at com.hortonworks.spark.sql.hive.llap.HiveWarehouseSessionImpl.executeInternal(HiveWarehouseSessionImpl.java:200)
+  at com.hortonworks.spark.sql.hive.llap.HiveWarehouseSessionImpl.executeSmart(HiveWarehouseSessionImpl.java:189)
+  at com.hortonworks.spark.sql.hive.llap.HiveWarehouseSessionImpl.execute(HiveWarehouseSessionImpl.java:182)
+  ... 49 elided
+```
+##### Solution: 
+Check spark.sql.hive.hiveserver2.jdbc.url if you have added any principal. After removing principal issue
+
+2. 
+```
+No module named pyspark_llap.sql.session
+Traceback (most recent call last):
+ImportError: No module named pyspark_llap.sql.session
+```
+##### Solution:
+
+For Python usage, the configuration below should also be added. For instance:
+In zepplein use livy.spark.submit.pyFiles  (capital F)
+```java
+Goto Zepplein UI -> Interpreter Setting -> Livy Interpreter -> Add below
+
+livy.spark.submit.pyFiles=file////usr/hdp/current/hive_warehouse_connector/pyspark_hwc-1.0.0.3.1.4.0-315.zip
+
+
+=> Rerun the notebbok
+%livy.pyspark
+from pyspark_llap.sql.session import HiveWarehouseSession
+hive = HiveWarehouseSession.session(spark).build()
+hive.setDatabase("default")
+hive.table("employee").filter("salary = 45000 OR salary = 30000").show()
+
+%livy.pyspark
+hive.setDatabase("hwc_db")
+hive.table("crimes").filter("year = 2000 OR year = 2010").show()
+```
+
+3. 
+```java
+%livy
+from pyspark_llap.sql.session import HiveWarehouseSession
+hive = HiveWarehouseSession.session(spark).build()
+<console>:1: error: ';' expected but '.' found.
+from pyspark_llap.sql.session import HiveWarehouseSession
+```
+##### solution:
+make sure you use `%livy.pyspark1
+
 
