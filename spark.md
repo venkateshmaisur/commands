@@ -16,18 +16,18 @@ spark.sql.hive.hiveserver2.jdbc.url  jdbc:hive2://c174-node2.squadron.support.ho
 spark.datasource.hive.warehouse.metastoreUri thrift://c174-node3.squadron.support.hortonworks.com:9083
 ```
 
-```
+```bash
 spark.sql.hive.hiveserver2.jdbc.url
-# grep -a2 beeline.hs2.jdbc.url.llap  /etc/hive/conf/beeline-site.xml
+ grep -a2 beeline.hs2.jdbc.url.llap  /etc/hive/conf/beeline-site.xml
 
 spark.datasource.hive.warehouse.metastoreUri
-# grep -a1  hive.metastore.uris  /etc/hive/conf/hive-site.xml
+ grep -a1  hive.metastore.uris  /etc/hive/conf/hive-site.xml
 
 spark.hadoop.hive.llap.daemon.service.hosts
 # Copy value from Advanced hive-interactive-site > hive.llap.daemon.service.hosts
 
 spark.hadoop.hive.zookeeper.quorum
-# grep -a1  hive.zookeeper.quorum  /etc/hive/conf/hive-site.xml
+ grep -a1  hive.zookeeper.quorum  /etc/hive/conf/hive-site.xml
 ```
 
 ## 1. Basic testing :
