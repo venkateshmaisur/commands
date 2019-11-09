@@ -62,10 +62,12 @@ spark-shell --master yarn --conf "spark.security.credentials.hiveserver2.enabled
 ##### Note: spark.security.credentials.hiveserver2.enabled should be set to false for YARN client deploy mode, and true for YARN cluster deploy mode (by default). This configuration is required for a Kerberized cluster
 
 ## 3) run following code in scala shell to view the table data
+```
 import com.hortonworks.hwc.HiveWarehouseSession
 val hive = HiveWarehouseSession.session(spark).build()
 hive.execute("show tables").show
 hive.executeQuery("select * from employee").show
+```
 
 ## 4) To apply common properties by default, add following setting into ambari spark2 custom conf
 
