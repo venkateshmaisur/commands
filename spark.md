@@ -62,7 +62,7 @@ spark-shell --master yarn --conf "spark.security.credentials.hiveserver2.enabled
 ##### Note: spark.security.credentials.hiveserver2.enabled should be set to false for YARN client deploy mode, and true for YARN cluster deploy mode (by default). This configuration is required for a Kerberized cluster
 
 ## 3) run following code in scala shell to view the table data
-```
+```bash
 import com.hortonworks.hwc.HiveWarehouseSession
 val hive = HiveWarehouseSession.session(spark).build()
 hive.execute("show tables").show
@@ -71,7 +71,7 @@ hive.executeQuery("select * from employee").show
 
 ## 4) To apply common properties by default, add following setting into ambari spark2 custom conf
 
-```
+```bash
 spark.hadoop.hive.llap.daemon.service.hosts @llap0
 spark.sql.hive.hiveserver2.jdbc.url  jdbc:hive2://c174-node2.squadron.support.hortonworks.com:2181,c174-node3.squadron.support.hortonworks.com:2181,c174-node4.squadron.support.hortonworks.com:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2-interactive
 spark.datasource.hive.warehouse.metastoreUri thrift://c174-node3.squadron.support.hortonworks.com:9083
@@ -107,7 +107,7 @@ Ref: https://community.cloudera.com/t5/Community-Articles/How-to-configure-zeppe
 
 Ref: https://zeppelin.apache.org/docs/0.6.1/interpreter/livy.html
 
-```
+```bash
   a) add following property in Custom livy2-conf
         livy.file.local-dir-whitelist=/usr/hdp/current/hive_warehouse_connector/
   b) Add hive-site.xml to /usr/hdp/current/spark2-client/conf on all cluster nodes.
