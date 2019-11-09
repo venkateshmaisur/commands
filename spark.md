@@ -8,7 +8,7 @@
 
 Ref: https://docs.cloudera.com/HDPDocuments/HDP3/HDP-3.1.0/integrating-hive/content/hive_configure_a_spark_hive_connection.html
 
-##### In laetsted HDP/Ambari All below values are already popululdated in Spark2 configs:
+##### In latest HDP/Ambari all below values are already popululdated in Spark2 configs:
 
 ```
 spark.hadoop.hive.llap.daemon.service.hosts @llap0
