@@ -31,9 +31,7 @@ spark.hadoop.hive.zookeeper.quorum
 ```
 
 ## 1. Basic testing :
-eg: 
-
-```sh
+eg: ```sh
 echo '1201,Vinod,45000,Technical manager
 1202,Manisha,45000,Proof reader
 1203,Masthanvali,40000,Technical writer
