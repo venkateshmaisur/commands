@@ -1,4 +1,4 @@
-# Spark HWC integration - HDP 3 Secure cluster
+# Spark HWC integration - HDP 3.X Secure cluster
 
 ### Prerequisites : 
 
