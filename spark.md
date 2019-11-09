@@ -1,6 +1,6 @@
 # Spark HWC integration - HDP 3 Secure cluster
 
-## Prerequisites : 
+### Prerequisites : 
 
 * Kerberized Cluster
 * Enable hive interactive server in hive
