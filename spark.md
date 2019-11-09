@@ -107,7 +107,7 @@ Ref: https://community.cloudera.com/t5/Community-Articles/How-to-configure-zeppe
 
 Ref: https://zeppelin.apache.org/docs/0.6.1/interpreter/livy.html
 
-```bash
+```java
   a) add following property in Custom livy2-conf
         livy.file.local-dir-whitelist=/usr/hdp/current/hive_warehouse_connector/
   b) Add hive-site.xml to /usr/hdp/current/spark2-client/conf on all cluster nodes.
@@ -115,25 +115,25 @@ Ref: https://zeppelin.apache.org/docs/0.6.1/interpreter/livy.html
   c)Ensure  hadoop.proxyuser.hive.hosts=*  exists in core-site.xml ; refer Custom core-site section in HDFS confs
   
   d) Login to Zeppelin and in livy2 interpreter  settings add following 
-  livy.spark.hadoop.hive.llap.daemon.service.hosts=@llap0
-livy.spark.security.credentials.hiveserver2.enabled=true
-livy.spark.sql.hive.hiveserver2.jdbc.url=jdbc:hive2://c174-node2.squadron.support.hortonworks.com:2181,c174-node3.squadron.support.hortonworks.com:2181,c174-node4.squadron.support.hortonworks.com:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2-interactive
-livy.spark.sql.hive.hiveserver2.jdbc.url.principal=hive/_HOST@HWX.COM
-livy.spark.yarn.security.credentials.hiveserver2.enabled=true
-livy.spark.jars=file:///usr/hdp/current/hive_warehouse_connector/hive-warehouse-connector-assembly-1.0.0.3.1.4.0-315.jar
+     livy.spark.hadoop.hive.llap.daemon.service.hosts=@llap0
+     livy.spark.security.credentials.hiveserver2.enabled=true
+     livy.spark.sql.hive.hiveserver2.jdbc.url=jdbc:hive2://c174-node2.squadron.support.hortonworks.com:2181,c174-   node3.squadron.support.hortonworks.com:2181,c174-node4.squadron.support.hortonworks.com:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2-interactive
+     livy.spark.sql.hive.hiveserver2.jdbc.url.principal=hive/_HOST@HWX.COM
+     livy.spark.yarn.security.credentials.hiveserver2.enabled=true
+     livy.spark.jars=file:///usr/hdp/current/hive_warehouse_connector/hive-warehouse-connector-assembly-1.0.0.3.1.4.0-315.jar
 
  Note: Ensure to change the version of hive-warehouse-connector-assembly to match your HWC version
 
-d) Restart livy2 interpreter 
+  d) Restart livy2 interpreter 
   
   e) in first paragraph add 
-  %livy2
-import com.hortonworks.hwc.HiveWarehouseSession
-val hive = HiveWarehouseSession.session(spark).build()
+     %livy2
+     import com.hortonworks.hwc.HiveWarehouseSession
+     val hive = HiveWarehouseSession.session(spark).build()
 
   f) in second paragraph add
-   %livy2
-hive.executeQuery("select * from employee").show
+     %livy2
+     hive.executeQuery("select * from employee").show
 ```
 ##### Note: There is an Ambari defect: AMBARI-22801, which reset the proxy configs on  keytab regenration/service addition. Please follow the step  7.c again in such scenarios
 
