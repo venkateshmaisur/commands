@@ -162,6 +162,59 @@ activeDirectoryRealm.groupRolesMap = "CN=support,OU=groups,OU=hortonworks,DC=sup
 activeDirectoryRealm.authorizationCachingEnabled = true 
 ```
 
+## LDAP Authentication
+
+```
+[users]
+# List of users with their password allowed to access Zeppelin.
+# To use a different strategy (LDAP / Database / ...) check the shiro doc at http://shiro.apache.org/configuration.html#Configuration-INISections
+admin = admin, admin
+#user1 = password2, role1, role2
+#user2 = password3, role3
+#user3 = password4, role2
+# Sample LDAP configuration, for user Authentication, currently tested for single Realm
+
+[main]
+
+ldapRealm = org.apache.zeppelin.server.LdapGroupRealm
+ldapRealm.contextFactory.environment[ldap.searchBase] = dc=raghav,dc=com
+ldapRealm.contextFactory.url = ldap://hdp1.raghav.com:389
+ldapRealm.userDnTemplate = uid={0},ou=users,dc=raghav,dc=com
+ldapRealm.contextFactory.authenticationMechanism = SIMPLE
+ldapRealm.contextFactory.systemUsername = cn=Manager,dc=raghav,dc=com
+ldapRealm.contextFactory.systemPassword = <Password>
+
+sessionManager = org.apache.shiro.web.session.mgt.DefaultWebSessionManager
+cacheManager = org.apache.shiro.cache.MemoryConstrainedCacheManager
+securityManager.realm = $ldapRealm
+securityManager.cacheManager = $cacheManager
+securityManager.sessionManager = $sessionManager
+securityManager.sessionManager.globalSessionTimeout = 86400000
+shiro.loginUrl = /api/login
+
+[roles]
+admin = *
+
+###ldap Group zeppelinadmin###
+zeppelinadmin = *
+
+
+[urls]
+# This section is used for url-based security.
+# You can secure interpreter, configuration and credential information by urls. Comment or uncomment the below urls that you want to hide.
+# anon means the access is anonymous.
+# authc means Form based Auth Security
+# To enfore security, comment the line below and uncomment the next one
+/api/version = anon
+
+#Providing access to specific url for zeppelinadmin group###
+/api/interpreter/** = authc, roles[zeppelinadmin]
+/api/configurations/** = authc, roles[zeppelinadmin]
+/api/credential/** = authc, roles[zeppelinadmin]
+#/** = anon
+/** = authc
+```
+
 ## SH impersonation
 
 https://zeppelin.apache.org/docs/0.7.0/manual/userimpersonation.html
