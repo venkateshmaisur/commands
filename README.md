@@ -72,7 +72,7 @@ tcpdump -ni any -nvvvXSs 4096 host sme-2012-ad.support.com and port 636 -w tcpdu
 tcpdump -ni any -nvvvXSs 4096 host <host> and port 636 -w tcpdump.pcap
 
 tcpdump -i eth0 -w /var/tmp/ldap3.pcap port 389 &
-tcpdump -i any -w /var/tmp/ldap3.pcap port 389 &
+tcpdump -i any -tttt -w /var/tmp/ldap.pcap port 389 &
 
 tshark -r /var/tmp/ldap.pcap
 tshark -r /var/tmp/ldap.pcap -V
