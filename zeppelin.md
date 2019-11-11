@@ -32,6 +32,21 @@ https://github.com/bhagadepravin/commands/blob/master/spark.md#7-integrate-hwc-i
 
 ## Python Interpreter
 
+```
+# Login into Zepplein node:
+
+/usr/hdp/2.6.5.0-292/zeppelin/bin/install-interpreter.sh -n python
+
+Install python(org.apache.zeppelin:zeppelin-python:0.7.0) to /usr/hdp/2.6.5.0-292/zeppelin/interpreter/python ...
+Interpreter python installed under /usr/hdp/2.6.5.0-292/zeppelin/interpreter/python.
+
+1. Restart Zeppelin
+2. Create interpreter setting in 'Interpreter' menu on Zeppelin GUI
+3. Then you can bind the interpreter on your note
+
+officially we dont support Python Interpreter, you can use 
+```
+
 ```sh
 # su - zeppelin 
 # cd /usr/hdp/current/zeppelin-server/bin/ 
