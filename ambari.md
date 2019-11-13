@@ -102,6 +102,20 @@ DELETE FROM kerberos_keytab_principal;
 DELETE FROM kerberos_keytab; 
 DELETE FROM kerberos_principal; 
 ```
+## Kerberos cahce cleanup
+```
+1. Manually created ambari server keytab using below command
+
+ktutil: add_entry -password -p service_pinc/cluster1@zyx.com -k 1 -e des3-cbc-sha1-kd
+Password for vemkd/cluster1@abc.com:
+ktutil: wkt /path_to_keytab_file/xyz.keytab
+
+2. Then cleaned following directories /var/lib/ambari-agent/tmp and /var/lib/ambari-agent/cache on all host
+3. Took the backup of ambari database and fired below queries
+SELECT * FROM ambari.kerberos_principal WHERE cached_keytab_path IS NOT null;
+update ambari.kerberos_principa set cached_keytab_path=NULL where principla_name=<>;
+update ambari.kerberos_principa set cached_keytab_path=NULL where principla_name=HTTP%;
+```
 
 ## POSTGRES CMDS
 
