@@ -39,7 +39,9 @@ LoadModule lbmethod_bybusyness_module modules/mod_lbmethod_bybusyness.so
 
 #### Create a custom conf file:
 `vi ranger-cluster.conf`
+
 Make the following updates:
+
 Add the following lines, then change the` <VirtualHost *:88>` port to match the default port you set in the `httpd.conf` file in the previous step.
 
 ```sh
