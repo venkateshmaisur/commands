@@ -37,37 +37,22 @@ LoadModule lbmethod_bytraffic_module modules/mod_lbmethod_bytraffic.so
 LoadModule lbmethod_bybusyness_module modules/mod_lbmethod_bybusyness.so
 ```
 
-#### Run the following command to restart the httpd server:
-`/usr/local/apache2/bin/apachectl restart`
+#### Create a custom conf file:
+`vi ranger-cluster.conf`
+Make the following updates:
+Add the following lines, then change the` <VirtualHost *:88>` port to match the default port you set in the `httpd.conf` file in the previous step.
 
-#### Create a custom conf file for the load-balancer SSL configuration:
-`vi /usr/local/apache2/conf/ranger-lb-ssl.conf`
-
-```bash
-<VirtualHost *:8443>
-
-        SSLEngine On
-        SSLProxyEngine On
-        SSLCertificateFile /usr/local/apache2/conf/server.crt
-        SSLCertificateKeyFile /usr/local/apache2/conf/server.key
-
-        #SSLCACertificateFile /usr/local/apache2/conf/ranger_lb_crt.pem
-        #SSLProxyCACertificateFile /usr/local/apache2/conf/ranger_lb_crt.pem
-        SSLVerifyClient optional
-        SSLOptions +ExportCertData
-        SSLProxyVerify none
-        SSLProxyCheckPeerCN off
-        SSLProxyCheckPeerName off
-        SSLProxyCheckPeerExpire off
+```sh
+#Listen 80
+<VirtualHost *:80>
         ProxyRequests off
-        ProxyPreserveHost off
+        ProxyPreserveHost on
 
         Header add Set-Cookie "ROUTEID=.%{BALANCER_WORKER_ROUTE}e; path=/" env=BALANCER_ROUTE_CHANGED
 
         <Proxy balancer://rangercluster>
-               BalancerMember http://172.22.71.39:6080 loadfactor=1 route=1
-               BalancerMember http://172.22.71.38:6080 loadfactor=1 route=2
-        
+                BalancerMember http://172.22.71.38:6080 loadfactor=1 route=1
+                BalancerMember http://172.22.71.39:6080 loadfactor=1 route=2
 
                 Order Deny,Allow
                 Deny from none
@@ -95,5 +80,10 @@ LoadModule lbmethod_bybusyness_module modules/mod_lbmethod_bybusyness.so
 </VirtualHost>
 ```
 
+#### Run the following command to restart the httpd server:
+`/usr/local/apache2/bin/apachectl restart`
 
-Ref: https://docs.cloudera.com/HDPDocuments/HDP3/HDP-3.1.4/fault-tolerance/content/configuring_ranger_admin_ha_with_ssl.html
+
+
+
+Ref: https://docs.cloudera.com/HDPDocuments/HDP3/HDP-3.1.4/fault-tolerance/content/configuring_ranger_admin_ha_without_ssl.html
