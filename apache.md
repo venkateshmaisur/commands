@@ -25,7 +25,7 @@ curl localhost
 #### Edit the httpd.conf file:
 ```sh
 vi /usr/local/apache2/conf/httpd.conf
-add
+# add
 LoadModule proxy_module modules/mod_proxy.so
 LoadModule proxy_http_module modules/mod_proxy_http.so
 LoadModule proxy_ajp_module modules/mod_proxy_ajp.so            
@@ -42,7 +42,8 @@ LoadModule ssl_module modules/mod_ssl.so
 
 #### Create a custom conf file for the load-balancer SSL configuration:
 `vi /usr/local/apache2/conf/ranger-lb-ssl.conf`
-```sh
+
+```bash
 <VirtualHost *:8443>
 
         SSLEngine On
