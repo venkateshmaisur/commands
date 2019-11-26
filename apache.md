@@ -23,9 +23,10 @@ curl localhost
 ```
 
 #### Edit the httpd.conf file:
+
+`vi /usr/local/apache2/conf/httpd.conf`
 ```sh
-vi /usr/local/apache2/conf/httpd.conf
-# add
+# add below
 LoadModule proxy_module modules/mod_proxy.so
 LoadModule proxy_http_module modules/mod_proxy_http.so
 LoadModule proxy_ajp_module modules/mod_proxy_ajp.so            
