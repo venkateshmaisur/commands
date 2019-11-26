@@ -1,4 +1,4 @@
-# Apache Loadbalancer
+# Apache Loadbalancer Non-SSL
 
 ```sh
 cd /usr/local
@@ -29,13 +29,12 @@ curl localhost
 # add below
 LoadModule proxy_module modules/mod_proxy.so
 LoadModule proxy_http_module modules/mod_proxy_http.so
-LoadModule proxy_ajp_module modules/mod_proxy_ajp.so            
+LoadModule proxy_ajp_module modules/mod_proxy_ajp.so
 LoadModule proxy_balancer_module modules/mod_proxy_balancer.so
 LoadModule slotmem_shm_module modules/mod_slotmem_shm.so
 LoadModule lbmethod_byrequests_module modules/mod_lbmethod_byrequests.so
 LoadModule lbmethod_bytraffic_module modules/mod_lbmethod_bytraffic.so
 LoadModule lbmethod_bybusyness_module modules/mod_lbmethod_bybusyness.so
-LoadModule ssl_module modules/mod_ssl.so
 ```
 
 #### Run the following command to restart the httpd server:
