@@ -10,6 +10,23 @@ keytool -import -file /tmp/adcert.crt -keystore $JAVA_HOME/jre/lib/security/cace
 curl -ik -u Username:Password -X GET  'https://<KNOX-HOSTNAME>:8443/gateway/default/webhdfs/v1/?op=LISTSTATUS'
 ```
 
+##### Debug on Ranger Knox Plugin
+
+Modify the gateway-log4j.properties like below, restart Knox and review the ranger Knox plugin log in ranger.knoxagent.log
+```sh
+#Ranger Knox Plugin debug
+ranger.knoxagent.logger=DEBUG,console,KNOXAGENT
+ranger.knoxagent.log.file=ranger.knoxagent.log
+log4j.logger.org.apache.ranger=${ranger.knoxagent.logger}
+log4j.additivity.org.apache.ranger=false
+log4j.appender.KNOXAGENT =org.apache.log4j.DailyRollingFileAppender
+log4j.appender.KNOXAGENT.File=${app.log.dir}/${ranger.knoxagent.log.file}
+log4j.appender.KNOXAGENT.layout=org.apache.log4j.PatternLayout
+log4j.appender.KNOXAGENT.layout.ConversionPattern=%d{ISO8601} %p %c{2}: %m%n %L
+log4j.appender.KNOXAGENT.DatePattern=.yyyy-MM-dd
+```
+
+
 ##### Use LB for KnoxSSO where you have multiple knox instances
 
 ```sh 
