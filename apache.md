@@ -91,9 +91,9 @@ Add the following lines, then change the` <VirtualHost *:88>` port to match the 
 ```bash
 kadmin.local
 addprinc -randkey HTTP/<host3>@EXAMPLE.COM
-ktadd -norandkey -kt /etc/security/keytabs/spnego.service.keytab HTTP/ <host3>@EXAMPLE.COM
-ktadd -norandkey -kt /etc/security/keytabs/spnego.service.keytab HTTP/ <host2>@EXAMPLE.COM
-ktadd -norandkey -kt /etc/security/keytabs/spnego.service.keytab HTTP/ <host1>@EXAMPLE.COM
+ktadd -norandkey -kt /etc/security/keytabs/spnego.service.keytab HTTP/<host3>@EXAMPLE.COM
+ktadd -norandkey -kt /etc/security/keytabs/spnego.service.keytab HTTP/<host2>@EXAMPLE.COM
+ktadd -norandkey -kt /etc/security/keytabs/spnego.service.keytab HTTP/<host1>@EXAMPLE.COM
 exit
 klist -kt /etc/security/keytabs/ranger.ha.keytab
 chmod 440 /etc/security/keytabs/ranger.ha.keytab
