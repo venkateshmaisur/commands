@@ -51,6 +51,18 @@ Add the following lines, then change the` <VirtualHost *:88>` port to match the 
         ProxyPreserveHost on
         #ErrorLog "/var/log/httpd_error_log"
         #CustomLog "/var/log/httpd_access_log" common
+	
+# Below is configuration for Knox:
+#	SSLProxyEngine On
+#	SSLVerifyClient optional
+#       SSLOptions +ExportCertData
+#       SSLProxyVerify none
+#       SSLProxyCheckPeerCN off
+#       SSLProxyCheckPeerName off
+#       SSLProxyCheckPeerExpire off
+#       ProxyRequests off
+#       ProxyPreserveHost off
+	
 # Add below bundle of knox cert or any service which SSL enabled in ranger_lb_crt.pem 
         #SSLCACertificateFile /usr/local/apache2/conf/ranger_lb_crt.pem
 
@@ -125,6 +137,11 @@ Add config from `Ambari > Ranger > Configs > Advanced > Custom ranger-admin-site
 Ref: https://docs.cloudera.com/HDPDocuments/HDP3/HDP-3.1.4/fault-tolerance/content/configuring_ranger_admin_ha_without_ssl.html
 
 
+#### curl cmd to test knox
+```sh
+curl -k -u Username:Password -X GET "https://<LB-Knox Hostname>:lb-port/gateway/default/webhdfs/v1/?op=LISTSTATUS"
+```
+
 # ^ Troubleshooting
 
 Login into Ranger node:
@@ -133,3 +150,10 @@ kinit -kt /etc/security/keytabs/rangeradmin.service.keytab $(klist -kt /etc/secu
 curl -ik --negotiate -u : "http://c174-node1.squadron.support.hortonworks.com:8888/service/public/v2/api/service"
 klist -dfae
 ```
+
+```
+[Wed Nov 27 15:29:40.345322 2019] [proxy:error] [pid 214509] AH00961: HTTPS: failed to enable ssl support for 172.25.40.155:8443 (c174-node4.squadron.support.hortonworks.com)
+[Wed Nov 27 15:29:44.109359 2019] [ssl:error] [pid 214510] [remote 172.25.40.155:8443] AH01961: SSL Proxy requested for c174-node1.squadron.support.hortonworks.com:8888 but not enabled [Hint: SSLProxyEngine]
+[Wed Nov 27 15:29:44.109396 2019] [proxy:error] [pid 214510] AH00961: HTTPS: failed to enable ssl support for 172.25.40.155:8443 (c174-node4.squadron.support.hortonworks.com)
+```
+make sure you have `SSLProxyEngine On`
