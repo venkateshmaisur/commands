@@ -37,7 +37,7 @@ LoadModule lbmethod_bytraffic_module modules/mod_lbmethod_bytraffic.so
 LoadModule lbmethod_bybusyness_module modules/mod_lbmethod_bybusyness.so
 ```
 
-#### Create a custom conf file:
+#### Create a custom conf file for Ranger:
 `vi ranger-cluster.conf`
 
 Make the following updates:
@@ -51,13 +51,20 @@ Add the following lines, then change the` <VirtualHost *:88>` port to match the 
         ProxyPreserveHost on
         #ErrorLog "/var/log/httpd_error_log"
         #CustomLog "/var/log/httpd_access_log" common
+# Add below bundle of knox cert or any service which SSL enabled in ranger_lb_crt.pem 
+        #SSLCACertificateFile /usr/local/apache2/conf/ranger_lb_crt.pem
 
         Header add Set-Cookie "ROUTEID=.%{BALANCER_WORKER_ROUTE}e; path=/" env=BALANCER_ROUTE_CHANGED
 
         <Proxy balancer://rangercluster>
-                BalancerMember http://172.22.71.38:6080 loadfactor=1 route=1
-                BalancerMember http://172.22.71.39:6080 loadfactor=1 route=2
+                BalancerMember http://<Ranger-Hostname-1>:6080 loadfactor=1 route=1
+                BalancerMember http://<Ranger-Hostname-2>:6080 loadfactor=1 route=2
 
+	### Knox Loadbalancing  ###
+
+              # BalancerMember https://<Knox-Hostname-1>:8443 loadfactor=1 route=1
+              # BalancerMember https://<Knox-Hostname-2>:8443 loadfactor=1 route=2
+               
                 Order Deny,Allow
                 Deny from none
                 Allow from all
@@ -82,6 +89,15 @@ Add the following lines, then change the` <VirtualHost *:88>` port to match the 
        ProxyPassReverse / balancer://rangercluster/
 
 </VirtualHost>
+```
+
+#### For Knox loadbalancing follow below steps:
+
+```bash
+echo -n | openssl s_client -connect <Knox-Hostname-1>:8443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/knoxcert1.crt
+echo -n | openssl s_client -connect <Knox-Hostname-2>:8443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/knoxcert2.crt
+
+cat /tmp/knoxcert1.crt /tmp/knoxcert2.crt > /usr/local/apache2/conf/ranger_lb_crt.pem
 ```
 
 #### Run the following command to restart the httpd server:
