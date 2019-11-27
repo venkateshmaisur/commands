@@ -49,6 +49,8 @@ Add the following lines, then change the` <VirtualHost *:88>` port to match the 
 <VirtualHost *:80>
         ProxyRequests off
         ProxyPreserveHost on
+        #ErrorLog "/var/log/httpd_error_log"
+        #CustomLog "/var/log/httpd_access_log" common
 
         Header add Set-Cookie "ROUTEID=.%{BALANCER_WORKER_ROUTE}e; path=/" env=BALANCER_ROUTE_CHANGED
 
