@@ -105,3 +105,13 @@ Add config from `Ambari > Ranger > Configs > Advanced > Custom ranger-admin-site
 
 
 Ref: https://docs.cloudera.com/HDPDocuments/HDP3/HDP-3.1.4/fault-tolerance/content/configuring_ranger_admin_ha_without_ssl.html
+
+
+# Troubleshooting
+
+
+```sh
+kinit -kt /etc/security/keytabs/rangeradmin.service.keytab $(klist -kt /etc/security/keytabs/rangeradmin.service.keytab |sed -n "4p"|cut -d ' ' -f7)
+curl -ik --negotiate -u : "http://c174-node1.squadron.support.hortonworks.com:8888/service/public/v2/api/service"
+klist -dfae
+```
