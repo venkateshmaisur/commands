@@ -52,7 +52,7 @@ Add the following lines, then change the` <VirtualHost *:88>` port to match the 
         #ErrorLog "/var/log/httpd_error_log"
         #CustomLog "/var/log/httpd_access_log" common
 	
-# Below is configuration for Knox:
+# Below is configuration for Knox, where is SSL enabled, we need have knox cert with us so apache to connect to Knox
 #	SSLProxyEngine On
 #	SSLVerifyClient optional
 #       SSLOptions +ExportCertData
