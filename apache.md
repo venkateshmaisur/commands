@@ -86,6 +86,22 @@ Add the following lines, then change the` <VirtualHost *:88>` port to match the 
 `/usr/local/apache2/bin/apachectl restart`
 
 
+# For Kerberos setup
+
+```bash
+kadmin.local
+addprinc -randkey HTTP/<host3>@EXAMPLE.COM
+ktadd -norandkey -kt /etc/security/keytabs/spnego.service.keytab HTTP/ <host3>@EXAMPLE.COM
+ktadd -norandkey -kt /etc/security/keytabs/spnego.service.keytab HTTP/ <host2>@EXAMPLE.COM
+ktadd -norandkey -kt /etc/security/keytabs/spnego.service.keytab HTTP/ <host1>@EXAMPLE.COM
+exit
+klist -kt /etc/security/keytabs/ranger.ha.keytab
+chmod 440 /etc/security/keytabs/ranger.ha.keytab
+chown root:hadoop /etc/security/keytabs/ranger.ha.keytab
+```
+Add config from `Ambari > Ranger > Configs > Advanced > Custom ranger-admin-site`:
+
+`ranger.ha.spnego.kerberos.keytab=/etc/security/keytabs/ranger.ha.keytab`
 
 
 Ref: https://docs.cloudera.com/HDPDocuments/HDP3/HDP-3.1.4/fault-tolerance/content/configuring_ranger_admin_ha_without_ssl.html
