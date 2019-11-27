@@ -35,6 +35,7 @@ LoadModule slotmem_shm_module modules/mod_slotmem_shm.so
 LoadModule lbmethod_byrequests_module modules/mod_lbmethod_byrequests.so
 LoadModule lbmethod_bytraffic_module modules/mod_lbmethod_bytraffic.so
 LoadModule lbmethod_bybusyness_module modules/mod_lbmethod_bybusyness.so
+LoadModule ssl_module modules/mod_ssl.so
 ```
 
 #### Create a custom conf file for Ranger:
@@ -52,7 +53,7 @@ Add the following lines, then change the` <VirtualHost *:88>` port to match the 
         #ErrorLog "/var/log/httpd_error_log"
         #CustomLog "/var/log/httpd_access_log" common
 	
-# Below is configuration for Knox, where is SSL enabled, we need have knox cert with us so apache to connect to Knox
+# Below is configuration for Knox/Ranger, where is SSL enabled, we need have knox cert with us so apache to connect to Knox
 #	SSLProxyEngine On
 #	SSLVerifyClient optional
 #       SSLOptions +ExportCertData
