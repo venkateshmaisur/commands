@@ -57,6 +57,21 @@ authentication.ldap.sync.groupMemberFilter
 ldap.sync.username.collision.behavior
 ```
 
+## AMBARI LDAP using knox demo ldap
+```
+yum clean all
+yum install openldap-clients -y
+
+# KNOX DEMO LDAP
+
+ldapsearch -h c174-node3.squadron.support.hortonworks.com -p 33389 -D uid=admin,ou=people,dc=hadoop,dc=apache,dc=org -w admin-password -b dc=hadoop,dc=apache,dc=org "(uid=admin)"
+
+ambari-server setup-ldap --ldap-url=c174-node3.squadron.support.hortonworks.com:33389 --ldap-user-class=person --ldap-user-attr=uid --ldap-group-class=groupofnames --ldap-ssl=false --ldap-secondary-url= ""--ldap-referral="" --ldap-group-attr=cn --ldap-member-attr=member --ldap-dn=dn --ldap-base-dn=dc=hadoop,dc=apache,dc=org --ldap-bind-anonym=false --ldap-manager-dn=uid=admin,ou=people,dc=hadoop,dc=apache,dc=org --ldap-manager-password=admin-password --ldap-save-settings
+
+ambari-server restart
+ambari-server sync-ldap --all
+```
+
 ## Ambari Version mismatch
 
 ```sql
