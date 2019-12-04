@@ -12,7 +12,7 @@ keytool -import -file /tmp/adcert.crt -keystore $JAVA_HOME/jre/lib/security/cace
 curl -ik -u Username:Password -X GET  'https://<KNOX-HOSTNAME>:8443/gateway/default/webhdfs/v1/?op=LISTSTATUS'
 ```
 
-## connect to hive using Knox.
+##### Connect to hive using Knox.
 ```bash
 echo -n | openssl s_client -connect ${knoxserver}:8443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/knoxcert.crt
 keytool -import -file /tmp/knoxcert.crt -keystore /tmp/knox.jks -alias knox-Cert -storepass changeit
