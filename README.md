@@ -166,3 +166,12 @@ Zepplein corrupt notebooks
 ```sh
 grep ERROR zeppelin-zeppelin-xx.internal.log | awk '{print $8}' | awk -F'.' '{print $NF}' | grep -v for | grep -v 2019* | grep -v but | grep -v handle | sort | uniq
 ```
+## Druid
+
+```sh
+su druid
+kinit -kt /etc/security/keytabs/druid.headless.keytab $(klist -kt /etc/security/keytabs/druid.headless.keytab |sed -n "4p"|cut -d ' ' -f7)
+curl -ik --negotiate -u :  'http://$(hostname -f):8081/druid/coordinator/v1/loadqueue?simple'
+curl -ik --negotiate -u :  'http://$(hostname -f):8081/druid/indexer/v1/workers'
+curl -ik --negotiate -u :  'http://$(hostname -f):8081/druid/coordinator/v1/loadstatus'
+```
