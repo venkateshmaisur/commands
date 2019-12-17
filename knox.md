@@ -21,6 +21,21 @@ beeline -u "jdbc:hive2://KnoxserverInternalHostName:8443/;ssl=true;sslTrustStore
 
 ```
 
+```
+Dcom.sun.jndi.ldap.object.disableEndpointIdentification=true
+
+KNOX:
+/usr/hdp/current/knox-server/bin/gateway.sh
+
+Modify the gateway.sh and added -Dcom.sun.jndi.ldap.object.disableEndpointIdentification=true on both the host.
+====
+#dynamic library path
+APP_JAVA_LIB_PATH="-Djava.library.path=$APP_HOME_DIR/ext/native -Dcom.sun.jndi.ldap.object.disableEndpointIdentification=true"
+
+Restart Knox and test again.
+
+```
+
 ##### Debug on Ranger Knox Plugin
 
 Modify the gateway-log4j.properties like below, restart Knox and review the ranger Knox plugin log in ranger.knoxagent.log
