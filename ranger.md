@@ -40,6 +40,13 @@ ambari-server setup --jdbc-db=mysql --jdbc-driver=/usr/share/java/mysql-connecto
 ```sql
 mysql -u root -proot
 grant all privileges on *.* to 'root'@'c174-node2.squadron-labs.com' identified by 'root' with grant option;
+
+## manual
+mysql -u root -proot
+create database ranger;
+CREATE USER 'rangerdba'@'RANGER-HOSTNAME' IDENTIFIED BY 'admin';
+grant all privileges on ranger.* to 'rangerdba'@'RANGER-HOSTNAME' identified by 'admin' with grant option;
+FLUSH PRIVILEGES;
 ```
 
 ## MySql Dump and Restoration
