@@ -29,7 +29,13 @@ After you have added the Initial Admin Identity, you must immediately generate c
 <property name="Node Identity 2">CN=node2.fqdn, OU=NIFI</property>
 <property name="Node Identity 3">CN=node3.fqdn, OU=NIFI</property>
 Replace node1.fqdn, node2.fqdn, and node3.fqdn with their respective fully qualified domain names.
+```
+```sh
+set initail admin user as per LDAP
+set proxy,You can enable Ranger plugin for Nifi.
+For auto location provide keystore and truststore path in Ranger UI -> nifi service.
 
+Also add nifi keystore and truststore path in Ambari UI -> Nifi -> Advanced ranger-nifi-plugin-properties
 ```
 
 ## 2. [Generating Client Certificates](https://docs.cloudera.com/HDPDocuments/HDF3/HDF-3.4.0/nifi-authentication/content/generating_client_certificates.html)
