@@ -52,6 +52,32 @@ log4j.appender.KNOXAGENT.layout.ConversionPattern=%d{ISO8601} %p %c{2}: %m%n %L
 log4j.appender.KNOXAGENT.DatePattern=.yyyy-MM-dd
 ```
 
+### KNOX Hbase rest
+
+```bash
+	For hbase, you must start the hbase rest service and configure your topology with the webhbase service url set to the <host>:<port> 
+-->On hbase master: 
+You would need to add properties hbase.rest.keytab.file & hbase.rest.kerberos.principal like below in hbase-site prior to startin rest service. 
+hbase.rest.kerberos.principal=HTTP/_HOST@LAB.HORTONWORKS.NET
+hbase.rest.keytab.file=/etc/security/keytabs/spnego.service.keytab 
+
+#su - hbase 
+nohup hbase rest start -p 8080 & 2>&1 
+
+-->Once set , you can now configure knox topology to have webhbase as below: 
+<service> 
+<role>WEBHBASE</role> 
+<url>http://{{hbase_master_host}}:8080</url> 
+</service> 
+
+Ref: https://knox.apache.org/books/knox-1-3-0/user-guide.html#HBase+URL+Mapping
+
+After this change you should be able to use the knox to query over webhdfs rest API. 
+
+#curl -ikv -u admin:admin-password https://c374-node4.squadron.support.hortonworks.com:8443/gateway/default/hbase/status/cluster 
+
+https://knox.apache.org/books/knox-0-12-0/user-guide.html#HBase+REST+API+Setup
+```
 
 ##### Use LB for KnoxSSO where you have multiple knox instances
 
