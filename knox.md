@@ -65,10 +65,11 @@ hbase.rest.keytab.file=/etc/security/keytabs/spnego.service.keytab
 nohup hbase rest start -p 60080 & 2>&1 
 
 -->Once set , you can now configure knox topology to have webhbase as below: 
-<service> 
-<role>WEBHBASE</role> 
-<url>http://{{hbase_master_host}}:60080</url> 
-</service> 
+            <service>
+                <role>WEBHBASE</role>
+                <url>http://{{hbase_master_host}}:{{hbase_master_port}}</url>
+            </service>
+
 
 Ref: https://knox.apache.org/books/knox-1-3-0/user-guide.html#HBase+URL+Mapping
 
