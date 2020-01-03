@@ -60,6 +60,12 @@ hive,atlas,kafka
 
 tar -cvzf configs.tar.gz /etc/kafka/conf/* /etc/atlas/conf/* /etc/hive/conf/*
 
+
+grep ERROR /Users/pbhagade/Downloads/application\ \(2\).log |grep -i notification | grep rollback |cut -d ' ' -f5- |sort | uniq
+
+
+grep -e ERROR -e WARN /Users/pbhagade/Downloads/application\ \(2\).log |grep NotificationHookConsumer |tail -1 &> filtered.out
+
 ```
 
 ## Enable the perf logging to measure the performance
