@@ -176,6 +176,17 @@ $ update host_version set state='INSTALLED' where repo_version_id=101;
 $ update host_version set state='CURRENT' where repo_version_id=151; 
 ```
 
+## regenerate certs
+```
+cat /var/lib/ambari-server/keys/pass.txt
+
+Replcace **** with above password
+
+openssl ca -create_serial -out /var/lib/ambari-server/keys/ca.crt -days 365 -keyfile /var/lib/ambari-server/keys/ca.key -key **** -selfsign -extensions jdk7_ca -config /var/lib/ambari-server/keys/ca.config -batch -infiles /var/lib/ambari-server/keys/ca.csr
+
+openssl pkcs12 -export -in /var/lib/ambari-server/keys/ca.crt -inkey /var/lib/ambari-server/keys/ca.key -certfile /var/lib/ambari-server/keys/ca.crt -out /var/lib/ambari-server/keys/keystore.p12 -password pass:**** -passin pass:****
+```
+
 ## Ambari Kerberos Descriptor
 
 `curl -u username:password -X GET http://<ambari-hostname>:8080/api/v1/clusters/c174/artifacts/kerberos_descriptor > kerberos_descriptor.json`
