@@ -318,6 +318,19 @@ Total Runtime: 00:01:02
 # Remove Existing Collections & Upgrade Binaries
  
 ````
+## ATLAS 503 webui error
+```sh
+Stop Atlas
+Login into Atlas node:
+cd /usr/hdp/current/atlas-server/server/webapp/
+rm -rf atlas/*
+cp atlas.war atlas/
+cd atlas/
+jar -xvf atlas.war
+rm -rf atlas.war
+Start Atlas service.
+```
+
 
 ## Tag sync performannce 
 ```
