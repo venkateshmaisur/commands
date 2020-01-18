@@ -203,6 +203,20 @@ mysql -u root -proot
 create database ranger1;
 mysqldump -u root -proot ranger1 < ranger-db.sql
 ```
+
+```
+
+ File "/usr/lib/ambari-agent/lib/resource_management/libraries/script/config_dictionary.py", line 73, in __getattr__
+    raise Fail("Configuration parameter '" + self.name + "' was not found in configurations dictionary!")
+resource_management.core.exceptions.Fail: Configuration parameter 'xasecure.policymgr.clientssl.keystore.password' was not found in configurations dictionary!
+
+xasecure.policymgr.clientssl.keystore=/etc/security/serverKeys/atlas-tagsync-keystore.jks
+xasecure.policymgr.clientssl.keystore.credential.file=jceks://file{{atlas_tagsync_credential_file}}
+xasecure.policymgr.clientssl.keystore.password=admin
+xasecure.policymgr.clientssl.truststore=/etc/security/serverKeys/atlas-tagsync-mytruststore.jks
+xasecure.policymgr.clientssl.truststore.credential.file=jceks://file{{atlas_tagsync_credential_file}}
+xasecure.policymgr.clientssl.truststore.password=admin
+```
 ## HSM
 
 ```sh
