@@ -32,3 +32,7 @@ Example:
 
 2.-./sqlline-thin.py "aquilodran-3.openstacklocal:8765:/hbase-secure/hbase;authentication=SPNEGO"
 ```
+working
+```
+./sqlline-thin.py "http://c174-node4.squadron.support.hortonworks.com:8765;authentication=SPNEGO"
+```
