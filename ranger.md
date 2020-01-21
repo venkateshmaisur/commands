@@ -217,6 +217,34 @@ xasecure.policymgr.clientssl.truststore=/etc/security/serverKeys/atlas-tagsync-m
 xasecure.policymgr.clientssl.truststore.credential.file=jceks://file{{atlas_tagsync_credential_file}}
 xasecure.policymgr.clientssl.truststore.password=admin
 ```
+
+```
+Can you check the java version?
+Also, if all AD Certs are added still you are facing the issue, Follow below steps:
+
+Please make below changes and let me know the result.
+
+On ranger admin node, go to the file /usr/hdp/current/ranger-admin/ews/ranger-admin-services.sh
+
+Search fo the start() function and modify the nohup java line adding the string "-Dcom.sun.jndi.ldap.object.disableEndpointIdentification=true", so this should look like this
+
+
+######
+start() {
+SLEEP_TIME_AFTER_START=5
+nohup java -Dcom.sun.jndi.ldap.object.disableEndpointIdentification=true -Dproc_rangeradmin ${JAVA_OPTS} ${DB_SSL_PARAM} -Dservername=${SERVER_NAME} -Dlogdir=${RANGER_ADMIN_LOG_DIR} -Dcatalina.base=${XAPOLICYMGR_EWS_DIR} -cp "${XAPOLICYMGR_EWS_DIR}/webapp/WEB-INF/classes/conf:${XAPOLICYMGR_EWS_DIR}/lib/*:${RANGER_JAAS_LIB_DIR}/*:${RANGER_JAAS_CONF_DIR}:${JAVA_HOME}/lib/*:${RANGER_HADOOP_CONF_DIR}/*:$CLASSPATH" org.apache.ranger.server.tomcat.EmbeddedServer > ${RANGER_ADMIN_LOG_DIR}/catalina.out 2>&1 &
+VALUE_OF_PID=$!
+echo "Starting Apache Ranger Admin Service"
+sleep $SLEEP_TIME_AFTER_START
+if ps -p $VALUE_OF_PID > /dev/null
+#####
+
+if it still doesnt work, try to get below details:
+
+nslookup ss0001.navair.navy.mil
+openssl s_client -connect ss0001.navair.navy.mil:636 -showcerts
+keytool -list -keystore /etc/ranger/admin/conf/ranger-admin-truststore.jks -v 
+```
 ## HSM
 
 ```sh
