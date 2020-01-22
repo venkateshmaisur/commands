@@ -15,8 +15,8 @@ Insert into COURSE values (3,'SQL');
 Insert into COURSE values (4,'C');
 ```
 ### Impala
-```
-# impala-shell -i localhost --quiet
+```sql
+impala-shell -i localhost --quiet
 
 create database experiments;
 use experiments;
