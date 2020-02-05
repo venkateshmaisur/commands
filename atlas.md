@@ -344,7 +344,9 @@ Along with that please get the kafka dump for ATLAS_ENTITIES topic
 --
 /usr/hdp/current/kafka-broker/bin/kafka-console-consumer.sh --bootstrap-server <broker>:6667 --topic ATLAS_ENTITIES --security-protocol <protocol> --from-beginning > /tmp/atlas_entities.log
 ```
-
+```
+ curl -s -k -u admin:admin 'http://c3232-node2.coelab.cloudera.com:21000/api/atlas/v2/search/basic?limit=25&excludeDeletedEntities=true&typeName=hive_table' | python -mjson.tool | grep name| wc -l
+ ```
 ---------------------------------------------------------------------------------------------------------------------------
 
 Below are the links which might be helpful to you for getting started with atlas. 
