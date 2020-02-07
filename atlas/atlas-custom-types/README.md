@@ -1,159 +1,90 @@
-json files and rest calls to add custom atlas types and create entities
+# Creating Custom Types and Entities in Atlas
 
-
-Objective:-
-
-Atlas, by default comes with certain types for Hive, Storm, Falcon etc. However, there might be cases where you would like to capture some custom metadata in Atlas. This can be metadata related to ETL processes, enterprise-operations etc. The article explains how to create custom Atlas types and provides some insight on establishing lineage between said types.
-
-Use Case:-
-
-Consider a simple Use Case where Raw Textual data is analyzed via a ML process and the results are stored in HDFS. For instance, the raw source data is a dump of access logs on professors and research assistants referring research papers. The ML process would try to come up with recommendations on research papers for further reading for these end users. To capture metadata and lineage for this workflow, we would want to have three custom types in Atlas.
-
-a.) ResearchPaperAccessDataset: To capture the metadata for the input dataset.
-
-b.) ResearchPaperRecommendationResults: To capture the metadata for the resultant output after the ML process has completed its analysis.
-
-c.) ResearchPaperMachineLearning: To capture the metadata for the ML process itself, which analyzes the Input dataset.
-
-The eventual lineage we want to capture would look something like this:-
-
-14073-screen-shot-2017-03-27-at-102550-am.png
-
-Bonus: The last part of this article has some information to create new Traits using REST API and then to associate it with an existing atlas entity.
-
-Files:-
+#### Files:-
 
 The files being used in this article are present in github.
 
 a.) atlas_type_ResearchPaperDataSet.json
-
 b.) atlas_entity_ResearchPaperDataSet.json
-
 c.) atlas_type_RecommendationResults.json
-
 d.) atlas_entity_RecommendationResults.json
-
 e.) atlas_type_process_ML.json
-
 f.) atlas_entity_process_ML.json
 
 
 Steps:-
 
-1. Create Custom Atlas ResearchPaperAccessDataset Type:-
+## 1. Create Custom Atlas ResearchPaperAccessDataset Type:-
 
-https://github.com/vspw/atlas-custom-types/blob/master/atlas_type_ResearchPaperDataSet.json
-
-```sh
-[root@zulu atlas]# curl -i -X POST -H 'Content-Type: application/json' -H 'Accept: application/json' -u admin 'http://yellow.hdp.com:21000/api/atlas/types' -d @atlas_type_ResearchPaperDataSet.json
-Enter host password for user 'admin':*****
-{"requestId":"qtp84739718-14 - bed149b3-b360-4bf5-b46b-8f25ac7692c3","types":[{"name":"ResearchPaperAccessDataset"}]}
-Notice the superType for "ResearchPaperAccessDataset" Type: ["DataSet"]
-```
-"DataSet" in turn has superTypes of ["Referenceable","Asset"]
-
-"Asset" Type has attributes such as -> name, description, owner
-"Referenceable" Type has attributes such as -> qualifiedName
-Depending on whether these attributes are mandatory or not (based on the multiplicity required), the entity Type we create next, for "ResearchPaperAccessDataset" should have definitions for these attributes.
-2. Create Entity for ResearchPaperAccessDataset Type:-
-https://github.com/vspw/atlas-custom-types/blob/master/atlas_entity_ResearchPaperDataSet.json
+https://github.com/bhagadepravin/commands/blob/master/atlas/atlas-custom-types/atlas_type_ResearchPaperDataSet.json
 
 ```sh
-[root@zulu atlas]# curl -i -X POST -H 'Content-Type: application/json' -H 'Accept: application/json' -u admin 'http://yellow.hdp.com:21000/api/atlas/entities' -d @atlas_entity_ResearchPaperDataSet.json
-{"requestId":"qtp84739718-15 - 827d5151-a6fb-4ccb-909f-f4ac5f8d8f26","entities":{"created":["40dc03dc-16d6-4281-826d-c4884cd1dad5"]},"definition":{"jsonClass":"org.apache.atlas.typesystem.json.InstanceSerialization$_Reference","id":{"jsonClass":"org.apache.atlas.typesystem.json.InstanceSerialization$_Id","id":"40dc03dc-16d6-4281-826d-c4884cd1dad5","version":0,"typeName":"ResearchPaperAccessDataset","state":"ACTIVE"},"typeName":"ResearchPaperAccessDataset","values":{"name":"GeoThermal-1224","createTime":"2017-03-25T20:07:12.000Z","description":"GeoThermal Research Input Dataset 1224","resourceSetID":1224,"researchPaperGroupName":"WV-SP-INT-HWX","qualifiedName":"ResearchPaperAccessDataset.1224-WV-SP-INT-HWX","owner":"EDM_RANDD"},"traitNames":[],"traits":{}}}
+curl -i -X POST -H 'Content-Type: application/json' -H 'Accept: application/json' -u admin:Welcome@12345 'http://c174-node3.squadron.support.hortonworks.com:21000/api/atlas/types' -d @atlas_type_ResearchPaperDataSet.json
 ```
-14074-screen-shot-2017-03-27-at-111439-am.png
 
-14076-screen-shot-2017-03-27-at-111511-am.png
+## 2. Create Entity for ResearchPaperAccessDataset Type:-
+https://github.com/bhagadepravin/commands/blob/master/atlas/atlas-custom-types/atlas_entity_ResearchPaperDataSet.json
 
-3. Create Custom ResearchPaperRecommendationResults Type:-
+```sh
+[root@c174-node3 ~]# curl -i -X POST -H 'Content-Type: application/json' -H 'Accept: application/json' -u admin:Welcome@12345 'http://c174-node3.squadron.support.hortonworks.com:21000/api/atlas/entities' -d @atlas_entity_ResearchPaperDataSet.json
+
+{"entities":{"created":["ae553652-685f-4b8b-b34a-1423c5d7975c"]},"requestId":"pool-2-thread-9 - 172f342d-3b43-4f41-ac91-6923b28e7947","definition":{"typeName":"ResearchPaperAccessDataset","values":{"owner":"EDM_RANDD","replicatedTo":null,"replicatedFrom":null,"createTime":"2017-03-25T20:07:12.000Z","qualifiedName":"ResearchPaperAccessDataset.1224-WV-SP-INT-HWX","researchPaperGroupName":"WV-SP-INT-HWX","name":"GeoThermal-1224","description":"GeoThermal Research Input Dataset 1224","resourceSetID":1224},"id":{"id":"ae553652-685f-4b8b-b34a-1423c5d7975c","typeName":"ResearchPaperAccessDataset","version":0,"state":"ACTIVE","jsonClass":"org.apache.atlas.typesystem.json.InstanceSerialization$_Id"},"traits":{},"traitNames":[],"systemAttributes":{"createdBy":"admin","modifiedBy":"admin","createdTime":"2020-02-07T13:48:10.424Z","modifiedTime":"2020-02-07T13:48:10.424Z"},"jsonClass":"org.apache.atlas.typesystem.json.InstanceSerialization$_Reference"},"guidAssignments":{"guidAssignments":{"-21823357824402199":"ae553652-685f-4b8b-b34a-1423c5d7975c"}}}
+```
+![ResearchPaperAccessDataset](https://github.com/bhagadepravin/commands/blob/master/atlas/atlas-custom-types/jpeg/ResearchPaperAccessDataset.png)
+
+
+## 3. Create Custom ResearchPaperRecommendationResults Type:-
 https://github.com/vspw/atlas-custom-types/blob/master/atlas_type_RecommendationResults.json
 
 ```sh
- [root@zulu atlas]# curl -i -X POST -H 'Content-Type: application/json' -H 'Accept: application/json' -u admin 'http://yellow.hdp.com:21000/api/atlas/types' -d @atlas_type_RecommendationResults.json
-Enter host password for user 'admin':
-{"requestId":"qtp84739718-15 - 9da58639-479f-41fb-819d-b11b4464011e","types":[{"name":"ResearchPaperRecommendationResults"}]}   
+curl -i -X POST -H 'Content-Type: application/json' -H 'Accept: application/json' -u admin:Welcome@12345 'http://c174-node3.squadron.support.hortonworks.com:21000/api/atlas/types' -d @atlas_type_RecommendationResults.json
+
 ```
 
-4. Create Entity for ResearchPaperRecommendationResults Type:-
-https://github.com/vspw/atlas-custom-types/blob/master/atlas_entity_RecommendationResults.json
+## 4. Create Entity for ResearchPaperRecommendationResults Type:-
+https://github.com/bhagadepravin/commands/blob/master/atlas/atlas-custom-types/atlas_type_RecommendationResults.json
 
 ```sh
-[root@zulu atlas]# curl -i -X POST -H 'Content-Type: application/json' -H 'Accept: application/json' -u admin 'http://yellow.hdp.com:21000/api/atlas/entities' -d @atlas_entity_RecommendationResults.json
-Enter host password for user 'admin':
-{"requestId":"qtp84739718-16 - b7ebe7d8-e671-4e94-a6c7-506947c7d5e5","entities":{"created":["43b6da13-31ee-4bbe-980e-84ed4b759f11"]},"definition":{"jsonClass":"org.apache.atlas.typesystem.json.InstanceSerialization$_Reference","id":{"jsonClass":"org.apache.atlas.typesystem.json.InstanceSerialization$_Id","id":"43b6da13-31ee-4bbe-980e-84ed4b759f11","version":0,"typeName":"ResearchPaperRecommendationResults","state":"ACTIVE"},"typeName":"ResearchPaperRecommendationResults","values":{"name":"RecommendationsGeoThermal-4995149","createTime":"2017-03-25T21:00:12.000Z","description":"GeoThermal Recommendations Mar 2017","qualifiedName":"ResearchPaperRecommendationResults.4995149-GeoThermal","researchArea":"GeoThermal","hdfsDestination":"hdfs:\/\/xena.hdp.com:8020\/edm\/data\/prod\/recommendations","owner":"EDM_RANDD","recommendationsResultsetID":4995149},"traitNames":[],"traits":{}}}
+[root@c174-node3 atlas-custom-types]# curl -i -X POST -H 'Content-Type: application/json' -H 'Accept: application/json' -u admin:Welcome@12345 'http://c174-node3.squadron.support.hortonworks.com:21000/api/atlas/entities' -d @atlas_entity_RecommendationResults.json
+
+{"entities":{"created":["7b802fb0-67f0-47ce-a25b-c8a9ed8edc6b"]},"requestId":"pool-2-thread-3 - 5b9a2d11-7f3a-4cf1-8ae5-f695c566f388","definition":{"typeName":"ResearchPaperRecommendationResults","values":{"owner":"EDM_RANDD","hdfsDestination":"hdfs://xena.hdp.com:8020/edm/data/prod/recommendations","replicatedTo":null,"replicatedFrom":null,"createTime":"2017-03-25T21:00:12.000Z","qualifiedName":"ResearchPaperRecommendationResults.4995149-GeoThermal","recommendationsResultsetID":4995149,"name":"RecommendationsGeoThermal-4995149","description":"GeoThermal Recommendations Mar 2017","researchArea":"GeoThermal"},"id":{"id":"7b802fb0-67f0-47ce-a25b-c8a9ed8edc6b","typeName":"ResearchPaperRecommendationResults","version":0,"state":"ACTIVE","jsonClass":"org.apache.atlas.typesystem.json.InstanceSerialization$_Id"},"traits":{},"traitNames":[],"systemAttributes":{"createdBy":"admin","modifiedBy":"admin","createdTime":"2020-02-07T12:22:04.273Z","modifiedTime":"2020-02-07T12:22:04.273Z"},"jsonClass":"org.apache.atlas.typesystem.json.InstanceSerialization$_Reference"},"guidAssignments":{"guidAssignments":{"-21823357824402198":"7b802fb0-67f0-47ce-a25b-c8a9ed8edc6b"}}}[root@c174-node3 atlas-custom-types]
 ```
-14077-screen-shot-2017-03-27-at-111531-am.png
+![RecommendationResults](https://github.com/bhagadepravin/commands/blob/master/atlas/atlas-custom-types/jpeg/RecommendationResults.png)
 
-14078-screen-shot-2017-03-27-at-111549-am.png
 
-5. Create a Special Process Type (ResearchPaperMachineLearning) which would complete the lineage information:-
+## 5. Create a Special Process Type (ResearchPaperMachineLearning) which would complete the lineage information:-
 
-https://github.com/vspw/atlas-custom-types/blob/master/atlas_type_process_ML.json
-
-Notice the superTypes for "ResearchPaperMachineLearning" - ["Process"],
-
-The "Process" type in turn constitutes superTypes "Referenceable" and "Asset".
-
-And besides the attributes inherited from the above superTypes, "Process" has the following attributes:-
-
-- inputs
-
-- outputs
-
-Our custom type (ResearchPaperMachineLearning) has attributes such as : operationType, userName, startTime and endTime.
-
-Hence we need to collectively define all these types in the entity we create after we are done with creating this type.
+https://raw.githubusercontent.com/bhagadepravin/commands/master/atlas/atlas-custom-types/atlas_type_process_ML.json
 
 ```sh
-[root@zulu atlas]# curl -i -X POST -H 'Content-Type: application/json' -H 'Accept: application/json' -u admin 'http://yellow.hdp.com:21000/api/atlas/types' -d @atlas_type_process_ML.json
-Enter host password for user 'admin':
-{"requestId":"qtp84739718-135 - 4f4cf931-0922-4d5c-b876-061f1bc1e7af","types":[{"name":"ResearchPaperMachineLearning"}]}
+[root@c174-node3 ~]# curl -i -X POST -H 'Content-Type: application/json' -H 'Accept: application/json' -u admin:Welcome@12345 'http://c174-node3.squadron.support.hortonworks.com:21000/api/atlas/types' -d @atlas_type_process_ML.json
+
+{"types":[{"name":"ResearchPaperMachineLearning"}],"requestId":"pool-2-thread-4 - d2a6b032-48dc-4507-9efe-a57bed9c1b57"}
+```
+## 6. Create an entity for the Process Type:-
+https://raw.githubusercontent.com/bhagadepravin/commands/master/atlas/atlas-custom-types/atlas_entity_process_ML.json
+
+Get GUID
 
 ```
-6. Create an entity for the Process Type:-
-https://github.com/vspw/atlas-custom-types/blob/master/atlas_entity_process_ML.json
+######## ResearchPaperAccessDataset
+http://c174-node3.squadron.support.hortonworks.com:21000/index.html#!/detailPage/ae553652-685f-4b8b-b34a-1423c5d7975c
+
+
+######## ResearchPaperRecommendationResults
+http://c174-node3.squadron.support.hortonworks.com:21000/index.html#!/detailPage/7b802fb0-67f0-47ce-a25b-c8a9ed8edc6b
+```
 
 ```sh
-[root@zulu atlas]# curl -i -X POST -H 'Content-Type: application/json' -H 'Accept: application/json' -u admin 'http://yellow.hdp.com:21000/api/atlas/entities' -d @atlas_entity_process_ML.json
-Enter host password for user 'admin':****
-{"requestId":"qtp84739718-18 - abbc3513-fa09-4a63-a8e5-af4b7b5f2d9a","entities":{"created":["4bd5263e-761b-4c0c-b629-c3d9fc87626f"]},"definition":{"jsonClass":"org.apache.atlas.typesystem.json.InstanceSerialization$_Reference","id":{"jsonClass":"org.apache.atlas.typesystem.json.InstanceSerialization$_Id","id":"4bd5263e-761b-4c0c-b629-c3d9fc87626f","version":0,"typeName":"ResearchPaperMachineLearning","state":"ACTIVE"},"typeName":"ResearchPaperMachineLearning","values":{"name":"ML_Iteration567019","startTime":"2017-03-26T20:20:13.675Z","description":"ML_Iteration567019 For GeoThermal DataSets","operationType":"DecisionTreeAndRegression","outputs":[{"jsonClass":"org.apache.atlas.typesystem.json.InstanceSerialization$_Id","id":"43b6da13-31ee-4bbe-980e-84ed4b759f11","version":0,"typeName":"DataSet","state":"ACTIVE"}],"endTime":"2017-03-26T20:27:23.675Z","inputs":[{"jsonClass":"org.apache.atlas.typesystem.json.InstanceSerialization$_Id","id":"40dc03dc-16d6-4281-826d-c4884cd1dad5","version":0,"typeName":"DataSet","state":"ACTIVE"}],"qualifiedName":"ResearchPaperMachineLearning.ML_Iteration567019","owner":"EDM_RANDD","clusterName":"turing","queryGraph":null,"userName":"hdpdev-edm-appuser-recom"},"traitNames":[],"traits":{}}}
+curl -i -X POST -H 'Content-Type: application/json' -H 'Accept: application/json' -u admin:Welcome@12345 'http://c174-node3.squadron.support.hortonworks.com:21000/api/atlas/entities' -d @atlas_entity_process_ML.json
+
+{"entities":{"created":["9ba24b15-66b5-4cec-8298-e9581337f560"],"updated":["7b802fb0-67f0-47ce-a25b-c8a9ed8edc6b","ae553652-685f-4b8b-b34a-1423c5d7975c"]},"requestId":"pool-2-thread-2 - a2316a38-f202-42b1-bf69-2e0093988ffc","definition":{"typeName":"ResearchPaperMachineLearning","values":{"owner":"EDM_RANDD","outputs":[{"id":"7b802fb0-67f0-47ce-a25b-c8a9ed8edc6b","typeName":"ResearchPaperRecommendationResults","version":0,"state":"ACTIVE","jsonClass":"org.apache.atlas.typesystem.json.InstanceSerialization$_Id"}],"queryGraph":null,"replicatedTo":null,"replicatedFrom":null,"qualifiedName":"ResearchPaperMachineLearning.ML_Iteration567019","inputs":[{"id":"ae553652-685f-4b8b-b34a-1423c5d7975c","typeName":"ResearchPaperAccessDataset","version":0,"state":"ACTIVE","jsonClass":"org.apache.atlas.typesystem.json.InstanceSerialization$_Id"}],"description":"ML_Iteration567019 For GeoThermal DataSets","userName":"hdpdev-edm-appuser-recom","clusterName":"turing","name":"ML_Iteration567019","startTime":"2017-03-26T20:20:13.675Z","operationType":"DecisionTreeAndRegression","endTime":"2017-03-26T20:27:23.675Z"},"id":{"id":"9ba24b15-66b5-4cec-8298-e9581337f560","typeName":"ResearchPaperMachineLearning","version":0,"state":"ACTIVE","jsonClass":"org.apache.atlas.typesystem.json.InstanceSerialization$_Id"},"traits":{},"traitNames":[],"systemAttributes":{"createdBy":"admin","modifiedBy":"admin","createdTime":"2020-02-07T14:05:30.658Z","modifiedTime":"2020-02-07T14:05:30.658Z"},"jsonClass":"org.apache.atlas.typesystem.json.InstanceSerialization$_Reference"},"guidAssignments":{"guidAssignments":{"-21823357824402196":"9ba24b15-66b5-4cec-8298-e9581337f560"}}}[root@c174-node3 ~]#
 ```
 
-So after creating all the necessary Types and Entities we should be able to see the respective types created in Atlas UI and query entities and create new entities as usual.
+![process_ML](https://github.com/bhagadepravin/commands/blob/master/atlas/atlas-custom-types/jpeg/process_ML.png)
 
-In this case we had a java application that used to create and deliver the entity json files for the above workflow after each iteration of the ML process completed successfully (Since the attributes values in the entities json file should be altered dynamically based on the iteration and results)
-
-14080-screen-shot-2017-03-27-at-111600-am.png
-
-14091-screen-shot-2017-03-27-at-111613-am.png
-
-14092-screen-shot-2017-03-27-at-111541-am.png
+![process_ML-lineage](https://github.com/bhagadepravin/commands/blob/master/atlas/atlas-custom-types/jpeg/process_ML-lineage.png)
 
 You should also be able to see the types created thus far in the search objects.
 
-14096-atlas2-customtypes.png
-
-Creating a Trait and Associating tagging an Atlas Entity:-
-
-Note that we can create new Trait/Tag types in Atlas similar to how we have created our custom types.
-
-https://github.com/vspw/atlas-custom-types/blob/master/atlas_trait_type.json
-
-```sh
-[root@zulu atlas]# curl -i -X POST -H 'Content-Type: application/json' -H 'Accept: application/json' -u admin 'http://yellow.hdp.com:21000/api/atlas/types' -d @atlas_trait_type.json
-Associating a trait to an existing Entity:-
-
-curl  -i -X POST  -H 'Content-Type: application/json' -H 'Accept: application/json' -u admin 'http://yellow.hdp.com:21000/api/atlas/entities/b58571af-1ef1-40e4-a89b-0a2ade4eeab3/traits' -d @associate_trait.json
-associate_trait.json
-
-{
-  "jsonClass":"org.apache.atlas.typesystem.json.InstanceSerialization$_Struct",
-  "typeName":"PublicData",
-  "values":{
-    "name":"addTrait"
-  }
-}
-```
-
-atlas2-customtypes.pngscreen-shot-2017-03-27-at-111455-am.png
+![entities](https://github.com/bhagadepravin/commands/blob/master/atlas/atlas-custom-types/jpeg/entities.png)
