@@ -5,10 +5,15 @@
 The files being used in this article are present in github.
 
 a.) atlas_type_ResearchPaperDataSet.json
+
 b.) atlas_entity_ResearchPaperDataSet.json
+
 c.) atlas_type_RecommendationResults.json
+
 d.) atlas_entity_RecommendationResults.json
+
 e.) atlas_type_process_ML.json
+
 f.) atlas_entity_process_ML.json
 
 
