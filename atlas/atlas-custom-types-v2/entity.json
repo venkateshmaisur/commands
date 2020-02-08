@@ -1,0 +1,15 @@
+{
+  "entity": {
+    "typeName": "SomeTestEntity",
+    "attributes": {
+      "description": "This is a description",
+      "name": "MyEntityName",
+      "owner": "admin",
+      "qualifiedName": "MyEntityName@c2175",
+      "TestEntity_1": "attr1",
+      "TestEntity_2": "attr2"
+    },
+    "guid": -1
+  },
+  "referredEntities": {}
+}
