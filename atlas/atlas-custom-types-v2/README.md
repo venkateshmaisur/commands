@@ -53,6 +53,7 @@ curl -u admin:Welcome@12345 -ik -H 'Content-Type: application/json' -X POST 'htt
 
 #### Search by text for entity from types: Where entity is MyEntityName
 
+```bash
 {
   "excludeDeletedEntities": true,
   "includeSubClassifications": true,
@@ -68,6 +69,7 @@ curl -u admin:Welcome@12345 -ik -H 'Content-Type: application/json' -X POST 'htt
   "classification": null,
   "termName": null
 }
+```
 
 ```java
 curl -iks  -u admin:Welcome@12345 -ik -H 'Content-Type: application/json' -X POST 'http://c174-node3.squadron.support.hortonworks.com:21000/api/atlas/v2/search/basic' -d  @search.json
