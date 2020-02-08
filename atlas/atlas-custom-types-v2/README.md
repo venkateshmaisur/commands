@@ -1,12 +1,12 @@
 ## How to create types with entities and delete them afterwards, in ATLAS REST API v2
 
-##### Creating a type
+#### 1. Creating a type
 
-##### Creating an entity
+#### 2. Creating an entity
 
-##### Removing the entity
+#### 3. Removing the entity
 
-##### Removing the type
+#### 4. Removing the type
 
 ###### wget https://raw.githubusercontent.com/bhagadepravin/commands/master/atlas/atlas-custom-types-v2/type.json
 
@@ -20,7 +20,7 @@ curl -u admin:Welcome@12345 -ik -H 'Content-Type: application/json' -X POST 'htt
 
 ### Create Entity:
 
-wget https://raw.githubusercontent.com/bhagadepravin/commands/master/atlas/atlas-custom-types-v2/entity.json
+###### wget https://raw.githubusercontent.com/bhagadepravin/commands/master/atlas/atlas-custom-types-v2/entity.json
 
 ```json
 curl -u admin:Welcome@12345 -ik -H 'Content-Type: application/json' -X POST 'http://c174-node3.squadron.support.hortonworks.com:21000/api/atlas/v2/entity' -d @entity.json
