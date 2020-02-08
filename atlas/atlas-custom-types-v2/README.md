@@ -22,7 +22,7 @@ curl -u admin:Welcome@12345 -ik -H 'Content-Type: application/json' -X POST 'htt
 
 ###### wget https://raw.githubusercontent.com/bhagadepravin/commands/master/atlas/atlas-custom-types-v2/entity.json
 
-```json
+```sh
 curl -u admin:Welcome@12345 -ik -H 'Content-Type: application/json' -X POST 'http://c174-node3.squadron.support.hortonworks.com:21000/api/atlas/v2/entity' -d @entity.json
 
 {"mutatedEntities":{"CREATE":[{"typeName":"SomeTestEntity","attributes":{"qualifiedName":"MyEntityName@c2175"},"guid":"ea493b2f-8218-4263-b790-a5f0f6b739c3"}]},"guidAssignments":{"-1":"ea493b2f-8218-4263-b790-a5f0f6b739c3"}}
