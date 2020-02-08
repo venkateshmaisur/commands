@@ -1,8 +1,11 @@
 ## How to create types with entities and delete them afterwards, in ATLAS REST API v2
 
 • Creating a type
+
 • Creating an entity
+
 • Removing the entity
+
 • Removing the type
 
 wget https://raw.githubusercontent.com/bhagadepravin/commands/master/atlas/atlas-custom-types-v2/type.json
