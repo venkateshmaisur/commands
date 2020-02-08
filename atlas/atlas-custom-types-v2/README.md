@@ -8,7 +8,7 @@
 
 ##### Removing the type
 
-#### wget https://raw.githubusercontent.com/bhagadepravin/commands/master/atlas/atlas-custom-types-v2/type.json
+###### wget https://raw.githubusercontent.com/bhagadepravin/commands/master/atlas/atlas-custom-types-v2/type.json
 
 ### Create type
 ```java
