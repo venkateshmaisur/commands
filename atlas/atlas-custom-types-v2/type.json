@@ -1,0 +1,44 @@
+{ 
+   "enumDefs":[ 
+
+   ],
+   "structDefs":[ 
+
+   ],
+   "classificationDefs":[ 
+
+   ],
+   "entityDefs":[ 
+      { 
+         "superTypes":[ 
+            "DataSet"
+         ],
+         "name":"SomeTestEntity",
+         "description":"This is a test entity",
+         "createdBy":"admin",
+         "updatedBy":"admin",
+         "attributeDefs":[ 
+            { 
+               "name":"TestEntity_1",
+               "isOptional":true,
+               "isUnique":false,
+               "isIndexable":false,
+               "typeName":"string",
+               "valuesMaxCount":1,
+               "cardinality":"SINGLE",
+               "valuesMinCount":0
+            },
+            { 
+               "name":"TestEntity_2",
+               "isOptional":true,
+               "isUnique":false,
+               "isIndexable":false,
+               "typeName":"string",
+               "valuesMaxCount":1,
+               "cardinality":"SINGLE",
+               "valuesMinCount":0
+            }
+         ]
+      }
+   ]
+}
