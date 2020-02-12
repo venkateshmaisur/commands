@@ -13,6 +13,8 @@
 wget https://raw.githubusercontent.com/bhagadepravin/commands/master/atlas/atlas-custom-types-v2/type.json
 ```
 
+ [GitHub Pages](https://pages.github.com/).
+ 
 ### 1. Create type
 ```java
 curl -u admin:Welcome@12345 -ik -H 'Content-Type: application/json' -X POST 'http://c174-node3.squadron.support.hortonworks.com:21000/api/atlas/v2/types/typedefs' -d @type.json
