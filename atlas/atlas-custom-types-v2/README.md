@@ -1,12 +1,10 @@
 ## How to create types with entities and delete them afterwards, in ATLAS REST API v2
 
-#### 1. Creating a type
-
-#### 2. Creating an entity
-
-#### 3. Removing the entity
-
-#### 4. Removing the type
+ - [x] 1. Creating a type
+ - [x] 2. Creating an entity
+ - [x] 3. Removing the entity
+ - [x] 4. Removing the type
+ - [x] 5. Remove term
 
 ###### wget https://raw.githubusercontent.com/bhagadepravin/commands/master/atlas/atlas-custom-types-v2/type.json
 
@@ -155,7 +153,7 @@ Please also note that deleting Atlas is not something which is recommended as At
 So, by default soft delete is enabled so that actual data is never deleted if any user by mistake deletes's something from Atlas. Plus the only way to delete is to completely clear the Atlas storage ( Hbase tables).
 
 
-### Remove term.
+### 5. Remove term
 
 Get guid from -> Atlas UI -> advanced search -> search for specific entity assign to term which you want to term, open develeper tool, you will see guid.
 ```
