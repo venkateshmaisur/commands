@@ -272,8 +272,21 @@ bash -x ./HSMMK2DB.sh LunaProvider HAHSMMSLA
  
  ## Delete Ranger user from cli
  
- HDP 3.1.5
+ ```sh
+  Note : This utility can be used to delete users or groups, To delete groups refer below given first command and to delete users refer second command.","info")
+ Usage(Group delete): deleteUserGroupUtil.py -groups <group file path> -admin <ranger admin user> -url <rangerhosturl> [-force] [-sslCertPath <cert path>] [-debug]","info")
+ Usage(User delete): deleteUserGroupUtil.py -users <user file path> -admin <ranger admin user> -url <rangerhosturl> [-force] [-sslCertPath <cert path>] [-debug]","info")
+ -groups: Delete groups specified in the given file","info")
+ -users: Delete users specified in the given file","info")
+ -admin: Ranger Admin user ID","info")
+ -force: Force delete users/groups, even if they are referenced in policies","info")
+ -url: Ranger Admin URL","info")
+ -sslCertPath: Filepath to ssl certificate to use when Ranger Admin uses HTTPS","info")
+ -debug: Enables debugging","info")
  ```
+ 
+ HDP 3.1.5
+ ```sh
  [root@c174-node2 ~]# python /usr/hdp/3.1.5.0-152/ranger-admin/deleteUserGroupUtil.py -users /root/users.txt  -admin admin -url http://c174-node2.squadron.support.hortonworks.com:6080 -force -debug
 Enter Ranger Admin password :
 Request URL = http://c174-node2.squadron.support.hortonworks.com:6080/service/xusers/users/userName/pravin?forceDelete=true
@@ -295,7 +308,7 @@ Server: Apache Ranger
  
  HDP 2.6.5
  
- ```
+ ```sh
  [root@c374-node2 ~]# python /usr/hdp/2.6.5.0-292/ranger-admin/deleteUserGroupUtil.py -users /root/users.txt  -admin admin -url http://172.25.37.128:6080 -force -debug
 Enter Ranger Admin password :
 Request URL = http://172.25.37.128:6080/service/xusers/users/userName/ambari?forceDelete=true
