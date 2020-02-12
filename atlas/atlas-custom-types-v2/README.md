@@ -18,7 +18,7 @@ curl -u admin:Welcome@12345 -ik -H 'Content-Type: application/json' -X POST 'htt
 
 ### 2. Create Entity:
 
-###### wget https://raw.githubusercontent.com/bhagadepravin/commands/master/atlas/atlas-custom-types-v2/entity.json
+*wget https://raw.githubusercontent.com/bhagadepravin/commands/master/atlas/atlas-custom-types-v2/entity.json*
 
 ```sh
 curl -u admin:Welcome@12345 -ik -H 'Content-Type: application/json' -X POST 'http://c174-node3.squadron.support.hortonworks.com:21000/api/atlas/v2/entity' -d @entity.json
