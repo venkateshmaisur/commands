@@ -11,7 +11,7 @@
 *wget https://raw.githubusercontent.com/bhagadepravin/commands/master/atlas/atlas-custom-types-v2/type.json*
  
 ### 1. Create type
-```java
+```json
 curl -u admin:Welcome@12345 -ik -H 'Content-Type: application/json' -X POST 'http://c174-node3.squadron.support.hortonworks.com:21000/api/atlas/v2/types/typedefs' -d @type.json
 
 
@@ -22,7 +22,7 @@ curl -u admin:Welcome@12345 -ik -H 'Content-Type: application/json' -X POST 'htt
 
 *wget https://raw.githubusercontent.com/bhagadepravin/commands/master/atlas/atlas-custom-types-v2/entity.json*
 
-```sh
+```json
 curl -u admin:Welcome@12345 -ik -H 'Content-Type: application/json' -X POST 'http://c174-node3.squadron.support.hortonworks.com:21000/api/atlas/v2/entity' -d @entity.json
 
 {"mutatedEntities":{"CREATE":[{"typeName":"SomeTestEntity","attributes":{"qualifiedName":"MyEntityName@c2175"},"guid":"ea493b2f-8218-4263-b790-a5f0f6b739c3"}]},"guidAssignments":{"-1":"ea493b2f-8218-4263-b790-a5f0f6b739c3"}}
@@ -36,7 +36,7 @@ curl -u admin:Welcome@12345 -ik -H 'Content-Type: application/json' -X POST 'htt
 
 ### Search Types 
 
-```bash
+```json
  cat search.json
 {
   "excludeDeletedEntities": true,
@@ -56,7 +56,7 @@ curl -u admin:Welcome@12345 -ik -H 'Content-Type: application/json' -X POST 'htt
 
 #### Search by text for entity from types: Where entity is MyEntityName
 
-```bash
+```json
 {
   "excludeDeletedEntities": true,
   "includeSubClassifications": true,
@@ -74,7 +74,7 @@ curl -u admin:Welcome@12345 -ik -H 'Content-Type: application/json' -X POST 'htt
 }
 ```
 
-```java
+```json
 curl -iks  -u admin:Welcome@12345 -ik -H 'Content-Type: application/json' -X POST 'http://c174-node3.squadron.support.hortonworks.com:21000/api/atlas/v2/search/basic' -d  @search.json
 
 
@@ -114,7 +114,7 @@ curl -iks  -u admin:Welcome@12345 -ik -H 'Content-Type: application/json' -X POS
 
 ###### Search by GUID
 
-```
+```json
 curl -u admin:Welcome@12345  -ik -H 'Content-Type: application/json' -X GET 'http://c174-node3.squadron.support.hortonworks.com:21000/api/atlas/v2/entity/guid/ea493b2f-8218-4263-b790-a5f0f6b739c3'
 
 {"referredEntities":{},"entity":{"typeName":"SomeTestEntity","attributes":{"owner":"admin","replicatedTo":null,"TestEntity_1":"attr1","replicatedFrom":null,"qualifiedName":"MyEntityName@c2175","name":"MyEntityName","description":"This is a description","TestEntity_2":"attr2"},"guid":"ea493b2f-8218-4263-b790-a5f0f6b739c3","status":"ACTIVE","createdBy":"admin","updatedBy":"admin","createTime":1581158664906,"updateTime":1581158664906,"version":0,"relationshipAttributes":{"schema":[],"inputToProcesses":[],"meanings":[],"outputFromProcesses":[]}}}[root@c174-node3 ~]#
@@ -122,7 +122,7 @@ curl -u admin:Welcome@12345  -ik -H 'Content-Type: application/json' -X GET 'htt
 
 ### 3. Removing the entity
 
-```java
+```json
 curl -u admin:Welcome@12345  -ik -H 'Content-Type: application/json' -X DELETE 'http://c174-node3.squadron.support.hortonworks.com:21000/api/atlas/v2/entity/guid/ea493b2f-8218-4263-b790-a5f0f6b739c3'
 
 {"mutatedEntities":{"DELETE":[{"typeName":"SomeTestEntity","attributes":{"owner":"admin","qualifiedName":"MyEntityName@c2175","name":"MyEntityName","description":"This is a description"},"guid":"ea493b2f-8218-4263-b790-a5f0f6b739c3","status":"ACTIVE","displayText":"MyEntityName","classificationNames":[],"meaningNames":[],"meanings":[]}]}}
@@ -158,7 +158,7 @@ So, by default soft delete is enabled so that actual data is never deleted if an
 ### 5. Remove term
 
 Get guid from -> Atlas UI -> advanced search -> search for specific entity assign to term which you want to term, open develeper tool, you will see guid.
-```
+```json
 { 
    "queryType":"DSL",
    "queryText":"`hive_table` name = cds",
