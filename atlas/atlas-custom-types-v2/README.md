@@ -1,4 +1,4 @@
-# How to create types, entities and delete in ATLAS using REST API v2
+## How to create types, entities and delete in ATLAS using REST API v2
 
  - [x] 1. **Creating a type**
  - [x] 2. **Creating an entity**
