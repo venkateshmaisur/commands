@@ -269,3 +269,59 @@ bash -x ./HSMMK2DB.sh LunaProvider HAHSMMSLA
  http://techdocs.broadcom.com/content/broadcom/techdocs/us/en/ca-enterprise-software/layer7-api-management/api-gateway/9-2/install-configure-upgrade/configure-the-appliance-gateway/configure-hardware-security-modules-hsm/configure-the-safenet-luna-sa-hsm.html
  
  https://cwiki.apache.org/confluence/display/RANGER/Ranger+KMS+Luna+HSM+Support
+ 
+ ## Delete Ranger user from cli
+ 
+ HDP 3.1.5
+ ```
+ [root@c174-node2 ~]# python /usr/hdp/3.1.5.0-152/ranger-admin/deleteUserGroupUtil.py -users /root/users.txt  -admin admin -url http://c174-node2.squadron.support.hortonworks.com:6080 -force -debug
+Enter Ranger Admin password :
+Request URL = http://c174-node2.squadron.support.hortonworks.com:6080/service/xusers/users/userName/pravin?forceDelete=true
+Response    = HTTP/1.1 204 No Content
+Set-Cookie: RANGERADMINSESSIONID=9615E822E6AF1F87D2F16A9D6C3B6D73; Path=/; HttpOnly
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src 'self'; img-src 'self'; style-src 'self' 'unsafe-inline';font-src 'self'
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Content-Type-Options: nosniff
+Date: Wed, 12 Feb 2020 08:41:02 GMT
+Server: Apache Ranger
+2020-02-12 08:41:02,648  [I] Deleted user : pravin
+2020-02-12 08:41:02,648  [I] Number of user deleted : 1
+ ```
+ 
+ HDP 2.6.5
+ 
+ ```
+ [root@c374-node2 ~]# python /usr/hdp/2.6.5.0-292/ranger-admin/deleteUserGroupUtil.py -users /root/users.txt  -admin admin -url http://172.25.37.128:6080 -force -debug
+Enter Ranger Admin password :
+Request URL = http://172.25.37.128:6080/service/xusers/users/userName/ambari?forceDelete=true
+Response    = HTTP/1.1 204 No Content
+Server: Apache-Coyote/1.1
+Set-Cookie: RANGERADMINSESSIONID=17A13877C5CDFD717F03D60B1618FA39; Path=/; HttpOnly
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Strict-Transport-Security: max-age=31536000
+Date: Wed, 12 Feb 2020 08:45:21 GMT
+2020-02-12 08:45:22,032  [I] Deleted user : ambari
+Request URL = http://172.25.37.128:6080/service/xusers/users/userName/registersssd?forceDelete=true
+Response    = HTTP/1.1 204 No Content
+Server: Apache-Coyote/1.1
+Set-Cookie: RANGERADMINSESSIONID=A73641D2B12B2FE06F32FDF0F4F6CB88; Path=/; HttpOnly
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Strict-Transport-Security: max-age=31536000
+Date: Wed, 12 Feb 2020 08:45:21 GMT
+2020-02-12 08:45:22,086  [I] Deleted user : registersssd
+2020-02-12 08:45:22,087  [I] Number of user deleted : 2
+[root@c374-node2 ~]# cat /root/users.txt
+ambari
+registersssd
+ ```
+ 
+ Ref: https://issues.apache.org/jira/browse/RANGER-806
