@@ -6,7 +6,12 @@
  - [x] 4. Removing the type
  - [x] 5. Remove term
 
-###### wget https://raw.githubusercontent.com/bhagadepravin/commands/master/atlas/atlas-custom-types-v2/type.json
+
+[type.json] (https://raw.githubusercontent.com/bhagadepravin/commands/master/atlas/atlas-custom-types-v2/type.json)
+
+```sh
+wget https://raw.githubusercontent.com/bhagadepravin/commands/master/atlas/atlas-custom-types-v2/type.json
+```
 
 ### 1. Create type
 ```java
