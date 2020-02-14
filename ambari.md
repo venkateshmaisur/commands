@@ -129,6 +129,12 @@ ambari=> delete  from kerberos_keytab_principal where principal_name like 'yarn-
 ambari=> delete  from kerberos_principal where principal_name like 'yarn-ats-hbase%';
 ambari-server restart
 ```
+
+```
+DELETE kkp_mapping_service FROM kkp_mapping_service INNER JOIN kerberos_keytab_principal ON kkp_mapping_service.kkp_id=kerberos_keytab_principal.kkp_id and kerberos_keytab_principal.principal_name='HTTP/ambari_server%';
+DELETE FROM kerberos_keytab_principal WHERE principal_name='HTTP/ambari_server%';
+DELETE FROM kerberos_principal WHERE principal_name='HTTP/ambari_server%'
+```
 ## Kerberos cahce cleanup
 ```
 1. Manually created ambari server keytab using below command
