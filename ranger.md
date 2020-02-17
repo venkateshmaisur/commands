@@ -338,3 +338,9 @@ registersssd
  ```
  
  Ref: https://issues.apache.org/jira/browse/RANGER-806
+ 
+ ```
+ java -cp '/usr/hdp/current/ranger-usersync/lib/*' org.apache.ranger.credentialapi.buildks list -provider jceks://file/etc/ranger/kms/rangerkms.jceks
+
+java -cp '/usr/hdp/current/ranger-usersync/lib/*' org.apache.ranger.credentialapi.buildks get ranger.ks.jdbc.password -provider jceks://file/etc/ranger/kms/rangerkms.jceks
+```
