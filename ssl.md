@@ -141,3 +141,15 @@ keytool -list -keystore keystore1.p12 -storetype PKCS12 -v -storepass hadoop@123
 # keytool -list -keystore myServerKeystore.jks -storepass hadoop@12345 -v
 
 ```
+
+## Self Signed cert. using keytool
+```java
+# Create self signed cert
+keytool -genkey -alias `hostname` -keyalg RSA -keysize 1024 -dname "CN=`hostname -f`,OU=SU,O=HWX,L=BNG,ST=KN,C=IN" -keypass Welcome -keystore keystore.jks -storepass Welcome -keypass Welcome
+
+# Export certificate
+keytool -export -alias  `hostname` -keystore keystore.jks -file  ams1.crt -storepass Welcome
+
+# Create trustStore
+keytool -import -file ams1.crt -keystore truststore.jks -alias  `hostname`-trust  -storepass Welcome
+```
