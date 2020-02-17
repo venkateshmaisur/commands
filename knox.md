@@ -119,3 +119,12 @@ Ambari>Knox>Configs>Custom gateway-site>Add
 gateway.signing.keystore.name=knoxSSO.jks 
 gateway.signing.key.alias=knoxsso
 ```
+
+## Performance:
+```
+configuring appropriate timeouts in gateway-site.xml, in Ambari Knox -> config -> Custom gateway-site, add the following
+
+gateway.httpclient.connectionTimeout=600000
+gateway.httpclient.socketTimeout=600000
+gateway.httpclient.maxConnections=128
+```
