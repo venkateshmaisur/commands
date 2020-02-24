@@ -175,3 +175,18 @@ curl -ik --negotiate -u :  'http://$(hostname -f):8081/druid/coordinator/v1/load
 curl -ik --negotiate -u :  'http://$(hostname -f):8081/druid/indexer/v1/workers'
 curl -ik --negotiate -u :  'http://$(hostname -f):8081/druid/coordinator/v1/loadstatus'
 ```
+
+## clean up linux host
+```
+find /var -name "*.log" \( \( -size +50M -mtime +7 \) -o -mtime +30 \) -exec truncate {} --size 0 \;
+yum clean all
+rm -rf /var/cache/yum
+rm -rf /var/tmp/yum-*
+rm -rf /hadoop/yarn/local/usercache/*
+rm -rf /var/lib/ambari-agent/tmp/*
+
+hdfs dfs -rm -R -skipTrash /ranger/audit
+
+du -sch *  /home
+du -xh / |grep '^\S*[0-9\.]\+G'|sort -rn
+```
