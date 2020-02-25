@@ -128,3 +128,30 @@ gateway.httpclient.connectionTimeout=600000
 gateway.httpclient.socketTimeout=600000
 gateway.httpclient.maxConnections=128
 ```
+
+### knoxsso troubleshooting
+```
+### Non-working sso
+
+2020-02-25 14:33:34,725 INFO  server.JWTRedirectAuthenticationHandler (JWTRedirectAuthenticationHandler.java:alternateAuthenticate(170)) - USERNAME: admin
+2020-02-25 14:33:34,901 WARN  server.AuthenticationFilter (AuthenticationFilter.java:doFilter(525)) - AuthenticationToken ignored: org.apache.hadoop.security.authentication.util.  : Invalid signature
+2020-02-25 14:33:34,902 INFO  server.JWTRedirectAuthenticationHandler (JWTRedirectAuthenticationHandler.java:getJWTFromCookie(203)) - hadoop-jwt cookie has been found and is being processed
+
+
+
+###  working sso
+
+2020-02-25 14:34:45,845 INFO  provider.BaseAuditHandler (BaseAuditHandler.java:logStatus(312)) - Audit Status Log: name=yarn.async.multi_dest.batch, finalDestination=yarn.async.multi_dest.batch.hdfs, interval=01:00.001 minutes, events=28783, succcessCount=338, totalEvents=188211, totalSuccessCount=2199
+2020-02-25 14:34:47,407 INFO  server.JWTRedirectAuthenticationHandler (JWTRedirectAuthenticationHandler.java:alternateAuthenticate(159)) - sending redirect to: https://c174-node3.squadron.support.hortonworks.com:8443/gateway/knoxsso/api/v1/websso?originalUrl=http://c174-node3.squadron.support.hortonworks.com:8088/cluster
+2020-02-25 14:34:48,842 INFO  provider.BaseAuditHandler (BaseAuditHandler.java:logStatus(312)) - Audit Status Log: name=yarn.async.multi_dest.batch, finalDestination=yarn.async.multi_dest.batch.solr, interval=01:00.001 minutes, events=28139, succcessCount=338, totalEvents=184725, totalSuccessCount=2199
+
+
+
+### knox logs yarn knoxsso
+
+20/02/25 14:35:52 ||4e257a73-13e1-437d-b88c-996ac3ea320d|audit|10.42.80.70|KNOXSSO||||access|uri|/gateway/knoxsso/api/v1/websso?originalUrl=http://c174-node3.squadron.support.hortonworks.com:8088/ui2/|unavailable|Request method: GET
+20/02/25 14:35:52 |||audit|10.42.80.70|KNOXSSO||||access|uri|/gateway/knoxsso/api/v1/websso?originalUrl=http://c174-node3.squadron.support.hortonworks.com:8088/ui2/|success|Response status: 401
+20/02/25 14:35:52 ||c819c7cf-f945-4e34-81a3-93c400dbd6cd|audit|10.42.80.70|knoxauth||||access|uri|/gateway/knoxsso/knoxauth/login.html?originalUrl=http://c174-node3.squadron.support.hortonworks.com:8088/ui2/|unavailable|Request method: GET
+20/02/25 14:35:52 ||c819c7cf-f945-4e34-81a3-93c400dbd6cd|audit|10.42.80.70|knoxauth|anonymous|||authentication|uri|/gateway/knoxsso/knoxauth/login.html?originalUrl=http://c174-node3.squadron.support.hortonworks.com:8088/ui2/|success|
+20/02/25 14:35:52 |||audit|10.42.80.70|knoxauth|anonymous|||access|uri|/gateway/knoxsso/knoxauth/login.html?originalUrl=http://c174-node3.squadron.support.hortonworks.com:8088/ui2/|success|Response status: 200
+```
