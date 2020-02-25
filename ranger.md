@@ -344,3 +344,5 @@ registersssd
 
 java -cp '/usr/hdp/current/ranger-usersync/lib/*' org.apache.ranger.credentialapi.buildks get ranger.ks.jdbc.password -provider jceks://file/etc/ranger/kms/rangerkms.jceks
 ```
+
+####### testing intelJ
