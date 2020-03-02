@@ -195,7 +195,7 @@ du -xh / |grep '^\S*[0-9\.]\+G'|sort -rn
 
 ```bash
 
-CLIENT_JVMFLAGS="-Djava.security.auth.login.config=./jaas.conf -Dsun.security.krb5.debug=true zookeeper-client -server ia-dat-prd-alpha-e1-13.pdp.prd.wdprhosts.disney.com:2181
+CLIENT_JVMFLAGS="-Djava.security.auth.login.config=./jaas.conf -Dsun.security.krb5.debug=true zookeeper-client -server <zkHost>:2181"
 
 
 +++++++++
