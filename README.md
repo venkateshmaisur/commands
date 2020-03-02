@@ -190,3 +190,23 @@ hdfs dfs -rm -R -skipTrash /ranger/audit
 du -sch *  /home
 du -xh / |grep '^\S*[0-9\.]\+G'|sort -rn
 ```
+
+## Zookeeper Debug
+
+```bash
+
+CLIENT_JVMFLAGS="-Djava.security.auth.login.config=./jaas.conf -Dsun.security.krb5.debug=true zookeeper-client -server ia-dat-prd-alpha-e1-13.pdp.prd.wdprhosts.disney.com:2181
+
+
++++++++++
+
+You can also enabled trace in log4j
+# vi /etc/zookeeper/conf/log4j.properties
+Uncomment the line which has log4j.rootLogger=TRACE
+# zookeeper-client -server <zkHost>:2181
+This will write file with name /etc/zookeeper/conf/zookeeper_trace.log
+That will have DEBUG messages related to kerberos and zookeeper client log
+
+```
+
+
