@@ -235,7 +235,7 @@ ldapRealm.userSearchAttributeName = uid
 ldapRealm.userSearchScope = subtree
 ldapRealm.groupSearchScope = subtree
 ldapRealm.userSearchFilter= (&(objectclass=posixAccount)(uid={0}))
-ldapRealm.groupSearchFilter = (&(objectclass=groupOfNames)(cn={0}))
+ldapRealm.groupSearchFilter = (&(objectclass=groupOfNames)(cn=group1))
 ldapRealm.memberAttribute = member
 #ldapRealm.memberAttributeValueTemplate=(name={0})
 ldapRealm.rolesByGroup = "itpeople":admin_role
