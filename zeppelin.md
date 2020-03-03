@@ -214,6 +214,69 @@ zeppelinadmin = *
 #/** = anon
 /** = authc
 ```
+## LDAP rolebygroup
+
+```bash
+[main]
+ldapRealm=org.apache.zeppelin.realm.LdapRealm
+anyofrolesuser = org.apache.zeppelin.utils.AnyOfRolesUserAuthorizationFilter
+ldapRealm.contextFactory.systemUsername =cn=Manager,dc=pravin,dc=com
+ldapRealm.contextFactory.systemPassword =tender12
+ldapRealm.contextFactory.authenticationMechanism=simple
+ldapRealm.contextFactory.url=ldap://pbhagade-oraclemaster.openstacklocal:389
+ldapRealm.authorizationEnabled=true
+ldapRealm.pagingSize = 20000
+ldapRealm.searchBase=dc=pravin,dc=com
+ldapRealm.userSearchBase=ou=users,dc=pravin,dc=com
+ldapRealm.groupSearchBase=ou=groups,dc=pravin,dc=com
+ldapRealm.userObjectClass=posixAccount
+ldapRealm.groupObjectClass=groupOfNames
+ldapRealm.userSearchAttributeName = uid
+ldapRealm.userSearchScope = subtree
+ldapRealm.groupSearchScope = subtree
+ldapRealm.userSearchFilter= (&(objectclass=posixAccount)(uid={0}))
+ldapRealm.groupSearchFilter = (&(objectclass=groupOfNames)(cn={0}))
+ldapRealm.memberAttribute = member
+#ldapRealm.memberAttributeValueTemplate=(name={0})
+ldapRealm.rolesByGroup = "itpeople":admin_role
+# securityManager.realm = $ldapRealm #comment this authenticate both users
+### A sample PAM configuration
+#pamRealm=org.apache.zeppelin.realm.PamRealm
+#pamRealm.service=sshd
+shiro.loginUrl = /api/login
+sessionManager = org.apache.shiro.web.session.mgt.DefaultWebSessionManager
+### If caching of user is required then uncomment below lines
+cacheManager = org.apache.shiro.cache.MemoryConstrainedCacheManager
+securityManager.cacheManager = $cacheManager
+cookie = org.apache.shiro.web.servlet.SimpleCookie
+cookie.name = JSESSIONID
+#Uncomment the line below when running Zeppelin-Server in HTTPS mode
+#cookie.secure = true
+cookie.httpOnly = true
+sessionManager.sessionIdCookie = $cookie
+securityManager.sessionManager = $sessionManager
+# 86,400,000 milliseconds = 24 hour
+securityManager.sessionManager.globalSessionTimeout = 86400000
+shiro.loginUrl = /api/login
+
+#[roles]
+#admin = *
+admin_role = *
+
+[urls]
+# This section is used for url-based security.
+# You can secure interpreter, configuration and credential information by urls. Comment or uncomment the below urls that you want to hide.
+# anon means the access is anonymous.
+# authc means Form based Auth Security
+# To enfore security, comment the line below and uncomment the next one
+#/api/version = anon
+/api/version=authc, anyofrolesuser[admin_role]
+/api/interpreter/** = authc, anyofrolesuser[admin_role]
+/api/configurations/** = authc, roles[admin_role]
+/api/credential/** = authc, roles[admin_role]
+#/** = anon
+/** = authc
+```
 
 ## SH impersonation
 
