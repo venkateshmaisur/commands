@@ -259,9 +259,6 @@ securityManager.sessionManager = $sessionManager
 securityManager.sessionManager.globalSessionTimeout = 86400000
 shiro.loginUrl = /api/login
 
-#[roles]
-#admin = *
-admin_role = *
 
 [urls]
 # This section is used for url-based security.
