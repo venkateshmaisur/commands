@@ -235,10 +235,10 @@ ldapRealm.userSearchAttributeName = uid
 ldapRealm.userSearchScope = subtree
 ldapRealm.groupSearchScope = subtree
 ldapRealm.userSearchFilter= (&(objectclass=posixAccount)(uid={0}))
-ldapRealm.groupSearchFilter = (&(objectclass=groupOfNames)(cn=group1))
+ldapRealm.groupSearchFilter = (&(objectclass=groupOfNames)(|(cn=group1)(cn=engineering)))
 ldapRealm.memberAttribute = member
 #ldapRealm.memberAttributeValueTemplate=(name={0})
-ldapRealm.rolesByGroup = "itpeople":admin_role
+ldapRealm.rolesByGroup = "itpeople":admin_role, "engineering"=admin_role
 # securityManager.realm = $ldapRealm #comment this authenticate both users
 ### A sample PAM configuration
 #pamRealm=org.apache.zeppelin.realm.PamRealm
