@@ -344,3 +344,19 @@ registersssd
 
 java -cp '/usr/hdp/current/ranger-usersync/lib/*' org.apache.ranger.credentialapi.buildks get ranger.ks.jdbc.password -provider jceks://file/etc/ranger/kms/rangerkms.jceks
 ```
+
+### Ranger tagsync triage
+```
+
+Login into tagsync node, share me output of "hostname -f" and tar file
+hostname -f
+tar -cvzf tagsync-config-logs.tar.gz /etc/ranger/tagsync/conf/* /var/log/ranger/tagsync/tagsync.log /var/log/ranger/tagsync/tagsync.out
+
+Login into kafka node:
+
+hostname -f
+ps -aux| grep kafka
+ls -ltr /etc/security/keytabs/
+klist -kt /etc/security/keytabs/kafka.service.keytab
+
+```
