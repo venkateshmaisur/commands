@@ -16,7 +16,8 @@ https://bhagadepravin.github.io/commands/solr
 - [Archiving Indexed Data](https://github.com/bhagadepravin/commands/blob/master/solr.md#archiving-indexed-data)
 - [Saving Indexed Data](https://github.com/bhagadepravin/commands/blob/master/solr.md#saving-indexed-data)
 - [Configuring Solr for Ranger](https://github.com/bhagadepravin/commands/blob/master/solr.md#configuring-solr-for-ranger)
-====================================================================================
+- [External solr for Atlas](https://github.com/bhagadepravin/commands/blob/master/solr.md#external-solrhdp-search-for-atlas)
+=================================================================================
                                                                                      
 For a Kerberos env kinit with Ambari Infra keytab
 ## Kinit with Ambari Infra keytab
