@@ -360,3 +360,21 @@ ls -ltr /etc/security/keytabs/
 klist -kt /etc/security/keytabs/kafka.service.keytab
 
 ```
+
+## Nifi Ranger logging
+
+```
+1. Enable debug for nifi ranger authorizer class in logback.xml as below:
+
+Ambari UI -> Nifi - > Configs -> Advanced -> Advanced nifi-node-logback-env -> Template for logback.xml
+
+Search for  <logger name="org.apache.nifi" level="INFO"
+add below to enable ranger.authorization logging
+
+<logger name="org.apache.nifi.ranger.authorization" level="DEBUG"/>
+
+
+Expected logging:
+
+2020-03-05 08:08:42,845 INFO [main] o.a.ranger.plugin.util.PolicyRefresher PolicyRefresher(serviceName=c2232_nifi): found updated version. lastKnownVersion=-1; newVersion=2
+```
