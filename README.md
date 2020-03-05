@@ -216,4 +216,19 @@ That will have DEBUG messages related to kerberos and zookeeper client log
 
 ```
 
+## Zookeeper digest
+```
+# Using superDigest to become a Zookeeper superuser
 
+export ZK_CLASSPATH=/etc/zookeeper/conf/*:/usr/hdp/current/zookeeper-server/lib/*:/usr/hdp/current/zookeeper-server/* 
+java -cp $ZK_CLASSPATH org.apache.zookeeper.server.auth.DigestAuthenticationProvider super:hadoop
+
+# From the output we can just add the following to SERVER_JVMFLAGS and restart Zookeeper:
+
+SERVER_JVMFLAGS=-Dzookeeper.DigestAuthenticationProvider.superDigest=super:QczWs9XWUeidfNqiyCcD6Dy2ORw=
+
+
+Then, in zkCli do:
+
+[zk: sandbox.hortonworks.com:2181(CONNECTED) 1] addauth digest super:hadoop
+```
