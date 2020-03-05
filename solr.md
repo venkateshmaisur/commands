@@ -442,6 +442,52 @@ SOLR_OPTS="$SOLR_OPTS -verbose:class"
 just before  "endif" and attach the solr-8886-console.log log file.
 ```
 
+#### External Solr(HDP Search) for Atlas
+
+https://docs.cloudera.com/HDPDocuments/HDPS/HDPS-5.0.0/bk_solr-search-installation/content/hdp-search50-installing-management-pack.html
+
+1. Install Solr
+
+```
+cd /tmp
+wget http://public-repo-1.hortonworks.com/CLOUDERA-HDP-SOLR/repos/centos7/5.0.0.5-301/mpack/cloudera-hdp-solr-mpack-5.0.0.5.tar.gz
+# ambari-server install-mpack --mpack=/tmp/cloudera-hdp-solr-mpack-5.0.0.5.tar.gz 
+# ambari-server restart
+```
+
+2. Add Service through Ambari
+
+3. upload atlas configs to zookeeper:
+
+```
+SORL_HOME/cloud-scripts/zkcli.sh -zkhost zk-host1:2181/external-infra-solr, zk-host2:2181/external-infra-solr, zk-host3:2181/external-infra-solr -cmd upconfig -confname atlas_configs -confdir /usr/hdp/current/atlas-server/conf/solr
+
+Ex: 
+su solr
+kinit -kt /etc/security/keytabs/solr.service.keytab solr/`hostname -f`
+/usr/cloudera-hdp-solr/5.0.0.5-301/cloudera-hdp-solr/solr/server/scripts/cloud-scripts/zkcli.sh -zkhost c174-node4.squadron.support.hortonworks.com:2181/solr -cmd upconfig -confdir /usr/hdp/current/atlas-server/conf/solr -confname atlas_configs
+```
+4. Create all 3 collections manually:
+```
+curl -k --negotiate -u : "http://$(hostname -f):8983/solr/admin/collections?action=create&name=vertex_index&numShards=1&replicationFactor=1&collection.configName=atlas_configs&async=1010"
+
+curl -k --negotiate -u : "http://$(hostname -f):8983/solr/admin/collections?action=create&name=edge_index&numShards=1&replicationFactor=1&collection.configName=atlas_configs&async=1011"
+
+curl -k --negotiate -u : "http://$(hostname -f):8983/solr/admin/collections?action=create&name=fulltext_index&numShards=1&replicationFactor=1&collection.configName=atlas_configs&async=1012"
+
+curl -ik --negotiate -u : "http://$(hostname -f):8983/solr/admin/collections?action=LIST&wt=json"
+
+curl -ik --negotiate -u : "http://$(hostname -f):8983/solr/admin/collections?action=clusterstatus&wt=json&indent=true"
+```
+
+4. Install Atlas with the following configuration change:
+```
+atlas.graph.index.search.solr.zookeeper-url=zk-host1:2181/external-infra-solr, zk-host2:2181/external-infra-solr, zk-host3:2181/external-infra-solr
+
+Ex: 
+atlas.graph.index.search.solr.zookeeper-url=c174-node2.squadron.support.hortonworks.com:2181/solr,c174-node3.squadron.support.hortonworks.com:2181/solr,c174-node4.squadron.support.hortonworks.com:2181/solr
+```
+
 - [Performance Tuning for Ambari Infra](https://docs.hortonworks.com/HDPDocuments/Ambari-2.6.2.0/bk_ambari-operations/content/performance_tuning_for_ambari_infra.html)
 - [Securing Solr Collections with Ranger + Kerberos](https://community.hortonworks.com/articles/15159/securing-solr-collections-with-ranger-kerberos.html)
 - [Setup Ranger to use Ambari Infra Solr enabled in SSL](https://community.hortonworks.com/articles/92987/setup-ranger-to-use-ambari-infra-solr-enabled-in-s.html)
