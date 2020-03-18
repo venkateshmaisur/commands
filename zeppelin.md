@@ -277,6 +277,14 @@ shiro.loginUrl = /api/login
 
 ## SH impersonation
 
+```
+useradd pravin
+passwd pravin
+ssh-copy-id pravin@localhost
+ssh pravin@localhost
+ssh-keygen -y -f ~/.ssh/id_rsa >> ~/.ssh/id_rsa.pub
+```
+
 https://zeppelin.apache.org/docs/0.7.0/manual/userimpersonation.html
 ```
 +++++ error ++++++
@@ -301,9 +309,9 @@ sudo: unable to initialize policy plugin
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
 	at java.lang.Thread.run(Thread.java:745)
 ++++++++++++++++++
-
+```
 Solution:=> useradd user1
-
+```
 —+++++ error +++++—— Logged in as user1
 
 org.apache.zeppelin.interpreter.InterpreterException: sudo: sorry, you must have a tty to run sudo
@@ -324,10 +332,11 @@ org.apache.zeppelin.interpreter.InterpreterException: sudo: sorry, you must have
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
 	at java.lang.Thread.run(Thread.java:745)
 
-
+```
 Solution:=> 
 On the Zeppelin server node make sure to add the below to /etc/sudoers:  With the root user:  
-$visudo  zeppelin ALL=(ALL) NOPASSWD: ALL 
+$visudo 
+zeppelin ALL=(ALL) NOPASSWD: ALL 
 
 #comment below line
 #Defaults    requiretty
@@ -336,7 +345,7 @@ You confirm the access by switch to zeppelin user and switch user you want to im
 
 sudo su zeppelin 
 sudo su <user> 
-
+```
 ++++
 org.apache.commons.exec.ExecuteException: Process exited with an error: 1 (Exit value: 1)
 	at org.apache.commons.exec.DefaultExecutor.executeInternal(DefaultExecutor.java:404)
