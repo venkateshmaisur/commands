@@ -29,6 +29,11 @@ kinit -kt /etc/security/keytabs/ambari-infra-solr.service.keytab $(klist -kt /et
 ## This is for Ranger audit collection
 ```shell
 curl --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=DELETE&name=ranger_audits"
+
+# Asynchronous Calls
+
+curl --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=DELETE&name=ranger_audits&async=delete01"
+curl --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=REQUESTSTATUS&requestid=delete01"
 ```
 
 ## This is for Atlas collection
