@@ -155,3 +155,39 @@ gateway.httpclient.maxConnections=128
 20/02/25 14:35:52 ||c819c7cf-f945-4e34-81a3-93c400dbd6cd|audit|10.42.80.70|knoxauth|anonymous|||authentication|uri|/gateway/knoxsso/knoxauth/login.html?originalUrl=http://c174-node3.squadron.support.hortonworks.com:8088/ui2/|success|
 20/02/25 14:35:52 |||audit|10.42.80.70|knoxauth|anonymous|||access|uri|/gateway/knoxsso/knoxauth/login.html?originalUrl=http://c174-node3.squadron.support.hortonworks.com:8088/ui2/|success|Response status: 200
 ```
+
+### Knox + yarn ui HDP 3.x
+Please follow the below procedure to access the yarn logs for a running application.
+```sh
+=============================================================================================================
+
+We need to use the latest rules from below:
+https://github.com/apache/knox/tree/master/gateway-service-definitions/src/main/resources/services/yarnui/2.7.0
+
+Please follow below procedure.
+
+1. Login into Knox host:
+
+cd /usr/hdp/current/knox-server/data/services/yarnui/2.7.0/
+mv rewrite.xml rewrite.xml.bk
+mv service.xml service.xml.bk
+
+2. Use below link to download if you have public access if you don't have access, copy and paste to create a new file under '/usr/hdp/current/knox-server/data/services/yarnui/2.7.0/'
+
+wget https://raw.githubusercontent.com/apache/knox/master/gateway-service-definitions/src/main/resources/services/yarnui/2.7.0/rewrite.xml
+wget https://raw.githubusercontent.com/apache/knox/master/gateway-service-definitions/src/main/resources/services/yarnui/2.7.0/service.xml
+
+# chown knox:hadoop /usr/hdp/current/knox-server/data/services/yarnui/2.7.0/*
+# mv /usr/hdp/current/knox-server/data/deployments /var/lib/knox/data-3.1.0.0-78/deployments.bk
+
+3. Restart Knox service
+
+4. touch those xml files.
+
+touch /usr/hdp/current/knox-server/data/services/yarnui/2.7.0/rewrite.xml
+touch /usr/hdp/current/knox-server/data/services/yarnui/2.7.0/service.xml
+
+5. Access the Knox yarn v1 UI. access the logs of running applications.
+
+=============================================================================================================
+```
