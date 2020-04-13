@@ -156,7 +156,7 @@ gateway.httpclient.maxConnections=128
 20/02/25 14:35:52 |||audit|10.42.80.70|knoxauth|anonymous|||access|uri|/gateway/knoxsso/knoxauth/login.html?originalUrl=http://c174-node3.squadron.support.hortonworks.com:8088/ui2/|success|Response status: 200
 ```
 
-### Knox + yarn ui HDP 3.x
+##### Knox + yarn ui HDP 3.x
 Please follow the below procedure to access the yarn logs for a running application.
 ```sh
 =============================================================================================================
@@ -190,4 +190,13 @@ touch /usr/hdp/current/knox-server/data/services/yarnui/2.7.0/service.xml
 5. Access the Knox yarn v1 UI. access the logs of running applications.
 
 =============================================================================================================
+```
+
+###### For Spark UI + knox
+```
+To access the logs using Knox URL you need to add 'knox' user to 'spark.history.ui.admin.acls'
+
+Please add below and restart the service let me know if that helps.
+
+# spark.history.ui.admin.acls=knox
 ```
