@@ -105,6 +105,16 @@ remove
 Now performance logging will be done in atlas_perf.log file. 
 ```
 
+###### performance:
+```
+I reviewed the logs, it takes  around *191* seconds on average to process the ENTITY_CREATE_V2 type messages.
+{noformat}
+$ grep "ENTITY_CREATE_V2" atlas_perf\ \(1\)\ \(2\).log | cut -c 81-88 | awk '\{ total += $1; count++ } END \{ print total/count }'
+
+191005
+{noformat}
+```
+
 ## Atlas Backup:
 ==========
 ```bash
@@ -346,6 +356,28 @@ Along with that please get the kafka dump for ATLAS_ENTITIES topic
 ```
 ```
  curl -s -k -u admin:admin 'http://c3232-node2.coelab.cloudera.com:21000/api/atlas/v2/search/basic?limit=25&excludeDeletedEntities=true&typeName=hive_table' | python -mjson.tool | grep name| wc -l
+ ```
+ 
+ ###### Enable metrics logging
+ ```
+ Please enable metric log for Atlas if not enabled and provide metrics log.
+
+Also provide output of metrics API  {{??http://<%atlas_host:port%>/api/atlas/admin/metrics??}}
+{noformat}
+ <appender name="METRICS" class="org.apache.log4j.RollingFileAppender">
+       <param name="File" value="${atlas.log.dir}/metric.log"/>
+       <param name="Append" value="true"/>
+       <layout class="org.apache.log4j.PatternLayout">
+           <param name="ConversionPattern" value="%d %x %m%n"/>
+           <param name="maxFileSize" value="100MB" />
+       </layout>
+   </appender>
+
+   <logger name="METRICS" additivity="false">
+       <level value="debug"/>
+       <appender-ref ref="METRICS"/>
+   </logger>
+{noformat}
  ```
 ---------------------------------------------------------------------------------------------------------------------------
 
