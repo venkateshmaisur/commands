@@ -23,6 +23,15 @@ systemctl enable mariadb
 systemctl status mariadb
 mysql_secure_installation
 
+### Reset password on RHEL 7.5
+systemctl stop mariadb
+mysqld_safe --skip-grant-tables &
+mysql -u root
+> use mysql;
+> UPDATE user SET password=PASSWORD('root') WHERE User='root' AND Host = 'localhost';
+> FLUSH PRIVILEGES;
+
+
 ```
 
 ## RESET MYSQL Ranger passsword
