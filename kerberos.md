@@ -178,3 +178,17 @@ A temp jks can be created on Linux and transferred to Windows client (windows ja
 
 Above command will print kerberos debug on stdout, collect the output for both working and not working oozie urls.
 ```
+
+###### java 242/252 known issue
+```
+Back-Up the Kerberos Database
+
+# kdb5_util dump -verbose dumpfile
+Capture the list of principals
+
+# kadmin.local -q listprincs > principals.sh
+If krb5.conf has renew_lifetime = 7d, run below cmds
+
+# for i in `cat principals.sh`; do kadmin.local -q "modprinc -maxlife 168hours $i"; done
+# for i in `cat principals.sh`; do kadmin.local -q "modprinc -maxrenewlife 168hours $i"; done
+```
