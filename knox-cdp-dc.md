@@ -9,7 +9,8 @@ curl -iku knoxui:knoxui https://localhost:8443/gateway/cdp-proxy-api/atlas/api/a
 ```
 #### Atlas UI
 ```bash
-Open https://KNOX_HOST:8443/gateway/cdp-proxy/atlas/ in your browser
+Open in your browser
+https://KNOX_HOST:8443/gateway/cdp-proxy/atlas/
 ```
 
 ## Cloudera Manager
@@ -38,35 +39,48 @@ SSH into the Cloudera Manager node
 
 Note: Cloudera Manager restart can take a little while
 
-#### Cloudera Manager API
-# curl -iku knoxui:knoxui 'https://localhost:8443/gateway/cdp-proxy-api/cm-api/v32/tools/echo?message=hello'
+## Cloudera Manager API
+```
+curl -iku knoxui:knoxui 'https://localhost:8443/gateway/cdp-proxy-api/cm-api/v32/tools/echo?message=hello'
+```
 
+#### Cloudera Manager UI
+Open in your browser
+```
+https://KNOX_HOST:8443/cmf/home 
+```
 
-Cloudera Manager UI
-Open https://KNOX_HOST:8443/cmf/home in your browser
+## HBase
 
-HBase
-HBase API
+#### HBase API
+```
 REST / WebHBase
 Configuration
 HBase Service -> Add Role -> HBase REST Server
 HBase Service -> Configuration -> hbase.rest.authentication.type = Kerberos
 Start HBase REST Server role
+```
 
-Testing
+#### Master and RegionServer UI
 
-
-Master and RegionServer UI
-Open https://KNOX_HOST:8443/gateway/cdp-proxy/hbase/webui/master?host=HBASE_MASTER_HOST&port=HBASE_MASTER_PORT in your browser
-
-
-HDFS
-HDFS API - WebHDFS
-# curl -iku knoxui:knoxui https://localhost:8443/gateway/cdp-proxy-api/webhdfs/v1/?op=LISTSTATUS
+Openin your browser
+```
+https://KNOX_HOST:8443/gateway/cdp-proxy/hbase/webui/master?host=HBASE_MASTER_HOST&port=HBASE_MASTER_PORT 
+```
 
 
-HDFS UI
-Open https://KNOX_HOST:8443/gateway/cdp-proxy/hdfs/?host=http://NAMENODE_HOST:NAMENODE_PORT in your browser
+## HDFS
+
+#### HDFS API - WebHDFS
+```
+curl -iku knoxui:knoxui https://localhost:8443/gateway/cdp-proxy-api/webhdfs/v1/?op=LISTSTATUS
+```
+
+#### HDFS UI
+```
+Open in your browser
+https://KNOX_HOST:8443/gateway/cdp-proxy/hdfs/?host=http://NAMENODE_HOST:NAMENODE_PORT 
+```
 
 Hive
 JDBC API
