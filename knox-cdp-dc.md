@@ -143,7 +143,7 @@ https://KNOX_HOST:8443/gateway/cdp-proxy/hue/
 ## Impala
 
 #### JDBC API
-```java
+```bash
 beeline -u "jdbc:hive2://$(hostname -f):8443/;ssl=true;sslTrustStore=/var/lib/knox/gateway/data/security/keystores/gateway.jks;trustStorePassword=knoxsecret;transportMode=http;httpPath=gateway/cdp-proxy-api/impala" -n knoxui -p knoxui -e 'show databases;'
 ```
 
