@@ -1,5 +1,25 @@
 # Knox CDP-DC services
 
+##### How to connect
+
+- [Atlas](https://github.com/bhagadepravin/commands/blob/master/knox-cdp-dc.md#atlas)
+- [Cloudera Manager](https://github.com/bhagadepravin/commands/blob/master/knox-cdp-dc.md#cloudera-manager)
+- [HBase](https://github.com/bhagadepravin/commands/blob/master/knox-cdp-dc.md#hbase)
+- [HDFS](https://github.com/bhagadepravin/commands/blob/master/knox-cdp-dc.md#hdfs)
+- [Hive](https://github.com/bhagadepravin/commands/blob/master/knox-cdp-dc.md#hive)
+- [Hue](https://github.com/bhagadepravin/commands/blob/master/knox-cdp-dc.md#hue)
+- [Impala](https://github.com/bhagadepravin/commands/blob/master/knox-cdp-dc.md#impala)
+- [Livy](https://github.com/bhagadepravin/commands/blob/master/knox-cdp-dc.md#livy)
+- [MR](https://github.com/bhagadepravin/commands/blob/master/knox-cdp-dc.md#mapreduce)
+- [HDFS](https://github.com/bhagadepravin/commands/blob/master/knox-cdp-dc.md#oozie)
+- [Oozie](https://github.com/bhagadepravin/commands/blob/master/knox-cdp-dc.md#oozie)
+- [Phoenix](https://github.com/bhagadepravin/commands/blob/master/knox-cdp-dc.md#phoenix-aka-avatica)
+- [Ranger](https://github.com/bhagadepravin/commands/blob/master/knox-cdp-dc.md#ranger)
+- [Spark](https://github.com/bhagadepravin/commands/blob/master/knox-cdp-dc.md#spark)
+- [Solr](https://github.com/bhagadepravin/commands/blob/master/knox-cdp-dc.md#solr)
+- [Yarn](https://github.com/bhagadepravin/commands/blob/master/knox-cdp-dc.md#yarn)
+- [Zeppelin](https://github.com/bhagadepravin/commands/blob/master/knox-cdp-dc.md#zeppelin)
+- []()
 
 ## Atlas
 
