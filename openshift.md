@@ -6,7 +6,7 @@
 ```
 grep -E '(vmx|svm)' /proc/cpuinfo
 ```
-    We should get either the word `vmx` or `svm` in the output, otherwise CPU doesn’t support virtualization.
+We should get either the word `vmx` or `svm` in the output, otherwise CPU doesn’t support virtualization.
 
 2. Install KVM and associated packages:
 ```bash
@@ -41,9 +41,9 @@ su - pbhagade
 All KVM guests to be used as OpenShift nodes will need to be connected to the same network, which can be achieved by creating a Bridge in KVM.
 
 ** Start up `virt-manager`
-- Go into `Menu --> Connection details --> Virtual networks`
-- Click `+` to add a network
-.. Give a name `shadowman`
+* Go into `Menu --> Connection details --> Virtual networks`
+  * Click `+` to add a network
+* Give a name `shadowman`
 * Set IP range
 * Enable DHCPv4
 * Click Next
