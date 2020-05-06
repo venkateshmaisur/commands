@@ -29,11 +29,12 @@ yum install "@X Window System" xorg-x11-xauth xorg-x11-fonts-* xorg-x11-utils -y
 ```
 
 6. If not running as root (which you shouldn't be), add your $USER to the libvirt and KVM groups:
-
+```bash
 useradd -m -s /bin/bash -c "Administrator" pbhagade
 usermod -aG wheel pbhagade
 usermod -aG libvirt $USER
 su - pbhagade
+```
 
 
 ### Usercreate
