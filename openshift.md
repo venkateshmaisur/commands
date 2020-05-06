@@ -1,3 +1,23 @@
+# Openshift
+
+### Installing KVM Components
+
+1. First, verify your CPU supports virtualization:
+```
+grep -E '(vmx|svm)' /proc/cpuinfo
+```
+We should get either the word `vmx` or `svm` in the output, otherwise CPU doesn’t support virtualization.
+
+2. Install KVM and associated packages:
+```bash
+yum install qemu-kvm qemu-img virt-manager libvirt libvirt-python libvirt-client virt-install virt-viewer bridge-utils -y
+```
+
+3. Enable and start libvirtd:
+```
+systemctl enable --now libvirtd
+```
+
 ### Usercreate
 
 ```bash
