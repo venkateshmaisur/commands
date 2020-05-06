@@ -3,28 +3,28 @@
 ### Installing KVM Components
 
 1. First, verify your CPU supports virtualization:
-```
+```bash
 grep -E '(vmx|svm)' /proc/cpuinfo
 ```
 We should get either the word `vmx` or `svm` in the output, otherwise CPU doesn’t support virtualization.
 
 2. Install KVM and associated packages:
-```bash
+```sql
 yum install qemu-kvm qemu-img virt-manager libvirt libvirt-python libvirt-client virt-install virt-viewer bridge-utils -y
 ```
 
 3. Enable and start libvirtd:
-```
+```java
 systemctl enable --now libvirtd
 ```
 
 4. Verify that the KVM kernel module is loaded:
-```
+```sh
 $ lsmod | grep kvm
 ```
 
 5. If you're running CentOS/RHEL 7 minimal, `virt-manager` may not start unless the `x-window-system` package is installed:
-```
+```sh
 yum install "@X Window System" xorg-x11-xauth xorg-x11-fonts-* xorg-x11-utils -y
 ```
 
