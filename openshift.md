@@ -40,11 +40,11 @@ su - pbhagade
 
 All KVM guests to be used as OpenShift nodes will need to be connected to the same network, which can be achieved by creating a Bridge in KVM.
 
-1. Start up `virt-manager`
+1. ** Start up `virt-manager`
 
   * Go into `Menu --> Connection details --> Virtual networks`
-** Click `+` to add a network
-* Give a name `shadowman`
+  * Click `+` to add a network
+  * Give a name `shadowman`
   * Set IP range
   * Enable DHCPv4
   * Click Next
