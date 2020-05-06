@@ -42,17 +42,17 @@ All KVM guests to be used as OpenShift nodes will need to be connected to the sa
 
 1. Start up `virt-manager`
 
-* Go into `Menu --> Connection details --> Virtual networks`
-* Click `+` to add a network
-* Give a name `shadowman`
-* Set IP range
-* Enable DHCPv4
-* Click Next
-* Skip IPv6 details
-* Select Forward to physical network
-* For destination, select your network (eth0, eno1, wlps0, etc)
-* Set Mode to `NAT`
-* Optional: Set domain name (or leave as `shadowman`)
+  * Go into `Menu --> Connection details --> Virtual networks`
+  * Click `+` to add a network
+  * Give a name `shadowman`
+  * Set IP range
+  * Enable DHCPv4
+  * Click Next
+  * Skip IPv6 details
+  * Select Forward to physical network
+  * For destination, select your network (eth0, eno1, wlps0, etc)
+  * Set Mode to `NAT`
+  * Optional: Set domain name (or leave as `shadowman`)
 
 
 
