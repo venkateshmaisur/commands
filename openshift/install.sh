@@ -61,4 +61,7 @@ ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/prerequisites.ym
 
 # run Deploy Cluster Playbook
 ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/deploy_cluster.yml
+
+# Uninstall
+ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/adhoc/uninstall.yml
 ```
