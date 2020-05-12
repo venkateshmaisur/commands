@@ -34,6 +34,15 @@ security.protocol=SASL_PLAINTEXT
 /usr/hdp/current/kafka-broker/bin/kafka-consumer-groups.sh --bootstrap-server <broker host>:6667 --list --command-config /root/client.properties
 ```
 
+##### HDP 3.1.5
+```
+/usr/hdp/current/kafka-broker/bin/kafka-consumer-groups.sh --bootstrap-server c174-node3.supportlab.cloudera.com:6667 --list --consumer-property security.protocol=SASL_PLAINTEXT
+
+/usr/hdp/current/kafka-broker/bin/kafka-consumer-groups.sh --bootstrap-server c174-node3.supportlab.cloudera.com:6667 --list  --command-config /tmp/client.properties
+
+/usr/hdp/current/kafka-broker/bin/kafka-console-consumer.sh --bootstrap-server  c174-node3.supportlab.cloudera.com:6667 --topic ATLAS_ENTITIES --from-beginning --consumer-property security.protocol=SASL_PLAINTEXT
+```
+
 We will collect the lag on hourly bases for 24 hrs.
 
 ```bash
