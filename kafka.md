@@ -34,13 +34,16 @@ security.protocol=SASL_PLAINTEXT
 /usr/hdp/current/kafka-broker/bin/kafka-consumer-groups.sh --bootstrap-server <broker host>:6667 --list --command-config /root/client.properties
 ```
 
-##### HDP 3.1.5
+##### HDP 3.1.5 on kerberos env
 ```
-/usr/hdp/current/kafka-broker/bin/kafka-consumer-groups.sh --bootstrap-server c174-node3.supportlab.cloudera.com:6667 --list --consumer-property security.protocol=SASL_PLAINTEXT
+cd /usr/hdp/current/kafka-broker/bin
+./kafka-consumer-groups.sh --bootstrap-server <broker host>:6667 --list --consumer-property security.protocol=SASL_PLAINTEXT
 
-/usr/hdp/current/kafka-broker/bin/kafka-consumer-groups.sh --bootstrap-server c174-node3.supportlab.cloudera.com:6667 --list  --command-config /tmp/client.properties
+cat client.properties
+security.protocol=SASL_PLAINTEXT
+./kafka-consumer-groups.sh --bootstrap-server <broker host>:6667 --list  --command-config /tmp/client.properties
 
-/usr/hdp/current/kafka-broker/bin/kafka-console-consumer.sh --bootstrap-server  c174-node3.supportlab.cloudera.com:6667 --topic ATLAS_ENTITIES --from-beginning --consumer-property security.protocol=SASL_PLAINTEXT
+./kafka-console-consumer.sh --bootstrap-server  <broker host>:6667 --topic ATLAS_ENTITIES --from-beginning --consumer-property security.protocol=SASL_PLAINTEXT
 ```
 
 We will collect the lag on hourly bases for 24 hrs.
@@ -61,12 +64,12 @@ while true; do date; /usr/hdp/current/kafka-broker/bin/kafka-consumer-groups.sh 
 
 ## Console Producer :
 ```sh
-/usr/hdp/current/kafka-broker/bin/bin/kafka-console-producer.sh --broker-list <broker-hostname:port> --topic <topic-name>
+/usr/hdp/current/kafka-broker/bin/kafka-console-producer.sh --broker-list <broker-hostname:port> --topic <topic-name>
 ```
 
 ## Console Consumer:
 ```sh
-/usr/hdp/current/kafka-broker/bin/bin/kafka-console-consumer.sh --bootstrap-server <BROKER_HOST:PORT> --topic <TOPIC-NAME>
+/usr/hdp/current/kafka-broker/bin/kafka-console-consumer.sh --bootstrap-server <BROKER_HOST:PORT> --topic <TOPIC-NAME>
 ```
 
 ## Delete
