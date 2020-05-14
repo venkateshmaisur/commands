@@ -366,3 +366,22 @@ curl --user admin:admin -i -H "X-Requested-By: ambari" -X PUT -d '{"HostRoles": 
 
 curl --user admin:pbhagade -i  -H "X-Requested-By: ambari" -X PUT -d '{"HostRoles": {"state": "STARTED"}}' http://172.25.34.129:8080/api/v1/clusters/c174/hosts/c174-node2.squadron.support.hortonworks.com/host_components/HIVE_SERVER
 ```
+
+
+## Ambari DDL
+https://github.com/apache/ambari/blob/129632c94aa339571d0fa278a2259157b5244fcb/ambari-server/src/main/resources/Ambari-DDL-SQLAnywhere-CREATE.sql#L1233-L1241
+
+## create user using API
+
+```
+Request URL: http://172.25.34.8:8080/api/v1/users
+
+
+POST {"Users/user_name":"pravin","Users/password":"BigData","Users/active":true,"Users/admin":true}
+
+```
+
+
+```
+update users set user_type='LOCAL' where user_name='admin';
+```
