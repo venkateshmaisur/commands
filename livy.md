@@ -1,4 +1,3 @@
-########## INTERNAL COMMENT ###########
 
 In kerberos env, SPNEGO is enabled in Livy UI. 
 they need have kerberos ticket on local machine and Firefox browser needs to be configured accordingly to access SPNEGO enabled UI.
