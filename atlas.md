@@ -379,6 +379,16 @@ Also provide output of metrics API  {{??http://<%atlas_host:port%>/api/atlas/adm
    </logger>
 {noformat}
  ```
+ 
+ #### Atlas group level policy
+```
+Atlas will first try to get the groups from the local host. If the user exists on the host where atlas is started , that user groups are mapped to the username.
+If user doesnt exists in the host, then atlas will look for user's group from HadoopGroups , for this purpose Atlas will use core-site configs for hadoop group mapping.
+If hadoop group mapping is configured then a UGI request to get group is made as per configs in core-site and map resulted groups to the user.
+So , to map hadoop groups to user, username should not exist on Atlas host. If there is are requirement to map all groups even from local Atlas host and also from HadoopGroup mapping , then atlas provides option 'atlas.authentication.ugi-groups.include-hadoop-groups' that can be set to true. And following restart will map user groups identified from both HadoopGroups and local groups.
+Try adding atlas.authentication.ugi-groups.include-hadoop-groups=true in atlas application properties.
+If core-site has 'hadoop.security.group.mapping.ldap.ssl.truststore' configs, make sure that truststore file exists on Atlas host as well for connections to ldaps.
+```
 ---------------------------------------------------------------------------------------------------------------------------
 
 Below are the links which might be helpful to you for getting started with atlas. 
