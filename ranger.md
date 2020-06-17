@@ -57,7 +57,17 @@ CREATE USER 'rangerdba'@'RANGER-HOSTNAME' IDENTIFIED BY 'admin';
 grant all privileges on ranger.* to 'rangerdba'@'RANGER-HOSTNAME' identified by 'admin' with grant option;
 FLUSH PRIVILEGES;
 ```
+## Oracle
+```
+SQLException : SQL state: 42000 java.sql.SQLSyntaxErrorException: ORA-00955: name is already used by an existing object
+ ErrorCode: 955
+SQLException : SQL state: 42000 java.sql.SQLSyntaxErrorException: ORA-00955: name is already used by an existing object
 
+
+insert into x_db_version_h (id,version, inst_at, inst_by, updated_at, updated_by,active) values ( X_DB_VERSION_H_SEQ.nextval,'030', sysdate, 'Ranger 1.1.0.3.2.0.0-520', sysdate, 'c4232-node2.coelab.cloudera.com','Y');
+commit;
+
+```
 ## MySql Dump and Restoration
 
 ```sql
