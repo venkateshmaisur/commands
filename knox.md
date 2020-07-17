@@ -158,8 +158,7 @@ gateway.httpclient.maxConnections=128
 
 ##### Knox + yarn ui HDP 3.x
 Please follow the below procedure to access the yarn logs for a running application.
-```sh
-=============================================================================================================
+```bash
 
 We need to use the latest rules from below:
 https://github.com/apache/knox/tree/master/gateway-service-definitions/src/main/resources/services/yarnui/2.7.0
@@ -172,7 +171,7 @@ cd /usr/hdp/current/knox-server/data/services/yarnui/2.7.0/
 mv rewrite.xml rewrite.xml.bk
 mv service.xml service.xml.bk
 
-2. Use below link to download if you have public access if you don't have access, copy and paste to create a new file under '/usr/hdp/current/knox-server/data/services/yarnui/2.7.0/'
+2. Use below link to download if you have public access if you dont have access, copy and paste to create a new file under '/usr/hdp/current/knox-server/data/services/yarnui/2.7.0/'
 
 wget https://raw.githubusercontent.com/apache/knox/master/gateway-service-definitions/src/main/resources/services/yarnui/2.7.0/rewrite.xml
 wget https://raw.githubusercontent.com/apache/knox/master/gateway-service-definitions/src/main/resources/services/yarnui/2.7.0/service.xml
