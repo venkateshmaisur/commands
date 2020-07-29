@@ -25,6 +25,13 @@ watch -n 1 'netstat -anp | grep `cat /var/run/knox/gateway.pid` | grep ESTABLISH
 {GATEWAY_HOME}/bin/knoxcli.sh create-alias ldcSystemPassword --cluster hdp --value hadoop
 ldapsearch -h <ldap-hostname> -p <port> -D <bind-dn> -w <bind_DN_password> -b <base_search> "(cn=<username>)"
 strace -o /var/tmp/strace.keytool /usr/java/latest/bin/keytool -list -keystore keystore1.p12 -storepass PASSWORD
+
+hadoop daemonlog -getlevel `hostname -f`:50070  org.apache.commons.httpclient.auth
+
+
+hadoop daemonlog -setlevel `hostname -f`:50470  org.apache.commons.httpclient.auth DEBUG -protocol https
+
+tshark -r /tmp/hdfs.pcap -O kerberos > /tmp/hdfs.out
 ```
 
 ```
