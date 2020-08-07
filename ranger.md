@@ -422,3 +422,29 @@ Expected logging:
 
 2020-03-05 08:08:42,845 INFO [main] o.a.ranger.plugin.util.PolicyRefresher PolicyRefresher(serviceName=c2232_nifi): found updated version. lastKnownVersion=-1; newVersion=2
 ```
+
+
+Ranger llap
+```
+ Hive to enforce urlauthorization, llap service will try to impersonate the user and execute liststatus hdfs API call on the location to confirm the impersonated user has RWX permissions on that location, this operation is re-cursive, so location mentioned  '/hadoop/tmp' should be either owned by the user 'hive'  or have RWX permission on the directory and all the files under that path. 
+
+confirm with below commands: 
+# hdfs dfs -ls -d /hadoop/tmp
+# hdfs dfs -ls /hadoop/tmp
+
+- To successful do the above operation of liststatus, as LLAP is impersonating the user, core-site/hive-site should be configured with proxyuser.hive.host/groups to include FQDN/IP of LLAP host and '*'
+
+Check proxyuser properties with below command executed at beeline prompt (LLAP connection): 
+
+set hadoop.proxyuser.hive.hosts;
+set hadoop.proxyuser.hive.groups;
+
+Above command output should have LLAP hostname/IP for hadoop.proxyuser.hive.hosts. And group name of user (hive) / * for hadoop.proxyuser.hive.groups
+
+
+- Impersonation error for second case should be logged to file /var/log/hive/hive-server2-interactive.err (review this log and above configs to confirm impersonation issues). 
+
+Error something like below should be logged in case of second issue: 
+
+Caused by: org.apache.hadoop.ipc.RemoteException(org.apache.hadoop.security.authorize.AuthorizationException): Unauthorized connection for super-user: hive/c316-node4.coelab.cloudera.com@COELAB.CLOUDERA.COM from IP 172.25.34.193
+```
