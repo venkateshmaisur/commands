@@ -21,6 +21,21 @@
 - [Zeppelin](https://github.com/bhagadepravin/commands/blob/master/knox-cdp-dc.md#zeppelin)
 - []()
 
+```
+1) cd /opt/cloudera/parcels/CDH-7.2.0-1.cdh7.2.0.p0.3758356/lib/knox/bin
+2) ./gateway.sh status
+3) export KNOX_GATEWAY_CONF_DIR=/var/lib/knox/gateway/conf
+4) export KNOX_GATEWAY_DATA_DIR=/var/lib/knox/gateway/data
+5) export KNOX_GATEWAY_LOG_DIR=/var/log/knox/gateway
+6) export KNOX_GATEWAY_LOG_OPTS="-Dlog4j.configuration=/var/lib/knox/gateway/conf/gateway-log4j.properties"
+7) export KNOX_CLI_LOG_OPTS="-Dlog4j.configuration=/var/lib/knox/gateway/conf/knoxcli-log4j.properties"
+8) sudo -u cloudera-scm -E ./gateway.sh clean
+9) sudo -u cloudera-scm ./gateway.sh start
+10) (ls -l /var/lib/knox/gateway/data/security/master && namei -l /var/lib/knox/gateway/data/security/master) | tee -a /tmp/knox-namei.out
+11) tar cvzf /tmp/Knox-$(hostname -f)_$(date +"%Y%m%d%H%M%S").tgz /var/log/knox/gateway/{gateway,knoxcli}.log /tmp/knox-namei.out
+
+```
+
 ## Atlas
 
 #### Atlas API
