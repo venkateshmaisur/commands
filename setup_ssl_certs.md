@@ -87,3 +87,34 @@ bil1VGtOjlrO2EmYhedxJX5fJKuCIIlPUeznxE0=
 6. Now import the p12 certificate in keystore using the following command: 
 * keytool -importkeystore -deststorepass <password> -destkeystore /etc/hive/conf/keystore.jks -srckeystore onegov.nsw.gov.au.p12 -srcstoretype PKCS12 
 ```
+
+# 4. create SAN certificates
+```
+Method I:
+
+Selg-signed Certificate with wildcard along with SAN entries:
+
+/usr/jdk64/jdk1.8.0_112/bin/keytool -genkeypair -alias wildcard -keyalg RSA -keystore keystore.jks -keysize 2048 -dname "CN=*.prod,OU=FPS,O=CMS,L=Woodlawn,ST=Maryland,C=US" -ext san=dns:c174-node2.supportlab.cloudera.com,dns:c174-node3.supportlab.cloudera.com,dns:c174-node4.supportlab.cloudera.com
+
+Please replcase san entries with actual DNS hostnames
+
+====================
+Method II:
+
+Selg-signed Certificate with CN, just change the -dname,alias,and password:
+
+
+# Create self signed cert with CN has hostname, we need to make sure this keysyore needs to be created on each Node with CN as hostnmae
+keytool -genkey -alias `hostname -f` -keyalg RSA -keysize 1024 -dname "CN=`hostname -f`,OU=FPS,O=CMS,L=Woodlawn,ST=Maryland,C=US" -keypass <PASSWORD> -keystore keystore.jks -storepass <PASSWORD> -keypass <PASSWORD>
+
+
+#### below are common cmds: Where to export the cert and import into the truststore
+
+# Export certificate
+keytool -export -alias  `hostname -f` -keystore keystore.jks -file  prod.crt -storepass <PASSWORD>
+or
+keytool -export -alias  wildcard -keystore keystore.jks -file  prod.crt -storepass <PASSWORD>
+
+# Create trustStore
+keytool -import -file prod.crt -keystore truststore.jks -alias  `hostname`-trust  -storepass <PASSWORD>
+```
