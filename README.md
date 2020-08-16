@@ -14,6 +14,7 @@
 
 ```bash
 env GZIP=-9 tar cvzf ambari-log.tar.gz <log file>
+tail -f /var/log/cloudera-scm-server/cloudera-scm-server.log  | grep "Started Jetty server"
 tshark -r /var/tmp/ldap.pcap -R frame.number==7 -V
 /usr/bin/ambari-python-wrap -c 'import sys;print (sys.version)'
 python -c 'import socket;print socket.getfqdn()'
