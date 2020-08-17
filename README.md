@@ -99,6 +99,8 @@ tshark -r /var/tmp/ldap.pcap
 tshark -r /var/tmp/ldap.pcap -V
 tshark -r /var/tmp/ldap.pcap  -frame == 7
 
+tshark -i any -d tcp.port==88,kerberos -R kerberos -nVXs0
+
 -i interface (an interface argument of ‘‘any’’)
 -n Don’t convert host addresses to names.
 -vvv Even more verbose output
