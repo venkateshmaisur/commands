@@ -385,3 +385,108 @@ POST {"Users/user_name":"pravin","Users/password":"BigData","Users/active":true,
 ```
 update users set user_type='LOCAL' where user_name='admin';
 ```
+
+## ambari two way ssl
+
+```
+ambari two way ssl
+
++++++ Tested steps for CA signed +++++++
+
+on Ambari server make sure you have below things
+
+/var/lib/ambari-server/keys/
+
+keystore.p12 [Server cert + intermediate CA + RootCA]
+pass.txt [keystore password]
+ca.crt [root ca]
+key.pem [ambari server key]
+
+/var/lib/ambari-agent/keys/.   [make sure you copy respected server certs and keys to respected nodes under keys dir.
+
+Ambari server creates on self signed certificate and CA signed so you need to copy certificates to respected locations.
+
+apollo1.openstacklocal.crt
+apollo1.openstacklocal.key
+ca.crt
+
+++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++
+
+1. Stop all ambari-agents and the ambari-server processes 
+
+2. ssh to the ambari-server machine 
+
+cd /var/lib/ambari-server/keys 
+
+We need to move the following files from here to a different /tmp directory 
+
+ca.key 
+ca.cert 
+pass.txt 
+keystore.p12 
+
+3. On the same machine 
+
+cd /var/lib/ambari-server/keys/db/newcerts 
+
+Perform an ls -al 
+Move any *.crt, *.csr and *.pem files and move to a different /tmp directory 
+
+
+4. On the same machine 
+
+cd /var/lib/ambari-server/keys/db 
+
+>cat index.txt 
+
+and ensure this is empty, if not vi the file and remove the contents of the file. 
+
+>echo '01' > serial 
+
+So if you cat serial it should only contain 01 
+
+5. Logon to each ambari-agent machine 
+
+cd /var/lib/ambari-agent/keys 
+
+>ls -al 
+
+and ensure that the directory is empty and if it isnt move out the contents. 
+
+6. openssl ca -config /var/lib/ambari-server/keys/ca.config -in /var/lib/ambari-server/keys/ambari-server.csr -out /var/lib/ambari-server/keys/ambari-server.crt -batch -passin file:/var/lib/ambari-server/keys/pass.txt -keyfile /var/lib/ambari-server/keys/ca.key -cert /var/lib/ambari-server/keys/ca.crt 
+
+7. enable two way ssl in ambari server 
+
+6. Start the ambari-server and ambari-agents
+
+
++++++
+
+-->Use certificate with CN other than wild character with subject name alterternative set to the list of DNS hostnames for which this cert is used. 
+
+Once we have .key,.crt you can copy these files to /var/lib/ambari-server/keys 
+
+# cp <file>.key /var/lib/ambari-server/keys/<hostname>.key 
+# cp <file>.crt /var/lib/ambari-server/keys/<hostname>.crt 
+
+-->Merge the root CA and Intermediate CA to one file and copy it to this dir with same name. 
+#cat <rootCA>.crt <intermediateCA>.crt > ca.crt 
+#cp ca.crt /var/lib/ambari-server/keys 
+
+-->Create p12 format file using openssl command : 
+
+#openssl pkcs12 -export -out keystore.p12 -inkey <Hostname>.key -in <hostname>.crt -certfile ca.crt 
+
+On Agent hosts: (as you have same cert used for all hosts copy the same cert and key files from ambari-server to all agent hosts) 
+
+-->Copy the ca.crt file to all agent hosts under /var/lib/ambari-agent/keys 
+#cp ca.crt /var/lib/ambari-agent/keys 
+
+-->Copy the <server>.crt under /var/lib/ambari-agent/keys 
+#cp <server>.crt /var/lib/ambari-agent/keys/<hostname>.crt 
+
+-->Copy the <server>.key under /var/lib/ambari-agent/keys 
+#cp <server>.key /var/lib/ambari-agent/keys/<hostname>.key 
+
+```
