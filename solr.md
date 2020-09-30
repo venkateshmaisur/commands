@@ -494,6 +494,12 @@ Ex:
 atlas.graph.index.search.solr.zookeeper-url=c174-node2.squadron.support.hortonworks.com:2181/solr,c174-node3.squadron.support.hortonworks.com:2181/solr,c174-node4.squadron.support.hortonworks.com:2181/solr
 ```
 
+```
+export SOLR_INCLUDE=/etc/ambari-infra-solr/conf/infra-solr-env.sh
+/usr/lib/ambari-infra-solr/bin/solr status
+/usr/lib/ambari-infra-solr/bin/solr restart
+```
+
 - [Performance Tuning for Ambari Infra](https://docs.hortonworks.com/HDPDocuments/Ambari-2.6.2.0/bk_ambari-operations/content/performance_tuning_for_ambari_infra.html)
 - [Securing Solr Collections with Ranger + Kerberos](https://community.hortonworks.com/articles/15159/securing-solr-collections-with-ranger-kerberos.html)
 - [Setup Ranger to use Ambari Infra Solr enabled in SSL](https://community.hortonworks.com/articles/92987/setup-ranger-to-use-ambari-infra-solr-enabled-in-s.html)
