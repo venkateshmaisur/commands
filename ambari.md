@@ -17,6 +17,11 @@ curl -ik -u admin -H "X-Requested-By: ambari" -X DELETE  http://hostname.example
 /var/lib/ambari-server/resources/scripts/configs.py -t 1111 -s https -a get -l `hostname -f` -n ZEUS -c hadoop-env -u admin -p admin  
 ```
 
+## CM How get the Auto-TLS truststore password.
+```
+https://CM-Hostname:PORT/api/v40/certs/truststorePassword
+```
+
 ## Ambari LDAP
 
 ```bash
