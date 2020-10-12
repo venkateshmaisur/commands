@@ -58,7 +58,43 @@ chkconfig kadmin on
 
 ```
 
+## Enable Pre-Authentication
 
+```
+# Enable by Default
+default_principal_flags = +preauth
+
+cat /var/kerberos/krb5kdc/kdc.conf
+[kdcdefaults]
+ kdc_ports = 88
+ kdc_tcp_ports = 88
+
+[realms]
+ PRAVIN.COM = {
+default_principal_flags = +preauth
+
+
+++++++++++++++++++++++++++++++++++
+# kdb5_util dump -verbose dumpfile
+Capture the list of principals
+
+# kadmin.local -q listprincs > principals.sh
+# for i in `cat principals.sh`; do kadmin.local -q "modprinc +requires_preauth $i"; done
+
+# How check
+
+getprinc <principal>
+
+Attributes: REQUIRES_PRE_AUTH
+```
+
+## Debug
+```
+yum install -y tcpdump wireshark
+tcpdump -i eth0 -w /var/tmp/krb_phase1.pcap port 88 &
+tshark -r /var/tmp/krb_phase1.pcap
+tshark -r /var/tmp/krb_phase1.pcap -O kerberos
+```
 # Windows Kerberos 
 
 ##### Windows kerberos spn
