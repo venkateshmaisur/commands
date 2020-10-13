@@ -228,3 +228,25 @@ If krb5.conf has renew_lifetime = 7d, run below cmds
 # for i in `cat principals.sh`; do kadmin.local -q "modprinc -maxlife 168hours $i"; done
 # for i in `cat principals.sh`; do kadmin.local -q "modprinc -maxrenewlife 168hours $i"; done
 ```
+
+
+### Ambari kerberos creation phase debug
+```bash
+$ kinit -S kadmin/c174-node1.supportlab.cloudera.com@SUPPORTLAB.CLOUDERA.COM admin/admin@SUPPORTLAB.CLOUDERA.COM  -c /tmp/cache
+
+that cache will have service principal  kadmin/ambari-host
+
+[root@c174-node2 ~]# klist -c /tmp/cache
+Ticket cache: FILE:/tmp/cache
+Default principal: admin/admin@SUPPORTLAB.CLOUDERA.COM
+Valid starting     Expires            Service principal
+10/13/20 11:16:59  10/20/20 11:16:59  kadmin/c174-node1.supportlab.cloudera.com@SUPPORTLAB.CLOUDERA.COM
+
+
+Then only you can use that cache to perform any activity like
+
+# kadmin -r SUPPORTLAB.CLOUDERA.COM -s c174-node1.supportlab.cloudera.com -c /tmp/cache -q 'get_principal admin/admin'
+
+
+Normal user or admin user cache wont work here, it needs kadmin service principal
+```
