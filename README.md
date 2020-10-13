@@ -248,3 +248,15 @@ Then, in zkCli do:
 
 [zk: sandbox.hortonworks.com:2181(CONNECTED) 1] addauth digest super:hadoop
 ```
+
+## Snapshot
+
+```
+login into Zookeeper node:
+
+cd /hadoop/zookeeper/version-2/   #or where they have snapshots
+
+$ cat snapshot.1b000385da.txt| grep -A2 /zkdtsm/ZKDTSMRoot/ZKDTSMTokensRoot/DT | grep ctime | awk '{print $8", "$4" "$5}'|sort| uniq -c >> DT_list.txt
+
+less > DT_list.txt
+```
