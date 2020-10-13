@@ -252,11 +252,20 @@ Then, in zkCli do:
 ## Snapshot
 
 ```
+
 login into Zookeeper node:
 
 cd /hadoop/zookeeper/version-2/   #or where they have snapshots
 
+java -cp /usr/hdp/current/zookeeper-server/zookeeper.jar:/usr/hdp/current/zookeeper-server/lib/* org.apache.zookeeper.server.SnapshotFormatter snapshot.c0088bd4e9 >  snapshot.1b000385da.txt
+
 $ cat snapshot.1b000385da.txt| grep -A2 /zkdtsm/ZKDTSMRoot/ZKDTSMTokensRoot/DT | grep ctime | awk '{print $8", "$4" "$5}'|sort| uniq -c >> DT_list.txt
 
 less > DT_list.txt
+
+same goes for latest the transaction logs 
+
+
+java -cp /usr/hdp/current/zookeeper-server/zookeeper.jar:/usr/hdp/current/zookeeper-server/lib/* org.apache.zookeeper.server.SnapshotFormatter snapshot.c0088bd4e9 | grep -i '/zkdtsm/ZKDTSMRoot/ZKDTSMTokensRoot/DT' | wc -l
+
 ```
