@@ -1,5 +1,13 @@
 # Knox troubleshooting
 
+
+#### cdp-dc
+```
+export KNOX_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*KNOX_GATEWAY | tail -1)
+env GZIP=-9  tar -cvzf knox.tar.gz /var/lib/knox/gateway/conf /var/lib/knox/gateway/data/deployments/cdp-proxy-api* $KNOX_PROCESS_DIR /var/log/knox/gateway/gateway.log /var/log/knox/gateway/gateway-audit.log
+```
+
+
 ```bash
 echo -n | openssl s_client -connect ${knoxserver}:8443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/knoxcert.crt
 watch -n 1 'netstat -anp | grep `cat /var/run/knox/gateway.pid` | grep ESTABLISHED | wc -l' 
