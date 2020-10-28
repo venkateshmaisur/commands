@@ -250,3 +250,52 @@ Then only you can use that cache to perform any activity like
 
 Normal user or admin user cache wont work here, it needs kadmin service principal
 ```
+
+### Enable renewable
+
+```bash
+[root@c274-node1 ~]# kinit test
+Password for test@SUPPORTLAB.CLOUDERA.COM:
+[root@c274-node1 ~]# klist -f
+Ticket cache: FILE:/tmp/krb5cc_0
+Default principal: test@SUPPORTLAB.CLOUDERA.COM
+
+Valid starting     Expires            Service principal
+10/28/20 09:16:58  10/29/20 09:16:58  krbtgt/SUPPORTLAB.CLOUDERA.COM@SUPPORTLAB.CLOUDERA.COM
+  Flags: FI
+
+
+==> I dont see R in Flags means this principal dont have reneweable enabled.
+
+As its MIT KDC, you can enabled it.
+
+
+Login into MIT KDC node.
+
+# you can check the Renewable details using below cmds
+
+kadmin.local -q "getprinc test@SUPPORTLAB.CLOUDERA.COM"
+kadmin.local -q "getprinc test@SUPPORTLAB.CLOUDERA.COM"   | grep renewable
+
+# Update the principal with renewable
+kadmin.local -q "modprinc -maxlife 24hours test@SUPPORTLAB.CLOUDERA.COM"
+kadmin.local -q "modprinc -maxrenewlife 168hours test@SUPPORTLAB.CLOUDERA.COM"
+
+kadmin.local -q "modprinc -maxlife 24hours krbtgt/SUPPORTLAB.CLOUDERA.COM@SUPPORTLAB.CLOUDERA.COM"
+kadmin.local -q "modprinc -maxrenewlife 168hours krbtgt/SUPPORTLAB.CLOUDERA.COM@SUPPORTLAB.CLOUDERA.COM"
+
+kinit user
+
+klist -f
+
+you will see "Flags: FRI" with R flag now.
+
+Generate new ticket in Windows and test MIT kerberos client.
+
+
+If you want to make sure all new principals which will be created in MIT should have Renewable flag, so make sure you have below properties in /var/kerberos/krb5kdc/kdc.conf Under  [realms] section
+
+max_life = 1d 0h 0m 0s
+max_renewable_life = 7d 0h 0m 0s
+
+```
