@@ -448,3 +448,19 @@ Error something like below should be logged in case of second issue:
 
 Caused by: org.apache.hadoop.ipc.RemoteException(org.apache.hadoop.security.authorize.AuthorizationException): Unauthorized connection for super-user: hive/c316-node4.coelab.cloudera.com@COELAB.CLOUDERA.COM from IP 172.25.34.193
 ```
+
+# Ranger Usersync CDP-DC troubleshooting:
+
+```
+#openssl s_client -connect localhost:5151  > /tmp/usersync.txt
+export RANGER_USERSYNC_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*RANGER_USERSYNC| tail -1)
+env GZIP=-9  tar -cvzf ranger-usersync.tar.gz $RANGER_USERSYNC_PROCESS_DIR /var/log/ranger/usersync/usersync* /tmp/usersync.txt
+```
+
+Please enable debug on Ranger usersync service
+```
+Goto -> Ranger -> Configuration -> Under Filters click on (Ranger usersync and then Logs)  -> set Ranger Usersync Logging Threshold to DEBUG
+
+Save and restart Usersync service only
+Goto Ranger -> Instances -> Select Ranger Usersync  -> Action for Selected -> Restart
+```
