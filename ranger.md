@@ -464,3 +464,16 @@ Goto -> Ranger -> Configuration -> Under Filters click on (Ranger usersync and t
 Save and restart Usersync service only
 Goto Ranger -> Instances -> Select Ranger Usersync  -> Action for Selected -> Restart
 ```
+
+# Ranger Admin CDP-DC troubleshooting:
+
+### Enable Ranger Debug
+
+`CM --> Ranger -> Configuration -> Under Filter section Select ( Ranger Admin & Logs ) -> Ranger Admin Logging Threshold -> DEBUG -> Save -> Instances -> Select Ranger Admin -> Action for Selected Restart`
+
+Once service is restarted login in to Ranger node:
+```
+export RANGER_ADMIN_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*RANGER_ADMIN| tail -1)
+env GZIP=-9  tar -cvzf ranger-admin.tar.gz $RANGER_ADMIN_PROCESS_DIR /var/log/ranger/admin/ranger-admin-`hostname -f`-ranger.log /var/log/ranger/admin/catalina.out /var/log/ranger/admin/ranger_db_patch.log
+```
+attach ranger-admin.tar.gz
