@@ -5,6 +5,7 @@
  - [x] 3. **Removing the entity**
  - [x] 4. **Removing the type**
  - [x] 5. **Remove term**
+  - [x] 6. **Script**
  
  **Json formatter** : https://jsonformatter.org/
 
@@ -204,5 +205,32 @@ Ex:
 Request URL: http://c186-node3.coelab.cloudera.com:21000/api/atlas/v2/glossary/terms/b901805d-3608-4cf0-a532-39151b2657a4/assignedEntities  ===>  termGuid
 
 [{"guid":"ceb6b9f7-9a32-4138-94a8-f19b0791820f","relationshipGuid":"a0f81e2a-7a4f-4447-a0dc-6aeb346eb5ce"}]  => "guid" "relationGuid":"
+
+```
+
+### 6. Script
+
+```bash
+wget https://raw.githubusercontent.com/bhagadepravin/commands/master/atlas/atlas-custom-types-v2/type.json
+wget https://raw.githubusercontent.com/bhagadepravin/commands/master/atlas/atlas-custom-types-v2/entity.json
+
+curl -u admin:admin  -ik -H 'Content-Type: application/json' -X POST 'http://c374-node4.supportlab.cloudera.com:21000/api/atlas/v2/types/typedefs' -d @type.json
+curl -u admin:admin -ik -H 'Content-Type: application/json' -X POST 'http://c374-node4.supportlab.cloudera.com:21000/api/atlas/v2/entity' -d @entity.json
+
+
+
+
+
+for i in {10..700000}; do \
+  curl -s -u admin:admin -ik -H 'Content-Type: application/json' -X POST -d \
+    '{"entity":{"typeName":"SomeTestEntity","guid":"-1","attributes":{"outputs":[],"owner":"m039629","bdpObjectInfo":"{\"inputs\": [{\"name\": \"afw300_multi_record_file\", \"region\": \"operation\", \"partition\": \"day\", \"application\": \"afw300\", \"multiRecordType\": \"true\", \"location\": \"sor\"}], \"outputs\": [{\"name\": \"afw300_multi_record_dataset_r\", \"region\": \"operation\", \"partition\": \"day\", \"application\": \"afw300\", \"multiRecordType\": \"R\", \"location\": \"raw\"}, {\"name\": \"afw300_multi_record_dataset_f\", \"region\": \"operation\", \"partition\": \"day\", \"application\": \"afw300\", \"multiRecordType\": \"F\", \"location\": \"raw\"}, {\"name\": \"afw300_multi_record_dataset_c\", \"region\": \"operation\", \"partition\": \"day\", \"application\": \"afw300\", \"multiRecordType\": \"C\", \"location\": \"raw\"}, {\"name\": \"afw300_multi_record_dataset_d\", \"region\": \"operation\", \"partition\": \"day\", \"application\": \"afw300\", \"multiRecordType\": \"D\", \"location\": \"raw\"}, {\"name\": \"afw300_multi_record_dataset_p\", \"region\": \"operation\", \"partition\": \"day\", \"application\": \"afw300\", \"multiRecordType\": \"P\", \"location\": \"raw\"}]}","inputs":[],"qualifiedName":"afw300_multi_record_file_process_'$i'@operation@b01_bdp_Process2","description":"multi record file ingestion test process","loadRegion":null,"userName":"m039629","transmissionInfo":"{\"frequency\": \"daily\", \"mode\": \"batch\", \"intermediary\": \"\"}","actionInfo":"{\"action\": \"multi_record\", \"multiRecord\": {\"regex\": null, \"position\": {\"start\": 0, \"width\": 1}, \"method\": \"position\"}}","name":"afw300_multi_record_file_process_'$i'","dbConnectionInfo":"","sorObjectInfo":"{\"targetType\": \"multi-record\", \"fileStore\": {\"dataFileNameRegex\": \"afw300_multi_record_file_\\\\d{4}_\\\\d{2}\\\\.csv\", \"extractTimestampRegex\": \"\\\\d{4}_\\\\d{2}\", \"extractTimestampFormat\": \"%Y_%m\", \"ctlFileNameRegex\": \"\"}, \"rdbms\": {\"dataTableName\": \"\", \"ctlTableName\": \"\", \"ctlSchemaName\": \"\", \"dataSchemaName\": \"\"}}"}}}' "http://c374-node4.supportlab.cloudera.com:21000/api/atlas/v2/entity"; \
+done 
+```
+
+ex:
+```
+$ curl -X GET -u admin:admin --header 'Accept: application/json;charset=UTF-8' 'http://c374-node4.supportlab.cloudera.com:21000/api/atlas/v2/search/basic?classification=atos'
+
+$ curl -ik -X GET -u admin:admin -H "Content-Type: application/json" -H"Cache-Control: no-cache" "http://c374-node4.supportlab.cloudera.com:21000/api/atlas/admin/metrics"
 
 ```
