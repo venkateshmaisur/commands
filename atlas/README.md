@@ -32,7 +32,7 @@ for i in `cat untags.txt`; do curl -s -u admin:admin -H 'Content-Type: applicati
 ```bash
 #!/bin/bash
 
-curl -u admin:admin -H 'Content-Type: application/json' -X POST 'http://c374-node4.supportlab.cloudera.com:21000/api/atlas/v2/search/basic' -d '{"excludeDeletedEntities":true,"entityFilters":null,"tagFilters":null,"attributes":[],"query":"!atos","limit":25,"offset":0,"typeName":"SomeTestEntity","classification":null}' |  python -m json.tool | grep guid | cut -d '"' -f 4 > untags.txt;for i in `cat untags.txt`; do curl -s -u admin:admin -H 'Content-Type: application/json' -X POST -d '{"classification":{"typeName":"atos","attributes":{}},"entityGuids":["'$i'"]}' "http://c374-node4.supportlab.cloudera.com:21000/api/atlas/v2/entity/bulk/classification";done 
+curl -u admin:admin -H 'Content-Type: application/json' -X POST 'http://c374-node4.supportlab.cloudera.com:21000/api/atlas/v2/search/basic' -d '{"excludeDeletedEntities":true,"entityFilters":null,"tagFilters":null,"attributes":[],"query":"!atos","limit":10000,"offset":0,"typeName":"SomeTestEntity","classification":null}' |  python -m json.tool | grep guid | cut -d '"' -f 4 > untags.txt;for i in `cat untags.txt`; do curl -s -u admin:admin -H 'Content-Type: application/json' -X POST -d '{"classification":{"typeName":"atos","attributes":{}},"entityGuids":["'$i'"]}' "http://c374-node4.supportlab.cloudera.com:21000/api/atlas/v2/entity/bulk/classification";done 
 
 crontab -e
 * * * * * sleep 15; /root/atlas-tags.sh
