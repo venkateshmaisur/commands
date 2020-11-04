@@ -34,6 +34,17 @@ mysql -u root
 
 ```
 
+## dump
+```sql
+mysqldump ranger -u root -p > ranger.sql
+env GZIP=-9 tar cvzf ranger-dump.tar.gz ranger.sql
+
+If the file size is more than 10gb use below cmd and attach the dump by excluding table=ranger.x_trx_log
+
+mysqldump ranger -u root -p --ignore-table=ranger.x_trx_log > ranger_trx.sql
+env GZIP=-9 tar cvzf ranger-dump-truncated.tar.gz ranger_trx.sql
+```
+
 Ranger llap permissions:
 ```
  Hive to enforce urlauthorization, llap service will try to impersonate the user and execute liststatus hdfs API call on the location to confirm the impersonated user has RWX permissions on that location, this operation is re-cursive, so location mentioned  '/hadoop/tmp' should be either owned by the user 'hive'  or have RWX permission on the directory and all the files under that path. 
