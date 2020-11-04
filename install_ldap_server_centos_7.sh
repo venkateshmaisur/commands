@@ -140,7 +140,7 @@ objectClass: shadowAccount
 cn: pbhagade
 uid: pbhagade
 uidNumber: 10001
-gidNumber: 500
+gidNumber: 10001
 homeDirectory: /home/pbhagade
 loginShell: /bin/bash
 gecos: pbhagade
@@ -151,10 +151,27 @@ shadowWarning: 0
 
 dn: cn=group1,ou=groups,dc=pravin,dc=com
 objectClass: groupOfNames
-cn: itpeople
 cn: group1
-description: IT security group
+description: group1
 member: uid=pbhagade,ou=users,dc=pravin,dc=com
+
+dn: uid=pravin,ou=users,dc=pravin,dc=com
+objectClass: top
+objectClass: account
+objectClass: posixAccount
+objectClass: shadowAccount
+cn: pravin
+uid: pravin
+uidNumber: 10002
+gidNumber: 10002
+homeDirectory: /home/pravin
+loginShell: /bin/bash
+gecos: pravin
+userPassword: Welcome
+shadowLastChange: 0
+shadowMax: 0
+shadowWarning: 0
+
 EOF
 
 # ADD Fake user to GROUP LAPLACE
@@ -164,3 +181,7 @@ sudo ldapadd -x -D cn=Manager,dc=pravin,dc=com -W -f fakeuser.ldif
 ### INSTAL LDAPADMINi
 ### FOLLOW HERE http://www.server-world.info/en/note?os=CentOS_7&p=openldap&f=7
 sudo yum --enablerepo=epel -y install phpldapadmin -y
+
+# ldapsearch -h localhost -p 389 -D cn=Manager,dc=pravin,dc=com -w Welcome -b dc=pravin,dc=com
+#
+#
