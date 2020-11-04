@@ -269,3 +269,25 @@ same goes for latest the transaction logs
 java -cp /usr/hdp/current/zookeeper-server/zookeeper.jar:/usr/hdp/current/zookeeper-server/lib/* org.apache.zookeeper.server.SnapshotFormatter snapshot.c0088bd4e9 | grep -i '/zkdtsm/ZKDTSMRoot/ZKDTSMTokensRoot/DT' | wc -l
 
 ```
+
+
+## kerberos debug renewal
+
+```
+a) What JDK version you are using in the cluster? 
+b) Below command outputs:
+
+    # ps -ef | grep ranger
+    # JAVA_HOME/bin/jrunscript -e 'print (javax.crypto.Cipher.getMaxAllowedKeyLength("AES") >= 256);'         
+        // use the correct path if JAVA_HOME undefined eg: /usr/java/
+c) To test the connectivity:
+
+    # kdestroy
+    # cd /var/run/cloudera-scm-agent/process/<nnnn>-ranger-RANGER_ADMIN      // use the latest directory 
+    # kinit -kt ranger.keytab rangeradmin/_HOST
+    # klist -ef 
+    # kinit -R  ==> this will confirm if the tickets are renewable
+
+If kinit -R fails, share the following output:
+    # KRB5_TRACE=/dev/stdout kinit -R  
+```
