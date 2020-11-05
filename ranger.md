@@ -476,6 +476,49 @@ Save and restart Usersync service only
 Goto Ranger -> Instances -> Select Ranger Usersync  -> Action for Selected -> Restart
 ```
 
+### usersync ldap
+
+```bash
+ranger.usersync.ldap.url : ldap://10.17.102.145:389
+ranger.usersync.ldap.binddn : cn=Manager,dc=pravin,dc=com
+ranger.usersync.ldap.ldapbindpassword : Welcome
+ranger.usersync.ldap.searchBase : dc=pravin,dc=com
+ranger.usersync.ldap.user.searchbase : dc=pravin,dc=com
+ranger.usersync.ldap.user.objectclass : posixAccount
+ranger.usersync.ldap.user.searchfilter : uid={0}
+ranger.usersync.ldap.user.nameattribute : uid
+ranger.usersync.ldap.user.groupnameattribute : cn
+ranger.usersync.group.usermapsyncenabled : Checked
+ranger.usersync.user.searchenabled : (by default set to false)
+ranger.usersync.group.searchenabled : (enabled by default)
+ranger.usersync.group.searchbase : dc=pravin,dc=com
+ranger.usersync.group.objectclass : groupOfNames
+ranger.usersync.group.searchfilter : 
+ranger.usersync.group.nameattribute : cn
+ranger.usersync.group.memberattributename : member
+ranger.usersync.group.search.first.enabled  : (by default set to false)
+
+
+
+We have below two options:
+ranger.usersync.user.searchenabled
+ranger.usersync.group.search.first.enabled
+
+
+ranger.usersync.ldap.user.searchscope : base
+
+2020-11-04 15:53:17,330 INFO org.apache.ranger.ldapusersync.process.LdapUserGroupBuilder: LdapUserGroupBuilder initialization completed with --  
+ldapUrl: ldap://10.17.102.145:389,  ldapBindDn: cn=Manager,dc=pravin,dc=com,  ldapBindPassword: ***** ,  ldapAuthenticationMechanism: simple,  
+searchBase: dc=pravin,dc=com,  userSearchBase: [dc=pravin,dc=com],  userSearchScope: 2,  userObjectClass: posixAccount,  userSearchFilter: null,  
+extendedUserSearchFilter: (objectclass=posixAccount),  userNameAttribute: uid,  userSearchAttributes: [uid],  userGroupNameAttributeSet: null,  
+pagedResultsEnabled: true,  pagedResultsSize: 500,  groupSearchEnabled: true,  groupSearchBase: [dc=pravin,dc=com],  groupSearchScope: 2,  
+groupObjectClass: groupOfNames,  groupSearchFilter: null,  extendedGroupSearchFilter: (&(objectclass=groupOfNames)(|(member={0})(member={1}))),  
+extendedAllGroupsSearchFilter: (&(objectclass=groupOfNames)),  groupMemberAttributeName: member,  groupNameAttribute: cn, 
+groupSearchAttributes: [member, cn], groupSearchFirstEnabled: false, userSearchEnabled: false,  ldapReferral: ignore
+
+if you want all user to be synced, keep the property empty or use "uid=*" or (objectclass=posixAccount)
+```
+
 # Ranger Admin CDP-DC troubleshooting:
 
 ### Enable Ranger Debug
