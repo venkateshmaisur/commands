@@ -114,9 +114,18 @@ mysql -u ambari -p ambari
 DROP DATABASE ambari;
 CREATE DATABASE ambari;
 mysql -u ambari "-pbigdata" --force ambari < /tmp/ambari.innodb.mysql
+
+
+mysqldump ranger -u root -p --ignore-table=ranger.x_trx_log --ignore-table=ranger.x_auth_sess > ranger_trx_new.sql
+env GZIP=-9 tar cvzf ranger-dump-truncated_new.tar.gz ranger_trx_new.sql /etc/my.cnf
+
+# restore
+mysql -u root -proot ranger1 < ranger_trx.sql
+nohup sh -c "cat ranger_trx.sql | grep -v 'INSERT INTO \\\`x_auth_sess\\\`' | mysql -u root -proot ranger1" &
 ```
 ## MYSQL SSL
 `mysql_ssl_rsa_setup --uid=mysql`
+
 
 
 ## Useful Cmds
