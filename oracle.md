@@ -159,6 +159,10 @@ WHERE
     account_status = 'OPEN';
 
 
+## Drop
+alter session set "_ORACLE_SCRIPT"=true; 
+DROP TABLESPACE example INCLUDING CONTENTS;
+DROP USER USERB CASCADE;
 
 
 
