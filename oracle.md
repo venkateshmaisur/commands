@@ -166,7 +166,37 @@ DROP USER USERB CASCADE;
 
 SQL> drop table X_DB_VERSION_H;
 SQL> DROP SEQUENCE X_DB_VERSION_H_SEQ;
-
-
-
 ```
+
+## Example:
+
+```sql
+SELECT 
+    username, 
+    default_tablespace, 
+    profile, 
+    authentication_type
+FROM
+    dba_users
+WHERE 
+    account_status = 'OPEN';
+
+SELECT * FROM user_users;
+
+alter session set "_ORACLE_SCRIPT"=true; 
+DROP TABLESPACE RANGERTEST INCLUDING CONTENTS;
+DROP USER RANGERDBA11 CASCADE;
+
+create TABLESPACE RANGERTEST datafile'/u01/app/oracle/oradata/orcl/RANGERTEST.dbf' size 500m;
+CREATE USER RANGERDBA11 IDENTIFIED BY "Welcome" DEFAULT TABLESPACE RANGERTEST TEMPORARY TABLESPACE TEMP PROFILE DEFAULT ACCOUNT UNLOCK;
+
+GRANT SELECT_CATALOG_ROLE TO RANGERDBA11;
+GRANT CONNECT, RESOURCE TO RANGERDBA11; 
+GRANT CREATE SESSION TO RANGERDBA11;
+GRANT CREATE VIEW TO RANGERDBA11;
+GRANT UNLIMITED TABLESPACE TO RANGERDBA11;
+```
+
+`select username, default_tablespace from user_users;`
+
+![Ranger Oracle](https://github.com/bhagadepravin/commands/blob/master/jpeg/image%20(5).png)
