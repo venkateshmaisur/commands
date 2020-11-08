@@ -95,3 +95,72 @@ cd database
 ```
 Ref: https://www.tecmint.com/oracle-database-11g-release-2-installation-in-linux/
 
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Centos 7 Oracle 12c r2
+
+### Install Gnome GUI on CentOS 7 / RHEL 7
+ https://www.itzgeek.com/how-tos/linux/centos-how-tos/install-gnome-gui-on-centos-7-rhel-7.html
+```bash
+yum groupinstall "GNOME Desktop" "Graphical Administration Tools" -y
+ln -sf /lib/systemd/system/runlevel5.target /etc/systemd/system/default.target
+reboot
+
+yum install -y tigervnc-server xorg-x11-fonts-Type1 -y
+
+cp /lib/systemd/system/vncserver@.service /etc/systemd/system/vncserver@:5.service
+vi /etc/systemd/system/vncserver@:5.service
+
+useradd oracle
+passwd oracle
+su oracle
+vncserver
+su -
+systemctl daemon-reload
+systemctl restart vncserver@:5.service
+```
+## 
+oracle
+https://medium.com/@anuketjain007/how-to-install-oracle-database-12c-release-2-in-linux-7-35923db49487
+https://www.tecmint.com/install-oracle-database-12c-on-centos-7/
+
+wget https://download.oracle.com/otn/linux/oracle12c/122010/linuxx64_12201_database.zip?AuthParam=1604678623_6312bff246bda3a3c5a35576a25943ec
+
+
+https://host-10-17-103-192.coe.cloudera.com:5500/em
+
+#### SQL Developer queries
+
+```sql
+select * from dba_tablespaces;
+select * from v$tablespace;
+select * from dba_data_files;
+
+create TABLESPACE example datafile'/u01/app/oracle/oradata/orcl/example.dbf' size 800m;
+alter session set "_ORACLE_SCRIPT"=true;  
+CREATE USER USERB IDENTIFIED BY "Welcome" DEFAULT TABLESPACE example TEMPORARY TABLESPACE TEMP PROFILE DEFAULT ACCOUNT UNLOCK;
+
+GRANT SELECT_CATALOG_ROLE TO USERB;
+GRANT CONNECT, RESOURCE TO USERB; 
+GRANT CREATE SESSION TO USERB;
+
+connect USERB;
+
+select user from dual;
+
+SELECT 
+    username, 
+    default_tablespace, 
+    profile, 
+    authentication_type
+FROM
+    dba_users
+WHERE 
+    account_status = 'OPEN';
+
+
+
+
+
+
+```
