@@ -8,6 +8,12 @@ grep -i java_home /etc/hadoop/conf/hadoop-env.sh
 ## Atlas CDP
 
 ```
+export ATLAS_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*ATLAS_SERVER | tail -1)
+ps auxwwf | grep atlas-ATLAS_SERVER > /tmp/atlas-ps.txt
+env GZIP=-9  tar -cvzf atlas.tar.gz $ATLAS_PROCESS_DIR /var/log/atlas/application.log /tmp/atlas-ps.txt
+```
+
+```
 # export ATLAS_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*ATLAS_SERVER | tail -1)
 # egrep 'hbase|storage' $ATLAS_PROCESS_DIR/conf/atlas-application.properties
 
