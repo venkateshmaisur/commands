@@ -54,7 +54,17 @@ env GZIP=-9 tar czhvf ./knox_all_conf_$(hostname)_$(date +"%Y%m%d%H%M%S").tgz /u
 # curl -i -k -u Username:Password -X GET  'https://<KNOX-HOSTNAME>:8443/gateway/default/webhdfs/v1/?op=LISTSTATUS'
 
 ```
+```
+Login into Atlas node
+export ATLAS_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*ATLAS_SERVER | tail -1)
+ps auxwwf | grep atlas-ATLAS_SERVER > /tmp/atlas-ps.txt
+env GZIP=-9  tar -cvzf atlas.tar.gz $ATLAS_PROCESS_DIR /var/log/atlas/application.log /tmp/atlas-ps.txt
 
+ Login into the Zookeeper node.
+
+export ZK_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*zookeeper-server | tail -1)
+env GZIP=-9  tar -cvzf zookeeper.tar.gz $ZK_PROCESS_DIR /var/log/zookeeper/zookeeper-cmf-ZOOKEEPER-1-SERVER-`hostname -f`.log
+```
 ```java
 JAVA_HOME=/usr/jdk64/jdk1.8.0_112/
 export PATH=$JAVA_HOME/bin:$PATH
