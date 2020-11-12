@@ -5,6 +5,51 @@ kinit -kt /etc/security/keytabs/atlas.service.keytab $(klist -kt /etc/security/k
 grep -i java_home /etc/hadoop/conf/hadoop-env.sh
 ```
 
+## Atlas CDP
+
+```
+# export ATLAS_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*ATLAS_SERVER | tail -1)
+# egrep 'hbase|storage' $ATLAS_PROCESS_DIR/conf/atlas-application.properties
+
+ # kinit -kt ${ATLAS_PROCESS_DIR}/atlas.keytab atlas/$(hostname -f)
+ # klist
+ # echo 'list' | hbase shell -n | grep -i atlas
+ 
+  # export HBASE_PROCESS_DIR=$(ls -1drt /var/run/cloudera-scm-agent/process/*hbase-REGIONSERVER | tail -1)
+ # kinit -kt $HBASE_PROCESS_DIR/hbase.keytab hbase/$(hostname -f)
+ # klist
+ # echo 'list' | hbase shell -n | grep -i atlas
+ 
+  # kinit -kt $HBASE_PROCESS_DIR/hbase.keytab hbase/$(hostname -f)
+ # echo "user_permission 'atlas_janus'" |hbase shell -n
+ # echo "user_permission 'ATLAS_ENTITY_AUDIT_EVENTS'" |hbase shell -n
+ 
+ By default CM doesnt set permissions on thse tables to allow atlas user access. Execute below commands to grant RWX permissions to atlas user.
+
+ # echo "grant 'atlas','RWXCA','atlas_janus'" | hbase shell -n
+ # echo "grant 'atlas','RWXCA','ATLAS_ENTITY_AUDIT_EVENTS'" | hbase shell -n
+ # echo "user_permission 'atlas_janus'" |hbase shell -n
+ # echo "user_permission 'ATLAS_ENTITY_AUDIT_EVENTS'" |hbase shell -n
+ 
+ # echo -e "hadoop\nhadoop" | kadmin.local -q 'addprinc thomas'
+# echo -e "hadoop\nhadoop" | kadmin.local -q 'addprinc steve'
+# echo hadoop | kinit thomas 
+ # beeline --silent=true -u "jdbc:hive2://$(hostname -f):2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2" -e "create table atlas_test_table(col1 string,col2 int);"
+ # beeline --silent=true -u "jdbc:hive2://$(hostname -f):2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2" -e "describe formatted atlas_test_table"
+  # kinit -kt $ATLAS_PROCESS_DIR/atlas.keytab atlas/$(hostname -f)
+ # export JAVA_HOME=/usr/java/jdk1.8.0_232-cloudera/
+ # echo hadoop | kinit admin/admin
+ # /opt/cloudera/parcels/CDH/lib/atlas/hook-bin/import-hive.sh
+ 
+ 
+ # echo hadoop | kinit thomas
+# beeline --silent=true -u "jdbc:hive2://$(hostname -f):2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2" -e "create table atlas_test_ctas_bridge as (select * from atlas_test_table)"
+# beeline --silent=true -u "jdbc:hive2://$(hostname -f):2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2"  -e "show tables"
+# echo hadoop | kinit admin/admin
+# /opt/cloudera/parcels/CDH/lib/atlas/hook-bin/import-hive.sh
+
+
+
 ## Hive import script
 ```sh
 HIVE_HOME=/usr/hdp/current/hive-client
