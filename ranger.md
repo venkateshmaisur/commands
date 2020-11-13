@@ -43,6 +43,12 @@ If the file size is more than 10gb use below cmd and attach the dump by excludin
 
 mysqldump ranger -u root -p --ignore-table=ranger.x_trx_log > ranger_trx.sql
 env GZIP=-9 tar cvzf ranger-dump-truncated.tar.gz ranger_trx.sql
+
+
+mysqldump ranger -u root -p --ignore-table=ranger.x_trx_log --ignore-table=ranger.x_auth_sess > ranger_trx.sql
+env GZIP=-9 tar cvzf ranger-dump-truncated.tar.gz ranger_trx_new.sql /etc/my.cnf
+
+while restoring dump to lab make sure you create those two tables manually after db is restored
 ```
 
 Ranger llap permissions:
