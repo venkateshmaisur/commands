@@ -153,3 +153,38 @@ keytool -export -alias  `hostname` -keystore keystore.jks -file  ams1.crt -store
 # Create trustStore
 keytool -import -file ams1.crt -keystore truststore.jks -alias  `hostname`-trust  -storepass Welcome
 ```
+
+
+## SSL ciper
+
+```
+ nmap -sV --script ssl-enum-ciphers -p 8443 pbhagade-1.pbhagade.root.hwx.site
+ ```
+ 
+ ```
+ #!/bin/bash
+# OpenSSL requires the port number.
+SERVER=$1
+DELAY=1
+ciphers=$(openssl ciphers 'ALL:eNULL' | sed -e 's/:/ /g')
+echo Obtaining cipher list from $(openssl version)
+for cipher in ${ciphers[@]}
+do
+echo -n Testing $cipher...
+result=$(echo -n | openssl s_client -cipher "$cipher" -connect $SERVER 2>&1)
+if [[ "$result" =~ ":error:" ]] ; then
+  error=$(echo -n $result | cut -d':' -f6)
+  echo NO \($error\)
+else
+  if [[ "$result" =~ "Cipher is ${cipher}" || "$result" =~ "Cipher    :" ]] ; then
+    echo YES
+  else
+    echo UNKNOWN RESPONSE
+    echo $result
+  fi
+fi
+sleep $DELAY
+done
+ ```
+ 
+ https://www.openssl.org/docs/man1.0.2/man1/ciphers.html
