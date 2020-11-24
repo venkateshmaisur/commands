@@ -1,4 +1,4 @@
-Atlas Repair Index
+# Atlas Repair Index
 
 https://atlas.apache.org/#/AtlasRepairIndex
 
