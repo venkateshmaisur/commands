@@ -10,6 +10,19 @@ In rare, cases it is possible that during entity creation, the entity is stored 
 Complete Restore
 If the user needs to restore all the indexes, this can be accomplished by executing the tool with no command-line parameters:
 
+### Solr backup
+```
+Use following syntax to run Solr backup API using curl command:
+# http://<Infra Solr Host>:<Port>/solr/admin/collections?action=BACKUP&name=myBackupName&collection=myCollectionName&location=/path/to/my/shared/drive
+
+kinit -kt /etc/security/keytabs/ambari-infra-solr.service.keytab $(klist -kt /etc/security/keytabs/ambari-infra-solr.service.keytab |sed -n "4p"|cut -d ' ' -f7)
+
+
+Example:
+curl -ivk --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=BACKUP&name=vertex_index_bkp&collection=vertex_index&location=/tmp"
+curl -ivk --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=BACKUP&name=edge_index_bkp&collection=edge_index&location=/tmp"
+curl -ivk --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=BACKUP&name=fulltext_index_bkp&collection=fulltext_index&location=/tmp"
+```
 ```
 cd /usr/hdp/current/atlas-server/tools/
 # Download index-repair-tool.zip
