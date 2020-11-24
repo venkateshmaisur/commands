@@ -10,15 +10,14 @@ In rare, cases it is possible that during entity creation, the entity is stored 
 Complete Restore
 If the user needs to restore all the indexes, this can be accomplished by executing the tool with no command-line parameters:
 
+```
 cd /usr/hdp/current/atlas-server/tools/
-######## Download index-repair-tool.zip
+# Download index-repair-tool.zip
 unzip index-repair-tool.zip
 
 kinit -kt /etc/security/keytabs/atlas.service.keytab $(klist -kt /etc/security/keytabs/atlas.service.keytab |sed -n "4p"|cut -d ' ' -f7)
 python repair_index.py
 
-
-```
 [root@c274-node4 index-repair-tool]# python repair_index.py
 Logging: /var/log/atlas/atlas-index-janus-repair.log
 Initializing graph: Graph Initialized!
