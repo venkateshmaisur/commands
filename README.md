@@ -161,6 +161,14 @@ export HADOOP_ROOT_LOGGER=DEBUG,console
 export HADOOP_OPTS="-Dsun.security.krb5.debug=true ${HADOOP_OPTS}"
 ```
 
+```
+You can add the below parameters in the KMS service from the Cloudera manager.
+Debug JVM
+-Dsun.security.krb5.debug=true -Dsun.security.jgss.debug=true -Dsun.security.spnego.debug=true
+export HADOOP_ROOT_LOGGER=TRACE,console;
+export HADOOP_JAAS_DEBUG=true; export HADOOP_OPTS="-Dsun.security.krb5.debug=true"
+```
+
 ## network tunning ####
 ```
 lease tune below parameters and then test the Alteryx job. 
