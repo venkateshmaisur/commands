@@ -442,6 +442,26 @@ If core-site has 'hadoop.security.group.mapping.ldap.ssl.truststore' configs, ma
 ```
 ---------------------------------------------------------------------------------------------------------------------------
 
+
+#### Atlas ranger tag policies
+
+```
+Entity.
+
+entity-type : hive_db,hive_table
+entity classification: SG_*, *_NOT_CLASSIFIED*
+entity-id: SG*
+permissions - give permission desired to user 
+
+
+Type
+
+ type-category - classification
+ type Name - SG_*
+ permissions - give permission desired to user 
+ 
+ This following policies worked for singapore schema entities for singapore assigned user  in policy
+ ```
 Below are the links which might be helpful to you for getting started with atlas. 
 
 1. https://community.hortonworks.com/articles/81680/atlas-tag-based-searches-utilizing-the-atlas-rest.html 
