@@ -495,3 +495,38 @@ On Agent hosts: (as you have same cert used for all hosts copy the same cert and
 #cp <server>.key /var/lib/ambari-agent/keys/<hostname>.key 
 
 ```
+
+
+### Kerberos config tab keeps on loading in ambari 2.7.5
+
+```
+select config_id,version_tag, type_name, selected, create_timestamp from clusterconfig where type_name = 'krb5-conf' and selected=1;
+
+select config_id,version_tag, type_name, selected, create_timestamp from clusterconfig where type_name = 'kerberos-env' and selected=1;
+
+select max(service_config_id) from serviceconfig;
+
+select * from serviceconfigmapping where service_config_id in (select service_config_id from  serviceconfig where service_name in ('KERBEROS'));
+
+select * from serviceconfigmapping;
+
+
+insert into serviceconfigmapping(service_config_id,config_id) values(253,453);
+insert into serviceconfigmapping(service_config_id,config_id) values(253,452);
+
+
+
+select max(service_config_id) from serviceconfig;
+#Now use the below Query to insert into serviceconfig, use the #service_config_id  as Max+1 ( for ex if the abouve query output was 1106 use 1107 as below ) Remember to change the XXX based on the abouve output 
+#Please note i am hard coding the serviceconfig as admin and setting the create_timestamp as Wednesday 14th october 2020 1602656506760
+Query 4: insert into serviceconfig(service_config_id,cluster_id,service_name,version,create_timestamp,stack_id,user_name) values(XXX,2,'KERBEROS',1,1602656506760,14,'admin');
+
+
+select max(service_config_id) from serviceconfig;
+252
+
+cluster_id 4
+stack_id 14
+
+insert into serviceconfig(service_config_id,cluster_id,service_name,version,create_timestamp,stack_id,user_name) values(253,4,'KERBEROS',1,1602656506760,14,'admin');
+```
