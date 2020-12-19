@@ -464,6 +464,98 @@ Type
  ```
 Below are the links which might be helpful to you for getting started with atlas. 
 
+
+
+#### Atlas Knox Proxy setup
+```
+In HDP atlas did not support trusted proxy and forced the use of the Anonymous authentication provider so that it could provide its own authentication.
+
+below are the jiras are required for to support trusted proxy for Atlas , Knox
+
+https://issues.apache.org/jira/browse/ATLAS-2824  Atlas authentication to support proxy-user
+https://issues.apache.org/jira/browse/KNOX-1877   Atlas service definitions should default to trusted proxy
+
+
+I checked HDP 3.1.0.302-2 ATLAS-2824  is already applied on it.
+
+KNOX-1877 was missing, We need to make below changes to make it work, which would require Restart of Atlas and Knox.
+
+1. Atlas.
+
+Please check if you have below property set, if present make sure its set to true, If not present, please add in Atlas -> Configs -> Advanced ->  "Custom application-properties"
+
+atlas.authentication.method.trustedproxy=true
+atlas.proxyuser.knox.groups=*
+atlas.proxyuser.knox.hosts=*
+
+# grep atlas.authentication.method.trustedproxy /etc/atlas/conf/atlas-application.properties
+
+
+Save and Restart
+
+2. Knox
+
+
+Please make the below changes where I commented policy and "dispatch classname" and new "dispatch classname"
+
+vim /usr/hdp/current/knox-server/data/services/atlas-api/0.8.0/service.xml
+
+<service role="ATLAS-API" name="atlas-api" version="0.8.0">
+<!--    <policies>
+        <policy role="webappsec"/>
+        <policy role="authentication" name="Anonymous"/>
+        <policy role="rewrite"/>
+        <policy role="authorization"/>
+    </policies>
+-->
+    <routes>
+        <route path="/atlas/api/**"/>
+    </routes>
+<!--    <dispatch classname="org.apache.knox.gateway.dispatch.PassAllHeadersDispatch" ha-classname="org.apache.knox.gateway.ha.dispatch.AtlasApiHaDispatch"/> -->
+        <dispatch classname="org.apache.knox.gateway.dispatch.DefaultDispatch" ha-classname="org.apache.knox.gateway.ha.dispatch.AtlasTrustedProxyHaDispatch" />
+</service>
+
+
+
+Clear the all kerberos.topo from deployment directory.
+
+ls -ltrd /usr/hdp/current/knox-server/data/deployments/kerberos.topo*
+rm -rf /usr/hdp/current/knox-server/data/deployments/kerberos.topo.17679eb56b8
+
+
+Restart Knox:
+
+touch /usr/hdp/current/knox-server/data/services/atlas-api/0.8.0/service.xml
+Rerun the curl cmd:
+
+
+curl -ik --negotiate -u : -X GET 'https://KNOX-HOSTNAME:8443/gateway/kerberos/atlas/api/atlas/types'
+
+
+Once above works, We need to use loadbalancer, for that, you need make below changes.
+-----------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
+
+1. Make sure /etc/security/keytabs/spnego.service.keytab has all Loadlancer principals with all CNAME, copy the same spnego.service.keytab  on other Knox node
+2.  Change "hadoop.auth.config.kerberos.principal" to "*" 
+
+After making this change you may getting below error, when you run curl cmd:
+-------
+ERROR knox.gateway (AbstractGatewayFilter.java:doFilter(69)) - Failed to execute filter: java.lang.NoClassDefFoundError: org/apache/kerby/kerberos/kerb/keytab/Keytab
+-------
+
+This is due to https://issues.apache.org/jira/browse/KNOX-2229 . and a quick fix is to copy all kerb* jars to knox/dep/ direcory.
+
+# cp /usr/hdp/current/hadoop-client/lib/kerb* /usr/hdp/current/knox-server/dep/
+
+** Execute cp command on all knox hosts
+
+Restart Knox
+
+
+curl -ik --negotiate -u : -X GET 'https://LB-HOSTNAME:LB-PORT/gateway/kerberos/atlas/api/atlas/types'
+```
+
 1. https://community.hortonworks.com/articles/81680/atlas-tag-based-searches-utilizing-the-atlas-rest.html 
 2. https://community.hortonworks.com/articles/39759/list-atlas-tags-and-traits.html 
 3. https://community.hortonworks.com/articles/58220/howto-install-and-configure-high-availability-on-a.html 
