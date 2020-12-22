@@ -207,3 +207,7 @@ Please add below and restart the service let me know if that helps.
 
 # spark.history.ui.admin.acls=knox
 ```
+
+
+###### [Spark History UI Service] Executor logs (stdout/stderr) links are broken]
+https://jira.cloudera.com/browse/EAR-10781
