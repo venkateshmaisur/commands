@@ -88,6 +88,23 @@ After this change you should be able to use the knox to query over webhdfs rest 
 https://knox.apache.org/books/knox-0-12-0/user-guide.html#HBase+REST+API+Setup
 ```
 
+#####
+
+```
+<service> 
+<role>HIVE</role> 
+<url>http://{{hive_server_host}}:{{hive_http_port}}/{{hive_http_path}}</url> 
+<param><name>replayBufferSize</name><value>32</value></param> 
+<param> 
+<name>httpclient.connectionTimeout</name> 
+<value>30m</value> 
+</param> 
+<param> 
+<name>httpclient.socketTimeout</name> 
+<value>30m</value> 
+</param>
+```
+
 ##### Use LB for KnoxSSO where you have multiple knox instances
 
 ```sh 
