@@ -309,3 +309,13 @@ c) To test the connectivity:
 If kinit -R fails, share the following output:
     # KRB5_TRACE=/dev/stdout kinit -R  
 ```
+
+
+### CM
+```
+vim /etc/default/cloudera-scm-server
+
+For CM add the following to /etc/default/cloudera-scm-server, e.g
+
+export CMF_JAVA_OPTS="-Xmx2G -XX:MaxPermSize=256m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp -Dcom.sun.jndi.ldap.object.disableEndpointIdentification=true"
+```
