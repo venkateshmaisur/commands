@@ -555,7 +555,15 @@ Restart Knox
 
 curl -ik --negotiate -u : -X GET 'https://LB-HOSTNAME:LB-PORT/gateway/kerberos/atlas/api/atlas/types'
 ```
+##### Atlas Bussiness metadata 
 
+```
+curl --location --request DELETE -u admin:admin 'http://localhost:21000/api/atlas/v2/types/typedef/name/bm01'
+
+https://knox-workshop-3.knox-workshop.root.hwx.site:31443/api/atlas/types
+https://knox-workshop-3.knox-workshop.root.hwx.site:31443/api/atlas/v2/types/typedefs
+
+```
 1. https://community.hortonworks.com/articles/81680/atlas-tag-based-searches-utilizing-the-atlas-rest.html 
 2. https://community.hortonworks.com/articles/39759/list-atlas-tags-and-traits.html 
 3. https://community.hortonworks.com/articles/58220/howto-install-and-configure-high-availability-on-a.html 
