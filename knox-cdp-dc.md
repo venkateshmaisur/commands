@@ -281,3 +281,74 @@ Openin your browser
  https://KNOX_HOST:8443/gateway/cdp-proxy/zeppelin/ 
 ```
 
+
+#### Knox Group level access not working
+```
+Please refer: https://jira.cloudera.com/browse/ENGESC-4918
+
+You need to set below CM -> Knox ->  Configurations: -> 
+
+ gateway.group.config.hadoop.security.group.mapping=org.apache.hadoop.security.LdapGroupsMapping
+
+
+Add below configs to "Knox Service Advanced Configuration Snippet (Safety Valve) for conf/gateway-site.xml"
+
+
+ <property>
+        <name>gateway.group.config.hadoop.security.group.mapping.ldap.bind.user</name>
+        <value>uid=guest,ou=people,dc=hadoop,dc=apache,dc=org</value>
+    </property>
+    <property>
+        <name>gateway.group.config.hadoop.security.group.mapping.ldap.bind.password</name>
+        <value>guest-password</value>
+    </property>
+    <property>
+        <name>gateway.group.config.hadoop.security.group.mapping.ldap.url</name>
+        <value>ldap://localhost:33389</value>
+    </property>
+    <property>
+        <name>gateway.group.config.hadoop.security.group.mapping.ldap.base</name>
+        <value></value>
+    </property>
+    <property>
+        <name>gateway.group.config.hadoop.security.group.mapping.ldap.search.filter.user</name>
+        <value>(&amp;(|(objectclass=person)(objectclass=applicationProcess))(cn={0}))</value>
+    </property>
+    <property>
+        <name>gateway.group.config.hadoop.security.group.mapping.ldap.search.filter.group</name>
+        <value>(objectclass=groupOfNames)</value>
+    </property>
+    <property>
+        <name>gateway.group.config.adoop.security.group.mapping.ldap.search.attr.member</name>
+        <value>member</value>
+    </property>
+    <property>
+        <name>gateway.group.config.hadoop.security.group.mapping.ldap.search.attr.group.name</name>
+        <value>cn</value>
+    </property>
+
+
+
+# Check which shared-provider cdp-proxy using or any other topology 
+CM -> Knox ->  Configurations: -> Search in filter "Knox Simplified Topology Management - cdp-proxy cdp-proxy"
+if its set to "providerConfigRef=sso"
+
+
+To modify sso and add identity-assertion, followed below steps:
+
+Goto -> CM -> Knox -> Knox Gateway Advanced Configuration Snippet (Safety Valve) for conf/cdp-resources.xml
+
+ 
+name = providerConfigs:sso
+
+value = role=federation#federation.name=SSOCookieProvider#federation.params.sso.authentication.provider.url=https://KNOX-HOSTNAME:8443/gateway/knoxsso/api/v1/websso#role=identity-assertion#identity-assertion.name=HadoopGroupProvider#identity-assertion.enabled=true#identity-assertion.param.CENTRAL_GROUP_CONFIG_PREFIX=gateway.group.config#role=authorization#authorization.name=XASecurePDPKnox#authorization.enabled=true
+
+#Note: Make sure you update "sso.authentication.provider.url"
+
+
+Save and restart Knox 
+
+```
+```
+<property><name>gateway.group.config.hadoop.security.group.mapping.ldap.bind.user</name><value>uid=guest,ou=people,dc=hadoop,dc=apache,dc=org</value></property><property><name>gateway.group.config.hadoop.security.group.mapping.ldap.bind.password</name><value>guest-password</value></property><property><name>gateway.group.config.hadoop.security.group.mapping.ldap.url</name><value>ldap://localhost:33389</value></property><property><name>gateway.group.config.hadoop.security.group.mapping.ldap.base</name><value></value></property><property><name>gateway.group.config.hadoop.security.group.mapping.ldap.search.filter.user</name><value>(|(objectclass=person)(objectclass=applicationProcess))(cn={0})</value></property><property><name>gateway.group.config.hadoop.security.group.mapping.ldap.search.filter.group</name><value>(objectclass=groupOfNames)</value></property><property><name>gateway.group.config.adoop.security.group.mapping.ldap.search.attr.member</name><value>member</value></property><property><name>gateway.group.config.hadoop.security.group.mapping.ldap.search.attr.group.name</name><value>cn</value></property>
+```
