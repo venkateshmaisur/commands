@@ -31,6 +31,18 @@ mysql -u root
 > UPDATE user SET password=PASSWORD('root') WHERE User='root' AND Host = 'localhost';
 > FLUSH PRIVILEGES;
 
+```
+
+## CDP Ranger AD authentication
+```
+ranger.authentication.method = ACTIVE_DIRECTORY
+ranger.ldap.ad.url = ldap://10.113.243.16:389
+ranger.ldap.ad.bind.dn = test1@SUPPORT.COM
+ranger.ldap.ad.bind.password = hadoop12345!
+ranger.ldap.ad.domain = support.com
+ranger.ldap.ad.base.dn = OU=hortonworks,DC=SUPPORT,DC=COM
+ranger.ldap.ad.referral = ignore
+ranger.ldap.ad.user.searchfilter = (&(sAMAccountName={0})(memberOf=CN=support,OU=groups,OU=hortonworks,DC=SUPPORT,DC=COM))
 
 ```
 
