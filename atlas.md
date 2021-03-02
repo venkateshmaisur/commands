@@ -13,6 +13,22 @@ ps auxwwf | grep atlas-ATLAS_SERVER > /tmp/atlas-ps.txt
 env GZIP=-9  tar -cvzf atlas.tar.gz $ATLAS_PROCESS_DIR /var/log/atlas/application.log /tmp/atlas-ps.txt
 ```
 
+### Atlas Group mapping issue (Linux + AD)
+```
+CDP Atlas Ranger logging:
+
+Atlas Server Logging Advanced Configuration Snippet (Safety Valve)
+log4j.category.org.apache.ranger=info,FILE
+
+
+
+CM -> Atlas -> Configuration -> atlas.authentication.method.ldap.ugi-groups [check the box]
+
+atlas.authentication.method.ldap.ugi-groups this checkbox should be checked 
+
+and remove "atlas.authentication.ugi-groups.include-hadoop-groups=true" property if it is set.
+```
+
 ```
 # export ATLAS_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*ATLAS_SERVER | tail -1)
 # egrep 'hbase|storage' $ATLAS_PROCESS_DIR/conf/atlas-application.properties
