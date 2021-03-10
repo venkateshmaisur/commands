@@ -228,3 +228,49 @@ Please add below and restart the service let me know if that helps.
 
 ###### [Spark History UI Service] Executor logs (stdout/stderr) links are broken]
 https://jira.cloudera.com/browse/EAR-10781
+
+
+###### hdp Knox sso troubleshooting:
+
+```
+
+select * from ambari_configuration;
+
+grep -a2  main.ldapRealm  /etc/knox/conf/topologies/knoxsso.xml
+
+#make sure it has same ldap/ad details:
+
+Open two terminals
+
+tailf /var/log/ambari-server/ambari-server.log | tee /tmp/new-ambari-server.log
+tail -f /var/log/knox/gateway.log /var/log/knox/gateway-audit.log | tee /tmp/knox.log
+
+take a downtime for Knox restart:
+login into knox node:
+mv /usr/hdp/current/knox-server/data/deployments/ /usr/hdp/current/knox-server/data/deployments_backup
+
+Disable Knox debug:
+
+Restart Knox service
+
+Open a browser, clear all cache and cookies from the browser.
+
+Access Ambari url, Make sure you have run tailf cmd on both ambari and knox : If you still facing the issue:
+attach below files:
+
+env GZIP=-9 tar czhvf ./knox_all_conf_$(hostname)_$(date +"%Y%m%d%H%M%S").tgz /usr/hdp/current/knox-server/conf/ /usr/hdp/current/knox-server/data/services/ambari* /usr/hdp/current/knox-server/data/deployments/ /var/log/knox/gateway.log /var/log/knox/gateway-audit.log 2>/dev/null
+
+/tmp/new-ambari-server.log
+/tmp/knox.log
+
+attach tar file form above cmd as well
+
+
+Ambari success logging:
+
+2021-03-10 07:59:13,807  INFO [ambari-client-thread-216] AmbariJwtAuthenticationFilter:265 - hadoop-jwt cookie has been found and is being processed
+2021-03-10 07:59:14,338  INFO [ambari-client-thread-216] AmbariJwtAuthenticationFilter:265 - hadoop-jwt cookie has been found and is being processed
+
+
+
+```
