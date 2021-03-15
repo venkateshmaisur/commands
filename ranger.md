@@ -46,6 +46,30 @@ ranger.ldap.ad.user.searchfilter = (&(sAMAccountName={0})(memberOf=CN=support,OU
 
 ```
 
+## CDP Ranger Usersync AD
+```
+ranger.usersync.ldap.url = ldap://10.113.243.16:389
+ranger.usersync.ldap.binddn = test1@SUPPORT.COM
+ranger.usersync.ldap.ldapbindpassword = hadoop12345!
+ranger.usersync.ldap.searchBase = OU=hortonworks,DC=support,DC=com
+ranger.usersync.ldap.user.searchbase = OU=squadron_users,OU=users,OU=hortonworks,DC=support,DC=com
+ranger.usersync.ldap.user.searchscope = sub
+ranger.usersync.ldap.user.objectclass = person
+ranger.usersync.ldap.user.searchfilter = Empty all users
+ranger.usersync.ldap.user.nameattribute = sAMAccountName
+ranger.usersync.ldap.referral
+ranger.usersync.ldap.user.groupnameattribute = sAMAccountName
+ranger.usersync.group.usermapsyncenabled = check
+ranger.usersync.group.searchenabled
+ranger.usersync.group.searchbase = OU=groups,OU=hortonworks,DC=support,DC=com
+ranger.usersync.group.searchscope = sub
+ranger.usersync.group.objectclass = group
+ranger.usersync.group.searchfilter = Empty all users
+ranger.usersync.group.nameattribute  = cn
+ranger.usersync.group.memberattributename = member
+```
+
+
 ## dump
 ```sql
 mysqldump ranger -u root -p > ranger.sql
