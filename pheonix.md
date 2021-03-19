@@ -77,3 +77,38 @@ sqlline version 1.2.0
 ++++++++++
 
 ```
+
+### Troubleshooting:
+
+```
+hbase configs  as the table access was going through knox user and not the doas user
+
+ phoenix.queryserver.withRemoteUserExtractor = true
+ 
+  'hadoop.proxyuser.knox.hosts and hadoop.proxyuser.knox.groups should be set to "*" in core-site.xml of HDFS service.  (this requires restart all Hadoop services if set)
+
+And PQS config phoenix.queryserver.withRemoteUserExtractor=true 
+
+
+
+++++++
+keytool -import -keystore /tmp/knox-keystore.jks -alias knox -file /tmp/knoxcert -storepass changeit
+
+keytool -printcert -sslserver <knox-server>:8443 -rfc
+
+gateway.httpclient.socketTimeout= 60000
+gateway.httpclient.connectionTimeout=60000
+
+++++++++
+To test the impersonation via PQS, please follow below steps: 
+- On Knox host : 
+
+# kinit -kt knox.service.keytab knox/`hostname -f`
+# export PHOENIX_OPTS='-Dsun.security.krb5.principal=knox/<FQDN>@<realm>'
+# /usr/hdp/current/phoenix-client/bin/sqlline-thin.py "http://<PQS-FQDN>:8765/?doAs=<userName>;authentication=SPNEGO;serialization=PROTOBUF"
+
++++++++++
+Due to phoenix jira https://issues.apache.org/jira/browse/PHOENIX-5761 not fixed in 3.1.5 you need to do kinit and set PHOENIX_OPTS eve though authentication is set to BASIC. However this should not be the case if connected from external service via ODBC or JDBC. 
+
+
+```
