@@ -112,3 +112,16 @@ Due to phoenix jira https://issues.apache.org/jira/browse/PHOENIX-5761 not fixed
 
 
 ```
+
+```
+Phoenix doesn't show non-phoenix tables.
+
+You need to create Phoenix views on the HBase table to access it from Phoenix.
+
+Phoenix is not meant to be a generic HBase client.
+
+Note that it is not trivial, and not always possible to map the contents of a random HBase table to Phoenix in a useful way.
+Strings are generally OK, but numbers and dates are more complex, and custom format may only be mapped as byte string.
+
+Reference: https://phoenix.apache.org/faq.html#How_I_map_Phoenix_table_to_an_existing_HBase_table
+```
