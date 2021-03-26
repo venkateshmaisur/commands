@@ -134,6 +134,18 @@ create database ranger;
 CREATE USER 'rangerdba'@'RANGER-HOSTNAME' IDENTIFIED BY 'admin';
 grant all privileges on ranger.* to 'rangerdba'@'RANGER-HOSTNAME' identified by 'admin' with grant option;
 FLUSH PRIVILEGES;
+
+
+###### RangerKMS
+CREATE DATABASE rangerkms;
+CREATE USER 'rangerkms'@'%' IDENTIFIED BY 'cloudera';
+CREATE USER 'rangerkms'@'localhost' IDENTIFIED BY 'cloudera';
+CREATE USER 'rangerkms'@'pravincredit-1.pravincredit.root.hwx.site' IDENTIFIED BY 'cloudera';
+GRANT ALL PRIVILEGES ON rangerkms.* TO 'rangerkms'@'%';
+GRANT ALL PRIVILEGES ON rangerkms.* TO 'rangerkms'@'localhost';
+GRANT ALL PRIVILEGES ON rangerkms.* TO 'rangerkms'@'pravincredit-1.pravincredit.root.hwx.site';
+grant all privileges on *.* to 'rangerkms'@'pravincredit-1.pravincredit.root.hwx.site' identified by 'cloudera' with grant option;
+FLUSH PRIVILEGES;
 ```
 ## Oracle
 ```
