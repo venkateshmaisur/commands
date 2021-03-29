@@ -188,3 +188,9 @@ done
  ```
  
  https://www.openssl.org/docs/man1.0.2/man1/ciphers.html
+ 
+ 
+ ```
+# keytool -list -v -keystore keystore.jks | egrep -i "Owner|Iss"
+# keytool -list -v -keystore truststore.jks | egrep -i "Owner|Iss"
+``
