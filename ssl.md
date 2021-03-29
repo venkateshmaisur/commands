@@ -33,6 +33,16 @@ openssl pkcs12 -export -out /root/ca/intermediate/private/ranger-plugin.pkcs12 -
 ##### Create a keystore in PKCS12 format from your private key file, certificate and root public certificate
 ```sh
 openssl pkcs12 -export -out corp_cert_chain.pfx -inkey <private-key>.key -in <cert.cer> -certfile <root_intermediate>.cer
+
+Example:
+
+# cat <Intermediate_cert> <RootCA_cert> > ca-chain.pem
+# openssl pkcs12 -export -inkey server.key -in server.pem -certfile ca-chain.pem -out keystore.pfx
+# keytool -v -importkeystore -srckeystore keystore.pfx -srcstoretype PKCS12 -destkeystore keystore.jks -deststoretype JKS -srcalias 1 -destalias `hostname -f`
+
+- Imported missing Intermediate cert to truststore
+# keytool -import -keystore truststore.jks -file <Intermediate_cert> -alias "Intermediate_cert"
+# keytool -import -keystore truststore.jks -file <Intermediate_cert> -alias "Root_cert"
 ```
 
 ##### Export the private key file from the pfx file
