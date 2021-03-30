@@ -3,6 +3,26 @@
 cdp-dc
 https://gist.github.com/rajkrrsingh/e134510d43d47284521b451d021da56f
 
+```
+[root@pravin-1 225-kafka-KAFKA_BROKER]# export KAFKA_OPTS='-Djava.security.auth.login.config=/tmp/jaas1.conf'
+[root@pravin-1 225-kafka-KAFKA_BROKER]# cat /tmp/jaas1.conf
+KafkaClient {
+com.sun.security.auth.module.Krb5LoginModule required
+useKeyTab=true
+keyTab="/var/run/cloudera-scm-agent/process/225-kafka-KAFKA_BROKER/kafka.keytab"
+   principal="kafka/pravin-1.pravin.root.hwx.site@ROOT.HWX.SITE";
+};
+[root@pravin-1 225-kafka-KAFKA_BROKER]# cat /tmp/client.properties
+sasl.kerberos.service.name=kafka
+security.protocol=SASL_SSL
+ssl.truststore.location = /var/run/cloudera-scm-agent/process/225-kafka-KAFKA_BROKER/cm-auto-global_truststore.jks
+ssl.truststore.password = 6mYXWUW14va4Y7ZKzAPhhCCO7simpuQHu2YisTlyuuf
+[root@pravin-1 225-kafka-KAFKA_BROKER]# kafka-topics --list --bootstrap-server `hostname -f`:9093 --command-config /tmp/client.properties
+```
+####### Configuring Kafka Producer and Kafka Consumer
+https://docs.cloudera.com/cdp-private-cloud-base/7.1.5/kafka-managing/topics/kafka-manage-cli-overview.html
+https://docs.cloudera.com/HDPDocuments/HDP3/HDP-3.0.1/configuring-wire-encryption/content/configuring_kafka_producer_and_kafka_consumer.html
+
 ## List
 ```sh
 /usr/hdp/current/kafka-broker/bin/kafka-topics.sh --list --zookeeper `hostname -f`:2181
