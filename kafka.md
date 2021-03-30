@@ -1,5 +1,8 @@
 # Kafka Commands
 
+cdp-dc
+https://gist.github.com/rajkrrsingh/e134510d43d47284521b451d021da56f
+
 ## List
 ```sh
 /usr/hdp/current/kafka-broker/bin/kafka-topics.sh --list --zookeeper `hostname -f`:2181
