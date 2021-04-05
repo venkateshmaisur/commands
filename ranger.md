@@ -47,6 +47,24 @@ ranger.ldap.ad.user.searchfilter = (&(sAMAccountName={0})(memberOf=CN=support,OU
 ```
 
 ## CDP Ranger Usersync AD
+
+```
+
+echo "10.113.243.16   ad-support-01.SUPPORT.COM"  >> /etc/hosts
+export RANGER_USERSYNC_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*RANGER_USERSYNC| tail -1)
+grep -a2 ranger.usersync.truststore.file $RANGER_USERSYNC_PROCESS_DIR/conf/ranger-ugsync-site.xml
+
+/var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_truststore.jks
+
+# Get Truststore password 
+https://CM-hostname:7183/api/v40/certs/truststorePassword
+
+/usr/java/jdk1.8.0_232-cloudera/bin/keytool -import -keystore /var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_truststore.jks -file /tmp/ADcert.crt -alias adcert -storepass NQxtXkbO13OWDYS7oNaAAwZpXcQl8D6DVPJdhtcPFbR
+
+
+/usr/java/jdk1.8.0_232-cloudera/bin/keytool -list -keystore /var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_truststore.jks
+```
+
 ```
 ranger.usersync.ldap.url = ldap://10.113.243.16:389
 ranger.usersync.ldap.binddn = test1@SUPPORT.COM
