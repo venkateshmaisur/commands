@@ -53,7 +53,10 @@ ranger.ldap.ad.user.searchfilter = (&(sAMAccountName={0})(memberOf=CN=support,OU
 echo "10.113.243.16   ad-support-01.SUPPORT.COM"  >> /etc/hosts
 # Check the jks file
 $ export RANGER_USERSYNC_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*RANGER_USERSYNC| tail -1)
-$ grep -a2 ranger.usersync.truststore.file $RANGER_USERSYNC_PROCESS_DIR/conf/ranger-ugsync-site.xml/var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_truststore.jks
+$ grep -a2 ranger.usersync.truststore.file $RANGER_USERSYNC_PROCESS_DIR/conf/ranger-ugsync-site.xml
+
+# It must be below path
+/var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_truststore.jks
 
 # Get Truststore password 
 https://CM-hostname:7183/api/v40/certs/truststorePassword
