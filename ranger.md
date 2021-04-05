@@ -51,18 +51,24 @@ ranger.ldap.ad.user.searchfilter = (&(sAMAccountName={0})(memberOf=CN=support,OU
 ```
 
 echo "10.113.243.16   ad-support-01.SUPPORT.COM"  >> /etc/hosts
-export RANGER_USERSYNC_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*RANGER_USERSYNC| tail -1)
-grep -a2 ranger.usersync.truststore.file $RANGER_USERSYNC_PROCESS_DIR/conf/ranger-ugsync-site.xml
-
-/var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_truststore.jks
+# Check the jks file
+$ export RANGER_USERSYNC_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*RANGER_USERSYNC| tail -1)
+$ grep -a2 ranger.usersync.truststore.file $RANGER_USERSYNC_PROCESS_DIR/conf/ranger-ugsync-site.xml/var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_truststore.jks
 
 # Get Truststore password 
 https://CM-hostname:7183/api/v40/certs/truststorePassword
 
-/usr/java/jdk1.8.0_232-cloudera/bin/keytool -import -keystore /var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_truststore.jks -file /tmp/ADcert.crt -alias adcert -storepass NQxtXkbO13OWDYS7oNaAAwZpXcQl8D6DVPJdhtcPFbR
+# Get AD cert into a file: 
+$ echo -n | openssl s_client -connect AD-hostname:636 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/ADcert.crt
+# You can also check if AD has chain certificate or not, you can add RootCA certificare into to the truststore, if customer do not want to add AD server cert:
+$ openssl s_client -connect AD-hostname:636 -showcerts
 
 
-/usr/java/jdk1.8.0_232-cloudera/bin/keytool -list -keystore /var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_truststore.jks
+#Import cert into cm-auto-global_truststore.jks 
+$ /usr/java/jdk1.8.0_232-cloudera/bin/keytool -import -keystore /var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_truststore.jks -file /tmp/ADcert.crt -alias adcert -storepass <PASSWORD>
+
+#Use below to check if its added or not
+$ /usr/java/jdk1.8.0_232-cloudera/bin/keytool -list -keystore /var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_truststore.jks
 ```
 
 ```
