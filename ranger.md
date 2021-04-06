@@ -644,3 +644,53 @@ To get password from the alias,
 
 ${JAVA_HOME}/bin/java -cp "/opt/cloudera/cm/lib/*" com.cloudera.enterprise.crypto.GenericKeyStoreTypePasswordExtractor "jceks" "/var/run/cloudera-scm-agent/process/<ID>-ranger-RANGER_USERSYNC/conf/rangerusersync.jceks" "usersync.ssl.key.password"
 ```
+
+
+##### Ranger HDP 3.x masking troubleshooting
+```
+1. login into Kafka node
+
+Kinit with kafka keytab
+ /usr/hdp/current/kafka-broker/bin/kafka-console-consumer.sh --bootstrap-server  c274-node2.supportlab.cloudera.com:6667 --topic ATLAS_ENTITIES  --consumer-property security.protocol=SASL_PLAINTEXT
+
+ also new tab:
+
+ cat /tmp/client.properties
+security.protocol=SASL_PLAINTEXT
+/usr/hdp/current/kafka-broker/bin/kafka-consumer-groups.sh --describe --group ranger_entities_consumer --bootstrap-server c274-node2.supportlab.cloudera.com:6667 --command-config /tmp/client.properties
+
+2. Login into Ranger database;
+
+use <ranger-database>
+# run below sql query, "test" is table which we are going to create and tag it using masking policy:
+2.a)
+select * from x_service_resource where service_resource_elements_text like '%test%'\G
+
+3. Login into hive node:
+create table t1 (x int);
+insert into t1 values (1), (3), (2), (4);
+select x from t1 order by x desc;
+
+
+4. Login into Atlas tag the entity, you will also see logging in Step 1.
+
+5. In Step 2, rerun the query:
+
+Look for "tags_text" which should not be null. it should have tag details, if it has meaning tag are getting propogating, it takes 30 sec to propogate ateast.
+
+6. Rerun the beeline query to check masking policy is working or not:
+select x from t1 order by x desc;
+
+
+7. If its not working lets collect below details.
+
+a. get step 1 output
+b. Get step 2 output
+c. get output of below cmd:
+
+cat /tmp/client.properties
+security.protocol=SASL_PLAINTEXT
+/usr/hdp/current/kafka-broker/bin/kafka-consumer-groups.sh --describe --group ranger_entities_consumer --bootstrap-server c274-node2.supportlab.cloudera.com:6667 --command-config /tmp/client.properties
+
+d. get ranger tagsync log file.
+```
