@@ -694,3 +694,71 @@ security.protocol=SASL_PLAINTEXT
 
 d. get ranger tagsync log file.
 ```
+
+
+###### Ranger Knox Plugin troubleshooting
+
+```
+*. Debug on Ranger Knox Plugin
+Modify the gateway-log4j.properties like below, restart Knox and review the ranger Knox plugin log in ranger.knoxagent.log
+
+#Ranger Knox Plugin debug
+ranger.knoxagent.logger=DEBUG,console,KNOXAGENT
+ranger.knoxagent.log.file=ranger.knoxagent.log
+log4j.logger.org.apache.ranger=${ranger.knoxagent.logger}
+log4j.additivity.org.apache.ranger=false
+log4j.appender.KNOXAGENT =org.apache.log4j.DailyRollingFileAppender
+log4j.appender.KNOXAGENT.File=${app.log.dir}/${ranger.knoxagent.log.file}
+log4j.appender.KNOXAGENT.layout=org.apache.log4j.PatternLayout
+log4j.appender.KNOXAGENT.layout.ConversionPattern=%d{ISO8601} %p %c{2}: %m%n %L
+log4j.appender.KNOXAGENT.DatePattern=.yyyy-MM-dd
+
+* You need to access something through Knox URL to generate the loggging for ranger.knoxagent.log
+* In kerberos env, knox conf must have core-site.xml with below entry
+
+cat core-site.xml
+  <configuration  xmlns:xi="http://www.w3.org/2001/XInclude">
+    <property>
+      <name>hadoop.security.authentication</name>
+      <value>kerberos</value>
+    </property>
+  </configuration>%
+  
+  * In debug logs if you see below error:
+
++++
+ 1302021-04-01 15:37:43,746 DEBUG util.RangerSslHelper: RangerSslHelper{keyStoreAlias=sslKeyStore, keyStoreFile=null, keyStoreType=jks, keyStoreURL=null, trustStoreAlias=sslTrustStore, trustStoreFile=null, trustStoreType=jks, trustStoreURL=null}
+ ++++
+ 
+ Meaning its not picking the jks files. due to misconfig, check for below file
+
+grep -a2 ranger.plugin.knox.policy.rest.ssl.config.file *
+grep: descriptors: Is a directory
+ranger-knox-security.xml-
+ranger-knox-security.xml-    <property>
+ranger-knox-security.xml:      <name>ranger.plugin.knox.policy.rest.ssl.config.file</name>
+ranger-knox-security.xml-      <value>/usr/hdf/current/knox-server/conf/ranger-policymgr-ssl.xml</value>
+ranger-knox-security.xml-    </property>
+
+Below error can be ignored:
++++
+ 1302021-04-01 15:37:43,751 ERROR utils.RangerCredentialProvider: Unable to get the Credential Provider from the Configuration
+ 72java.lang.IllegalArgumentException: The value of property hadoop.security.credential.provider.path must not be null
+ +++
+ 
+ * If see below error in gateway.log while accessing any url through knox:
+
+++++++
+2021-04-06 12:46:59,322 ERROR knox.gateway (GatewayServlet.java:service(146)) - Gateway processing failed: javax.servlet.ServletException: java.lang.NoClassDefFoundError: com/google/common/base/MoreObjects
+++++++
+
+a jar is missing
+Solution:
+find /usr/hdf/3.5.1.0-17/ -name guava-25.1-jre.jar
+
+cp /usr/hdf/3.5.1.0-17/ranger-knox-plugin/lib/ranger-knox-plugin-impl/guava-25.1-jre.jar  /usr/hdf/3.5.1.0-17/knox/ext/ranger-knox-plugin-impl/
+cp /usr/hdf/3.5.1.0-17/ranger-knox-plugin/lib/ranger-knox-plugin-impl/guava-25.1-jre.jar  /usr/hdf/3.5.1.0-17/ranger-knox-plugin/lib/ranger-knox-plugin-impl/
+
+for any 500,404 error while accessing the URL, check gateway.log file
+```
+
