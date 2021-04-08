@@ -761,4 +761,13 @@ cp /usr/hdf/3.5.1.0-17/ranger-knox-plugin/lib/ranger-knox-plugin-impl/guava-25.1
 
 for any 500,404 error while accessing the URL, check gateway.log file
 ```
+### Ranger group role assignment
 
+```
+Check if customer added below property and restarted Ranger admin and usersync service.
+
+Add a property in safety valve under ranger-admin-site "Ranger Admin Advanced Configuration Snippet (Safety Valve) for conf/ranger-admin-site.xml"
+
+ranger.support.for.service.specific.role.download=true
+
+```
