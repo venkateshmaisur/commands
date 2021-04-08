@@ -1,0 +1,97 @@
+### Create bulk user in openldap:
+```sh
+#!/bin/bash
+
+
+# the variables below to match your env 
+USERNAME="pbhagade"
+DIRSRV="10.17.103.192"
+PORT="389"
+ROOTDN="cn=Manager,dc=pravin,dc=com"
+PASSWD="Welcome"
+LDIF="/tmp/bulkuser.ldif"
+
+
+ldapadd -cxD cn=Manager,dc=pravin,dc=com -f user.ldif -w $PASSWD
+# specify the range. For example, 1 - 20  will create 20 users. 
+for i in $(seq 4 1600); do
+        echo "dn: uid=$USERNAME$i,ou=users,dc=pravin,dc=com" > $LDIF
+        echo "cn: Pravin Bhagade$i" >> $LDIF
+        echo "uid: $USERNAME$i" >> $LDIF
+        echo "uidNumber: $i" >> $LDIF
+        echo "gidNumber: 10000" >> $LDIF
+        echo "sn: Smith$i" >> $LDIF
+        echo "givenName: Lucas$i" >> $LDIF
+        echo "mail: $USERNAME$i@pbhagade.com" >> $LDIF
+        echo "homeDirectory: /home/$USERNAME$i" >> $LDIF
+        echo "loginShell: /bin/bash" >> $LDIF
+        echo "userPassword: $PASSWD" >> $LDIF
+        echo "objectClass: top" >> $LDIF
+        echo "objectClass: posixAccount" >> $LDIF
+        echo "objectClass: inetOrgPerson" >> $LDIF
+        echo "objectClass: organizationalPerson" >> $LDIF
+        echo "objectClass: person" >> $LDIF
+
+        /usr/bin/ldapmodify -x -h $DIRSRV -p $PORT -D "$ROOTDN" -w $PASSWD -a -f $LDIF
+done
+
+#EOF
+```
+
+
+## Add bulk user in a single group
+
+#1
+```
+#!/bin/bash
+
+
+# the variables below to match your env 
+USERNAME="pbhagade"
+DIRSRV="10.17.103.192"
+PORT="389"
+ROOTDN="cn=Manager,dc=pravin,dc=com"
+PASSWD="Welcome"
+LDIF="/tmp/group.ldif"
+
+
+ldapmodify -cxD cn=Manager,dc=pravin,dc=com -f group.ldif -w $PASSWD
+# specify the range. For example, 1 - 20  will create 20 users. 
+for i in $(seq 1); do
+echo "dn: cn=group1,ou=groups,dc=pravin,dc=com" >> $LDIF
+echo "changetype: modify" >> $LDIF
+echo "add: member" >> $LDIF
+echo "member: uid=$USERNAME$i,ou=users,dc=pravin,dc=com" >> $LDIF
+        /usr/bin/ldapmodify -x -h $DIRSRV -p $PORT -D "$ROOTDN" -w $PASSWD -a -f $LDIF
+done
+
+```
+
+#2
+```
+#!/bin/bash
+
+
+# the variables below to match your env 
+USERNAME="pbhagade"
+DIRSRV="10.17.103.192"
+PORT="389"
+ROOTDN="cn=Manager,dc=pravin,dc=com"
+PASSWD="Welcome"
+LDIF="/tmp/group.ldif"
+
+
+ldapmodify -cxD cn=Manager,dc=pravin,dc=com -f group.ldif -w $PASSWD
+# specify the range. For example, 1 - 20  will create 20 users. 
+for i in $(seq 2 1600); do
+echo "member: uid=$USERNAME$i,ou=users,dc=pravin,dc=com" >> $LDIF
+        /usr/bin/ldapmodify -x -h $DIRSRV -p $PORT -D "$ROOTDN" -w $PASSWD -a -f $LDIF
+done
+```
+
+Above it will fail: Add manully: 
+
+```
+ldapmodify -x -h 10.17.103.192 -p 389 -D cn=Manager,dc=pravin,dc=com -w Welcome -a -f /tmp/group.ldif
+```
+
