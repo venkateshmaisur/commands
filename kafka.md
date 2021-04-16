@@ -19,6 +19,8 @@ ssl.truststore.location = /var/run/cloudera-scm-agent/process/225-kafka-KAFKA_BR
 ssl.truststore.password = 6mYXWUW14va4Y7ZKzAPhhCCO7simpuQHu2YisTlyuuf
 [root@pravin-1 225-kafka-KAFKA_BROKER]# kafka-topics --list --bootstrap-server `hostname -f`:9093 --command-config /tmp/client.properties
 ```
+https://docs.cloudera.com/HDPDocuments/HDP3/HDP-3.1.5/authentication-with-kerberos/content/kerberos_kafka_jaas_configuration_file_for_the_kafka_client.html
+
 ####### Configuring Kafka Producer and Kafka Consumer
 https://docs.cloudera.com/cdp-private-cloud-base/7.1.5/kafka-managing/topics/kafka-manage-cli-overview.html
 https://docs.cloudera.com/HDPDocuments/HDP3/HDP-3.0.1/configuring-wire-encryption/content/configuring_kafka_producer_and_kafka_consumer.html
