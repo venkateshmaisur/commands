@@ -771,3 +771,37 @@ Add a property in safety valve under ranger-admin-site "Ranger Admin Advanced Co
 ranger.support.for.service.specific.role.download=true
 
 ```
+
+
+### delete the user/groups:
+```
+Ref: https://issues.apache.org/jira/browse/RANGER-806
+
+You just need to have a file that has details of users/groups. on a new line.
+
+vi /tmp/group.txt
+
+groupname1
+groupname2
+etc
+
+Example: python /opt/cloudera/parcels/CDH-7.1.5-1.cdh7.1.5.p0.7431829/lib/ranger-admin/deleteUserGroupUtil.py -groups /tmp/group.txt -admin admin -url https://pravin-1.pravin.root.hwx.site:6182 -p -d -sslCertPath /var/run/cloudera-scm-agent/process/490-ranger-RANGER_USERSYNC/cm-auto-in_cluster_ca_cert.pem
+
+# usage 
+
+2021-04-19 08:17:51,545  [I] Usage(Group delete): deleteUserGroupUtil.py -groups <group file path> -admin <ranger admin user> -url <rangerhosturl> [-force] [-sslCertPath <cert path>] [-debug]
+2021-04-19 08:17:51,545  [I] Usage(User delete): deleteUserGroupUtil.py -users <user file path> -admin <ranger admin user> -url <rangerhosturl> [-force] [-sslCertPath <cert path>] [-debug]
+2021-04-19 08:17:51,545  [I] -groups: Delete groups specified in the given file
+2021-04-19 08:17:51,545  [I] -users: Delete users specified in the given file
+2021-04-19 08:17:51,545  [I] -admin: Ranger Admin user ID
+2021-04-19 08:17:51,545  [I] -force: Force delete users/groups, even if they are referenced in policies
+2021-04-19 08:17:51,545  [I] -url: Ranger Admin URL
+2021-04-19 08:17:51,546  [I] -sslCertPath: Filepath to ssl certificate to use when Ranger Admin uses HTTPS
+2021-04-19 08:17:51,546  [I] -debug: Enables debugging
+
+
+
+Note: without -force, user/group will be deleted, but its still see in the Ranger UI, as Visibility  HIDDEN.
+
+ -force: Force delete users/groups, even if they are referenced in policies
+```
