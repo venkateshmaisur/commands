@@ -805,3 +805,25 @@ Note: without -force, user/group will be deleted, but its still see in the Range
 
  -force: Force delete users/groups, even if they are referenced in policies
 ```
+
+## cdp debug
+```
+Please enable debug on Ranger Usersync and Ranger Admin service. Save and Restart the service.
+
+1. Ranger admin:
+
+enable debug logs for ranger admin by adding the below parameters in----> Ranger Admin Logging Advanced Configuration Snippet (Safety Valve)
+
+logs.log4j.category.org.apache.ranger.biz.XUserMgr=debug,RFA
+log4j.additivity.org.apache.ranger.biz.XUserMgr=false
+
+
+2. Ranger Usersync:
+
+Goto CM -> Ranger -> configuration -> Ranger Usersync Logging Threshold -> DEBUG
+
+Save and restart the service.
+
+
+Please attach the Usersync and Ranger admin logs.
+```
