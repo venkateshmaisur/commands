@@ -500,6 +500,20 @@ export SOLR_INCLUDE=/etc/ambari-infra-solr/conf/infra-solr-env.sh
 /usr/lib/ambari-infra-solr/bin/solr restart
 ```
 
+## Solr query using WebUI and curl
+
+```
+query solr using webUI.
+
+goto solr Web UI, in kerberos env, its spnego enabled, so we may need kerberos ticket locally and firefox browser must of configured for spnego authentication.
+Once Solr WebUI is accessible, choose ranger_audit collection, Under q section u can add "repo:cm_hive reqUser:hive resource:default"
+
+if WebUI is not accessible solr curl cmd would like : 
+kinit
+curl -ik --negotiate -u: "https://pravin-1.pravin.root.hwx.site:8995/solr/ranger_audits/select?q=repo%3Acm_hive%20reqUser%3Ahive%20resource%3Adefault"
+```
+
+
 - [Performance Tuning for Ambari Infra](https://docs.hortonworks.com/HDPDocuments/Ambari-2.6.2.0/bk_ambari-operations/content/performance_tuning_for_ambari_infra.html)
 - [Securing Solr Collections with Ranger + Kerberos](https://community.hortonworks.com/articles/15159/securing-solr-collections-with-ranger-kerberos.html)
 - [Setup Ranger to use Ambari Infra Solr enabled in SSL](https://community.hortonworks.com/articles/92987/setup-ranger-to-use-ambari-infra-solr-enabled-in-s.html)
@@ -509,4 +523,5 @@ export SOLR_INCLUDE=/etc/ambari-infra-solr/conf/infra-solr-env.sh
 - [ams-solr-metrics-mpack](https://github.com/oleewere/ams-solr-metrics-mpack)
 - []
 - []
+
 
