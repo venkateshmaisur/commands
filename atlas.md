@@ -580,6 +580,124 @@ https://knox-workshop-3.knox-workshop.root.hwx.site:31443/api/atlas/types
 https://knox-workshop-3.knox-workshop.root.hwx.site:31443/api/atlas/v2/types/typedefs
 
 ```
+### impala hook troubleshooting
+
+```
+To check if its issue with CDW or Impala.
+
+We can perfrom few steps like connecting to impala and try create table and observer few details.
+
+1. Connect to impala:
+
+kinit with user:
+
+impala-shell -i pravin-3.pravin.root.hwx.site -d default -k --ssl --ca_cert=/var/run/cloudera-scm-agent/process/455-impala-IMPALAD/cm-auto-in_cluster_ca_cert.pem
+
+
+2. Open a new terminal.
+
+Login into new into the impala node which we are trying to connect.
+
+# tailf /var/log/impalad/impalad.INFO | tee /tmp/impala-latest.log
+
+3. Login into kafka node:
+
+Open multiple terminal for kafka node.
+
+#I see we have already collected ATLAS_HOOK details.
+
+# kafka-console-consumer --bootstrap-server  `hostname -f`:9093 --topic ATLAS_HOOK --consumer.config /home/client.properties
+
+We will also check the ATLAS_ENTITIES
+
+#  kafka-console-consumer --bootstrap-server  `hostname -f`:9093 --topic ATLAS_ENTITIES --consumer.config /home/client.properties
+
+Also check the atlas consumer lag:
+
+# kafka-consumer-groups --describe --bootstrap-server `hostname -f`:9093 --group atlas --command-config /home/client.properties
+
+4. Login into atlas node:
+
+tailf /var/log/atlas/application.log  | tee /tmp/atlas-latest.log
+
+
+5. From step we can try to create a table:
+
+create database experiments;
+use experiments;
+create table t1 (x int);
+
+6. Observer, Step 3 cmds
+ATLAS_HOOK , ATLAS_ENTITIES, group atlas , 
+
+You can also check the latest lineage log file under : /var/log/impalad/lineage on the impalad which we are connected to.
+
+any exception in atlas logs
+
+
+If everything looks good, check in Atlas UI, if entity is created or not.
+
+if not we need to collect above details.
+
+
+Logs collections:
+
+1. Login into atlas
+
+export ATLAS_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*ATLAS_SERVER | tail -1)
+ps auxwwf | grep atlas-ATLAS_SERVER > /tmp/atlas-ps.txt
+env GZIP=-9  tar -cvzf atlas.tar.gz $ATLAS_PROCESS_DIR /var/log/atlas/application.log /tmp/atlas-ps.txt
+
+2. Login into impala node which we connected to:
+
+export IMPALAD_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*IMPALAD | tail -1)
+env GZIP=-9  tar -cvzf atlas.tar.gz $IMPALAD_PROCESS_DIR /tmp/impala-latest.log  /var/log/impalad/lineage /var/log/impalad/impalad.INFO /var/log/impalad/impalad.ERROR
+
+3. kafka cmd outputs from the console.
+
+
+
+```
+logs look like
+
+```
+
+
+
+kafka-console-consumer --bootstrap-server  `hostname -f`:9093 --topic ATLAS_HOOK --consumer.config /home/client.properties
+
+{"version":{"version":"1.0.0","versionParts":[1]},"msgCompressionKind":"NONE","msgSplitIdx":1,"msgSplitCount":1,"msgSourceIP":"172.27.79.198","msgCreatedBy":"hive","msgCreationTime":1619751227952,"message":{"type":"ENTITY_CREATE_V2","user":"impala","entities":{"referredEntities":{"-79817439561753777":{"typeName":"hive_column","attributes":{"owner":"impala","qualifiedName":"experiments.movies_info.genre@cm","name":"genre","comment":null,"position":2,"type":"string"},"guid":"-79817439561753777","isIncomplete":false,"provenanceType":0,"version":0,"relationshipAttributes":{"table":{"guid":"-79817439561753773","typeName":"hive_table","uniqueAttributes":{"qualifiedName":"experiments.movies_info@cm"},"relationshipType":"hive_table_columns"}},"proxy":false},"-79817439561753776":{"typeName":"hive_column","attributes":{"owner":"impala","qualifiedName":"experiments.movies_info.name@cm","name":"name","comment":null,"position":1,"type":"varchar(50)"},"guid":"-79817439561753776","isIncomplete":false,"provenanceType":0,"version":0,"relationshipAttributes":{"table":{"guid":"-79817439561753773","typeName":"hive_table","uniqueAttributes":{"qualifiedName":"experiments.movies_info@cm"},"relationshipType":"hive_table_columns"}},"proxy":false},"-79817439561753775":{"typeName":"hive_column","attributes":{"owner":"impala","qualifiedName":"experiments.movies_info.id@cm","name":"id","comment":null,"position":0,"type":"int"},"guid":"-79817439561753775","isIncomplete":false,"provenanceType":0,"version":0,"relationshipAttributes":{"table":{"guid":"-79817439561753773","typeName":"hive_table","uniqueAttributes":{"qualifiedName":"experiments.movies_info@cm"},"relationshipType":"hive_table_columns"}},"proxy":false},"-79817439561753774":{"typeName":"hive_storagedesc","attributes":{"qualifiedName":"experiments.movies_info@cm_storage","storedAsSubDirectories":false,"location":"hdfs://pravin-1.pravin.root.hwx.site:8020/warehouse/tablespace/managed/hive/experiments.db/movies_info","compressed":false,"inputFormat":"org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat","parameters":null,"outputFormat":"org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat","serdeInfo":{"typeName":"hive_serde","attributes":{"serializationLib":"org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe","name":null,"parameters":{}}},"numBuckets":0},"guid":"-79817439561753774","isIncomplete":false,"provenanceType":0,"version":0,"relationshipAttributes":{"table":{"guid":"-79817439561753773","typeName":"hive_table","uniqueAttributes":{"qualifiedName":"experiments.movies_info@cm"},"relationshipType":"hive_table_storagedesc"}},"proxy":false}},"entities":[{"typeName":"hive_table","attributes":{"owner":"impala","tableType":"MANAGED_TABLE","temporary":false,"lastAccessTime":1619751227000,"createTime":1619751227000,"qualifiedName":"experiments.movies_info@cm","name":"movies_info","comment":null,"parameters":{"transient_lastDdlTime":"1619751227","OBJCAPABILITIES":"HIVEMANAGEDINSERTREAD,HIVEMANAGEDINSERTWRITE","transactional_properties":"insert_only","transactional":"true"},"retention":0},"guid":"-79817439561753773","isIncomplete":false,"provenanceType":0,"version":0,"relationshipAttributes":{"sd":{"guid":"-79817439561753774","typeName":"hive_storagedesc","uniqueAttributes":{"qualifiedName":"experiments.movies_info@cm_storage"},"relationshipType":"hive_table_storagedesc"},"columns":[{"guid":"-79817439561753775","typeName":"hive_column","uniqueAttributes":{"qualifiedName":"experiments.movies_info.id@cm"},"relationshipType":"hive_table_columns"},{"guid":"-79817439561753776","typeName":"hive_column","uniqueAttributes":{"qualifiedName":"experiments.movies_info.name@cm"},"relationshipType":"hive_table_columns"},{"guid":"-79817439561753777","typeName":"hive_column","uniqueAttributes":{"qualifiedName":"experiments.movies_info.genre@cm"},"relationshipType":"hive_table_columns"}],"partitionKeys":[],"db":{"typeName":"hive_db","uniqueAttributes":{"qualifiedName":"experiments@cm"},"relationshipType":"hive_table_db"}},"proxy":false}]}}}
+
+
+
+
+
+
+
+kafka-console-consumer --bootstrap-server  `hostname -f`:9093 --topic ATLAS_ENTITIES --consumer.config /home/client.properties
+
+{"version":{"version":"1.0.0","versionParts":[1]},"msgCompressionKind":"NONE","msgSplitIdx":1,"msgSplitCount":1,"msgSourceIP":"172.27.79.198","msgCreatedBy":"","msgCreationTime":1619751228672,"message":{"type":"ENTITY_NOTIFICATION_V2","entity":{"typeName":"hive_table","attributes":{"owner":"impala","createTime":1619751227000,"qualifiedName":"experiments.movies_info@cm","name":"movies_info"},"guid":"81f18e76-3257-450c-b196-3b50c7e273be","displayText":"movies_info","isIncomplete":false},"operationType":"ENTITY_CREATE","eventTime":1619751227966}}
+{"version":{"version":"1.0.0","versionParts":[1]},"msgCompressionKind":"NONE","msgSplitIdx":1,"msgSplitCount":1,"msgSourceIP":"172.27.79.198","msgCreatedBy":"","msgCreationTime":1619751228672,"message":{"type":"ENTITY_NOTIFICATION_V2","entity":{"typeName":"hive_storagedesc","attributes":{"qualifiedName":"experiments.movies_info@cm_storage"},"guid":"d278a804-5ccf-4780-9e69-a335f3b40449","displayText":"experiments.movies_info@cm_storage","isIncomplete":false},"operationType":"ENTITY_CREATE","eventTime":1619751227966}}
+{"version":{"version":"1.0.0","versionParts":[1]},"msgCompressionKind":"NONE","msgSplitIdx":1,"msgSplitCount":1,"msgSourceIP":"172.27.79.198","msgCreatedBy":"","msgCreationTime":1619751228672,"message":{"type":"ENTITY_NOTIFICATION_V2","entity":{"typeName":"hive_column","attributes":{"owner":"impala","qualifiedName":"experiments.movies_info.id@cm","name":"id"},"guid":"2237918c-9154-4725-bfc4-30b9d82cbddd","displayText":"id","isIncomplete":false},"operationType":"ENTITY_CREATE","eventTime":1619751227966}}
+{"version":{"version":"1.0.0","versionParts":[1]},"msgCompressionKind":"NONE","msgSplitIdx":1,"msgSplitCount":1,"msgSourceIP":"172.27.79.198","msgCreatedBy":"","msgCreationTime":1619751228672,"message":{"type":"ENTITY_NOTIFICATION_V2","entity":{"typeName":"hive_column","attributes":{"owner":"impala","qualifiedName":"experiments.movies_info.name@cm","name":"name"},"guid":"5bd95220-5af0-4a94-947e-273095393778","displayText":"name","isIncomplete":false},"operationType":"ENTITY_CREATE","eventTime":1619751227966}}
+{"version":{"version":"1.0.0","versionParts":[1]},"msgCompressionKind":"NONE","msgSplitIdx":1,"msgSplitCount":1,"msgSourceIP":"172.27.79.198","msgCreatedBy":"","msgCreationTime":1619751228672,"message":{"type":"ENTITY_NOTIFICATION_V2","entity":{"typeName":"hive_column","attributes":{"owner":"impala","qualifiedName":"experiments.movies_info.genre@cm","name":"genre"},"guid":"1cb51038-ed2f-405b-8b55-7d136b8d6336","displayText":"genre","isIncomplete":false},"operationType":"ENTITY_CREATE","eventTime":1619751227966}}
+{"version":{"version":"1.0.0","versionParts":[1]},"msgCompressionKind":"NONE","msgSplitIdx":1,"msgSplitCount":1,"msgSourceIP":"172.27.79.198","msgCreatedBy":"","msgCreationTime":1619751228672,"message":{"type":"ENTITY_NOTIFICATION_V2","entity":{"typeName":"hive_db","attributes":{"owner":"impala","qualifiedName":"experiments@cm","clusterName":"cm","name":"experiments"},"guid":"06146bc1-a631-4f9d-8d0c-f1c7b71a9c0a","status":"ACTIVE","displayText":"experiments","isIncomplete":false},"operationType":"ENTITY_UPDATE","eventTime":1619751227966}}
+^C21/04/30 02:54:18 INFO internals.ConsumerCoordinator: [Consumer clientId=consumer-console-consumer-29807-1, groupId=console-consumer-29807] Revoke previously assigned partitions ATLAS_ENTITIES-0
+21/04/30 02:54:18 INFO internals.AbstractCoordinator: [Consumer clientId=consumer-console-consumer-29807-1, groupId=console-consumer-29807] Member consumer-console-consumer-29807-1-d9143306-5fc3-41c4-85f0-8232b6b79594 sending LeaveGroup request to coordinator pravin-3.pravin.root.hwx.site:9093 (id: 2147483579 rack: null) due to the consumer is being closed
+21/04/30 02:54:18 WARN kerberos.KerberosLogin: [Principal=kafka/pravin-1.pravin.root.hwx.site@ROOT.HWX.SITE]: TGT renewal thread has been interrupted and will exit.
+Processed a total of 6 messages
+[ro
+
+
+[root@pravin-3 lineage]# #tailf impala_lineage_log_1.0-1618308657670
+[root@pravin-3 lineage]# pwd
+/var/log/impalad/lineage
+
+{"queryText":"CREATE TABLE MOVIES_INFO ( id int, name varchar(50), genre string )","queryId":"8240ff9777868c61:9bde95c300000000","hash":"d1c8f558a067a35a603b2e90904ccbc4","user":"impala/pravin-2.pravin.root.hwx.site@ROOT.HWX.SITE","timestamp":1619751227,"endTime":1619751227,"edges":[],"vertices":[]}
+
+
+
+```
 1. https://community.hortonworks.com/articles/81680/atlas-tag-based-searches-utilizing-the-atlas-rest.html 
 2. https://community.hortonworks.com/articles/39759/list-atlas-tags-and-traits.html 
 3. https://community.hortonworks.com/articles/58220/howto-install-and-configure-high-availability-on-a.html 
