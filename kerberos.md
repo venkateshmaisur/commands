@@ -299,3 +299,33 @@ max_life = 1d 0h 0m 0s
 max_renewable_life = 7d 0h 0m 0s
 
 ```
+
+## Custom krb5.conf in cdp
+```
+1. Created the krb5.conf under $JAVA_HOME/jre/lib/security on all the nodes
+2. Updated Cloudera Manager's environment variables:
+
+In /etc/default/cloudera-scm-server we changed the following default:
+export CMF_JAVA_OPTS="-Xmx2G -XX:MaxPermSize=256m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp"
+to
+export CMF_JAVA_OPTS="-Xmx2G -XX:MaxPermSize=256m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp -Djava.security.krb5.conf=/usr/java/jdk1.8.0_181-cloudera/jre/lib/security/cloudera_krb5.conf"
+
+3. Updated the Agent's environment variables:
+
+In /etc/default/cloudera-scm-agent we added the following on a new line: CMF_AGENT_KRB5_CONFIG=/usr/java/jdk1.8.0_181-cloudera/jre/lib/security/cloudera_krb5.conf
+
+4. Then we updated the following under 'Advanced Java Configuration' for each of the services
+
+-Djava.security.krb5.conf=/usr/java/jdk1.8.0_181-cloudera/jre/lib/security/cloudera_krb5.conf
+
+5. Then restarted Zookeeper service and it came right up
+
+6. Then restarting the HDFS services, the following roles did not start : NameNode, Failover controllers etc. So we added the following line [****] to this file: /opt/cloudera/parcels/CDH-6.3.0-1.cdh6.3.0.p0.1279813/meta/cdh_env.sh
+[****] export KRB5_CONFIG=/usr/java/jdk1.8.0_181-cloudera/jre/lib/security/cloudera_krb5.conf
+
+7. Then the HDFS roles started but the RPC communication failed on both the NameNodes. So we added the following to the Safety Value 'Environment Variable' section:
+HADOOP_OPTS="-Djava.security.krb5.conf=/usr/java/jdk1.8.0_181-cloudera/jre/lib/security/cloudera_krb5.conf"
+
+8. Finally, running the hdfs command failed with the error regarding TGT missing and we resolved that by export this variable which may need to be set at user profile
+export HADOOP_OPTS="-Djava.security.krb5.conf=/usr/java/jdk1.8.0_181-cloudera/jre/lib/security/cloudera_krb5.conf"
+```
