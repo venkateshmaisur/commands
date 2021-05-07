@@ -827,3 +827,17 @@ Save and restart the service.
 
 Please attach the Usersync and Ranger admin logs.
 ```
+
+### Usersync ssl debug in cdp
+
+```
+CM -> Ranger -> configuration -> search for "Ranger Usersync Environment Advanced Configuration Snippet (Safety Valve)"
+Key   = CSD_JAVA_OPTS
+value = -Djavax.net.debug=ssl
+Save and restart Usersync service.
+Get the latest process dir output:
+
+export RANGER_USERSYNC_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*RANGER_USERSYNC| tail -1) 
+env GZIP=-9 tar -cvzf ranger-usersync.tar.gz $RANGER_USERSYNC_PROCESS_DIR 
+```
+
