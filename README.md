@@ -327,19 +327,13 @@ export CMF_JAVA_OPTS="-Xmx2G -XX:MaxPermSize=256m -XX:+HeapDumpOnOutOfMemoryErro
 2. Install openldap services:
 sudo yum -y install openldap-clients ca-certificates
 
-3. Add your AD certificate to your hosts:
- openssl s_client -connect <AD-hostname>:636 <<<'' | openssl x509 -out /etc/pki/ca-trust/source/anchors/ad01.crt
+Add your AD certificate to your hosts:
   openssl s_client -connect <AD-hostname>:636 <<<'' | openssl x509 -out /etc/pki/tls/cert.pem
-
-4.Update catrust certificates:
-sudo update-ca-trust force-enable
-sudo update-ca-trust extract
-sudo update-ca-trust check
-
-5) Add your ad server to be trusted:
+Add your ad server to be trusted:
 
 sudo tee -a /etc/openldap/ldap.conf > /dev/null << EOF
 TLS_CACERT /etc/pki/tls/cert.pem
+TLS_REQCERT never
 URI ldaps://<AD-hostname> ldap://<AD-hostname>
 BASE <searchbase >
 EOF
@@ -347,4 +341,11 @@ EOF
 6) Test connection to AD using openssl client:
 openssl s_client -connect <AD-hostname>:636 </dev/null
 
+```
+
+```
+echo "TLS_REQCERT never" > /tmp/cm_ldaptest
+echo 'sasl_secprops minssf=0,maxssf=0' >> /tmp/cm_ldaptest
+export LDAPCONF=/tmp/cm_ldaptest
+ldapsearch -x -D "test1@SUPPORT.COM"  -H "ldap://10.113.243.16:389" -b "DC=support,DC=com" -w 'hadoop12345!' '(cn=support)'
 ```
