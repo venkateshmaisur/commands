@@ -1,5 +1,5 @@
 ## Apache Loadbalancer
-
+# https://docs.cloudera.com/HDPDocuments/HDP3/HDP-3.1.5/fault-tolerance/content/configuring_ranger_admin_ha_with_ssl.html
 #/bin/bash
 cd /usr/local
 wget https://archive.apache.org/dist/httpd/httpd-2.4.16.tar.gz
