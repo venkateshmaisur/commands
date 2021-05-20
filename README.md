@@ -110,6 +110,7 @@ tshark -r /var/tmp/ldap.pcap -V
 tshark -r /var/tmp/ldap.pcap  -frame == 7
 
 tshark -i any -d tcp.port==88,kerberos -R kerberos -nVXs0
+tshark -i any -d tcp.port==7182,ssl -R ssl -nVXs0 | tee /tmp/ssldebug.log
 
 -i interface (an interface argument of ‘‘any’’)
 -n Don’t convert host addresses to names.
