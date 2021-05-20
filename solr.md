@@ -473,7 +473,8 @@ su solr
 kinit -kt /etc/security/keytabs/solr.service.keytab solr/`hostname -f`
 /usr/cloudera-hdp-solr/5.0.0.5-301/cloudera-hdp-solr/solr/server/scripts/cloud-scripts/zkcli.sh -zkhost c174-node4.squadron.support.hortonworks.com:2181/solr -cmd upconfig -confdir /usr/hdp/current/atlas-server/conf/solr -confname atlas_configs
 ```
-4. Create all 3 collections manually:
+4. Create all 3 collections manually
+
 ```
 curl -k --negotiate -u : "http://$(hostname -f):8983/solr/admin/collections?action=create&name=vertex_index&numShards=1&replicationFactor=1&collection.configName=atlas_configs&async=1010"
 
