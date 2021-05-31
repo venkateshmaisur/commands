@@ -92,6 +92,20 @@ export HIVE_CONF_DIR=/usr/hdp/current/hive-client/conf
 /usr/hdp/current/atlas-server/hook-bin/import-hive.sh
 ```
 
+### cdp import script
+```
+Login into Hbase node:
+export ATLAS_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*ATLAS_SERVER | tail -1)
+kinit -kt $ATLAS_PROCESS_DIR/atlas.keytab atlas/`hostname -f`
+
+**Note**
+# set JAVA_HOME if not set
+# Make sure atlas service user has access to atlas policy for "update-entity"
+
+#run:
+/opt/cloudera/parcels/CDH//lib/atlas/hook-bin/import-hbase.sh
+```
+
 ```bash
 /bin/bash /usr/hdp/current/atlas-server/hook-bin/import-hive.sh -Dsun.security.jgss.debug=true -Djavax.security.auth.useSubjectCredsOnly=false -Djava.security.auth.login.config=/etc/atlas/conf/atlas_jaas.conf
 ```
