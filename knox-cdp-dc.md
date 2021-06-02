@@ -352,3 +352,57 @@ Save and restart Knox
 ```
 <property><name>gateway.group.config.hadoop.security.group.mapping.ldap.bind.user</name><value>uid=guest,ou=people,dc=hadoop,dc=apache,dc=org</value></property><property><name>gateway.group.config.hadoop.security.group.mapping.ldap.bind.password</name><value>guest-password</value></property><property><name>gateway.group.config.hadoop.security.group.mapping.ldap.url</name><value>ldap://localhost:33389</value></property><property><name>gateway.group.config.hadoop.security.group.mapping.ldap.base</name><value></value></property><property><name>gateway.group.config.hadoop.security.group.mapping.ldap.search.filter.user</name><value>(|(objectclass=person)(objectclass=applicationProcess))(cn={0})</value></property><property><name>gateway.group.config.hadoop.security.group.mapping.ldap.search.filter.group</name><value>(objectclass=groupOfNames)</value></property><property><name>gateway.group.config.adoop.security.group.mapping.ldap.search.attr.member</name><value>member</value></property><property><name>gateway.group.config.hadoop.security.group.mapping.ldap.search.attr.group.name</name><value>cn</value></property>
 ```
+
+####. modify homepage descriptor
+```
+After checking, found, we are hitting https://jira.cloudera.com/browse/OPSAPS-58747 (Internal jira)
+- As per the jira we should have KNOX-METADATA, KNOXSSOUT, and KNOX-SESSSION in the homepage topology
+
+#############################################
+- We followed below steps to resolve this issue:
+
+1. Stop the knox service from CM UI
+2. Go to CSD directory, /opt/cloudera/cm/csd/
+3. Take a backup of KNOX_C715-7.2.4.jar 
+4. Read the jar
+
+#/usr/lib/jvm/latest/bin/jar -tvf /opt/cloudera/cm/csd/KNOX_C715-7.2.4.jar | grep -i homepage
+
+5. Extract the homepage.json file, 
+
+#/usr/lib/jvm/latest/bin/jar -xvf /opt/cloudera/cm/csd/KNOX_C715-7.2.4.jar aux/descriptors/homepage.json
+
+6. Modify homepage.json file like below:
+
+vi aux/descriptors/homepage.json
+{
+"provider-config-ref": "homepage",
+"services": [
+{
+"name": "KNOX-METADATA"
+},
+{
+"name": "KNOXSSOUT"
+},
+{
+"name": "KNOX-SESSION"
+}
+],
+"applications": [
+{
+"name": "home"
+}
+]
+
+7. update the jar again:
+#/usr/lib/jvm/latest/bin/jar -uvf /opt/cloudera/cm/csd/KNOX_C715-7.2.4.jar aux/descriptors/homepage.json
+
+8. Restart cm server
+#systemctl restart cloudera-scm-server
+
+9. Start the knox service from CM UI
+#############################################
+
+
+- Knox UI is up and running properly
+```
