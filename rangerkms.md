@@ -55,3 +55,39 @@ Connection: close
 ++++++++++++++++
 
 ```
+
+##### using knox
+```
+
+[root@pbhagade-2 ~]# curl -i -k -u pravin:Welcome -L -X GET "https://pbhagade-1.pbhagade.root.hwx.site:8443/gateway/cdp-proxy-api/webhdfs/v1/enczone1/myfile.txt?op=OPEN"
+HTTP/1.1 307 Temporary Redirect
+Date: Fri, 04 Jun 2021 08:58:23 GMT
+Set-Cookie: KNOXSESSIONID=node01xjcgkvgrcnj41phhtrhopvijv6.node0; Path=/gateway/cdp-proxy-api; Secure; HttpOnly
+Expires: Thu, 01 Jan 1970 00:00:00 GMT
+Set-Cookie: rememberMe=deleteMe; Path=/gateway/cdp-proxy-api; Max-Age=0; Expires=Thu, 03-Jun-2021 08:58:26 GMT; SameSite=lax
+Date: Fri, 04 Jun 2021 08:58:26 GMT
+Cache-Control: no-cache
+Expires: Fri, 04 Jun 2021 08:58:26 GMT
+Date: Fri, 04 Jun 2021 08:58:26 GMT
+Pragma: no-cache
+X-Content-Type-Options: nosniff
+X-FRAME-OPTIONS: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Location: https://pbhagade-1.pbhagade.root.hwx.site:8443/gateway/cdp-proxy-api/webhdfs/data/v1/webhdfs/v1/enczone1/myfile.txt?_=AAAACAAAABAAAAEAbF5ZpS5ynU0G49zfU4Iqg2yA7qy_dVIMi0C7tLYzLBxJ89uVL8_m5iLYuJyoJRS9kThMXoH_kdWI8yengOXGBLfBtVnUn2lHFsVNrpqOZBUNKcexiDSXFza6RG1xXdtpfFU0lBJb2OrOAdbltymyGUHqQQKKn5hvIgq7LCrrHoOrNKK3DS4ojsHRdDFUQaLEENSxFBoceDNeG3D9wU9wDTZndHu71FFpKmCZaWEnPbvnZfJufW2b5aAbVcKG_EabS-L1HY6_T6EQQu4_GVKfZ8bv57L2rZWapxOpLZLlD0IGtPBxJBXx2khFKhD_o9qUHqw2afoGYc1d6C_wv5iLuRvANFSKv0Pb3qMkp0a1QHXOPxL2uf-GbA
+Content-Type: application/octet-stream
+Content-Length: 0
+
+HTTP/1.1 200 OK
+Date: Fri, 04 Jun 2021 08:58:26 GMT
+Set-Cookie: KNOXSESSIONID=node0smxh8z2pvdut1osd0gwpftudo7.node0; Path=/gateway/cdp-proxy-api; Secure; HttpOnly
+Expires: Thu, 01 Jan 1970 00:00:00 GMT
+Set-Cookie: rememberMe=deleteMe; Path=/gateway/cdp-proxy-api; Max-Age=0; Expires=Thu, 03-Jun-2021 08:58:28 GMT; SameSite=lax
+Access-Control-Allow-Methods: GET
+Access-Control-Allow-Origin: *
+Content-Type: application/octet-stream
+Connection: close
+Content-Length: 10
+
+Hello TDE
+[root@pbhagade-2 ~]#
+```
