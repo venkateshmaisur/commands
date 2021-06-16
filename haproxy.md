@@ -176,3 +176,97 @@ local2.* /var/log/haproxy.log
 
 
 
+
+### Ycloud haproxy sample file
+```bash
+-rw-rw-r-- 1 systest systest 2862 Jun 16 04:59 hs2-haproxy.cfg.template
+-rw-rw-r-- 1 systest systest 1022 Jun 16 05:03 5088_ranger-haproxy.cfg.template
+-rw-rw-r-- 1 systest systest 1085 Jun 16 05:03 solr-haproxy.cfg.template
+-rw-rw-r-- 1 systest systest 7073 Jun 16 05:03 haproxy.cfg
+[root@pbhagade-1 haproxy]# cat solr-haproxy.cfg.template
+#---------------------------------------------------------------------
+# Solr frontend which proxys to the Solr backends
+#---------------------------------------------------------------------
+frontend                        solr_front
+    bind                        *:5001 ssl crt /var/lib/cloudera-scm-agent/agent-cert/cdep-host_key_cert_chain_decrypted.pem
+    default_backend             solr
+
+#---------------------------------------------------------------------
+# round robin balancing between the various backends
+#---------------------------------------------------------------------
+backend solr
+    balance                     roundrobin
+    server solr1 pbhagade-1.pbhagade.root.hwx.site:8995/solr check ssl ca-file /var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_cacerts.pem
+    server solr2 pbhagade-2.pbhagade.root.hwx.site:8995/solr check ssl ca-file /var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_cacerts.pem
+    server solr3 pbhagade-3.pbhagade.root.hwx.site:8995/solr check ssl ca-file /var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_cacerts.pem
+
+[root@pbhagade-1 haproxy]# cat 5088_ranger-haproxy.cfg.template
+#---------------------------------------------------------------------
+# Ranger frontend which proxies to the Ranger backends
+#---------------------------------------------------------------------
+frontend                        ranger_front_5088
+    bind                        *:5088 ssl crt /var/lib/cloudera-scm-agent/agent-cert/cdep-host_key_cert_chain_decrypted.pem
+    default_backend             ranger_5088
+
+#---------------------------------------------------------------------
+# round robin balancing between the various backends
+#---------------------------------------------------------------------
+backend ranger_5088
+    balance                     roundrobin
+    cookie SERVERID insert indirect nocache
+    server ranger1 pbhagade-2.pbhagade.root.hwx.site:6182 check ssl ca-file /var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_cacerts.pem cookie 1
+    server ranger2 pbhagade-1.pbhagade.root.hwx.site:6182 check ssl ca-file /var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_cacerts.pem cookie 2
+
+[root@pbhagade-1 haproxy]# cat hs2-haproxy.cfg.template
+#---------------------------------------------------------------------
+# main frontend which proxys to the backends
+#---------------------------------------------------------------------
+frontend  hiveserver2_front
+    bind                        *:10015 ssl crt /var/lib/cloudera-scm-agent/agent-cert/cdep-host_key_cert_chain_decrypted.pem
+    mode                        tcp
+    option                      tcplog
+    default_backend             hiveserver2
+
+#---------------------------------------------------------------------
+# round robin balancing between the various backends
+#---------------------------------------------------------------------
+# This is the setup for HS2. beeline client connect to load_balancer_host:load_balancer_port.
+# HAProxy will balance connections among the list of servers listed below.
+backend hiveserver2
+    balance                     roundrobin
+    mode                        tcp
+    server hiveserver2_1 pbhagade-3.pbhagade.root.hwx.site:10001 ssl ca-file /var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_cacerts.pem check
+    server hiveserver2_2 pbhagade-1.pbhagade.root.hwx.site:10001 ssl ca-file /var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_cacerts.pem check
+
+
+# Setup for Hue or other JDBC-enabled applications.
+# In particular, Hue requires sticky sessions.
+# The application connects to load_balancer_host:10016 ssl crt /var/lib/cloudera-scm-agent/agent-cert/cdep-host_key_cert_chain_decrypted.pem, and HAProxy balances
+# connections to the associated hosts, where Hive listens for JDBC
+# requests on port 10015 ssl crt /var/lib/cloudera-scm-agent/agent-cert/cdep-host_key_cert_chain_decrypted.pem.
+#---------------------------------------------------------------------
+# main frontend which proxys to the backends
+#---------------------------------------------------------------------
+frontend  hivejdbc_front
+    bind                        *:10016 ssl crt /var/lib/cloudera-scm-agent/agent-cert/cdep-host_key_cert_chain_decrypted.pem
+    mode                        tcp
+    option                      tcplog
+    stick                       match src
+    stick-table type ip size 200k expire 30m
+    default_backend             hivejdbc
+
+#---------------------------------------------------------------------
+# source balancing between the various backends
+#---------------------------------------------------------------------
+# HAProxy will balance connections among the list of servers listed below.
+backend hivejdbc
+    balance                     source
+    mode                        tcp
+    server hiveserver2_1 pbhagade-3.pbhagade.root.hwx.site:10001 ssl ca-file /var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_cacerts.pem check
+    server hiveserver2_2 pbhagade-1.pbhagade.root.hwx.site:10001 ssl ca-file /var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_cacerts.pem check
+```
+
+
+
+
+
