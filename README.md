@@ -350,3 +350,33 @@ echo 'sasl_secprops minssf=0,maxssf=0' >> /tmp/cm_ldaptest
 export LDAPCONF=/tmp/cm_ldaptest
 ldapsearch -x -D "test1@SUPPORT.COM"  -H "ldap://10.113.243.16:389" -b "DC=support,DC=com" -w 'hadoop12345!' '(cn=support)'
 ```
+
+#### Kerberos debug
+
+
+```
++++++
+-> Enable debug in HDFS to capture kerberos issue
+Goto CM UI -> HDFS -> Configuration -> HDFS Service Environment Advanced Configuration Snippet (Safety Valve)
+
++++
+key = HADOOP_JAAS_DEBUG
+Value = true
+
+Key = HADOOP_OPTS
+Value = -Dsun.security.krb5.debug=true
+
+For Hive
+++++
+Goto CM -> Hive -> Configuration -> Hive on Tez Service Environment Advanced Configuration Snippet (Safety Valve)
+Set:
+
+Key    = HADOOP_OPTS
+Value  = -Dsun.security.krb5.debug=true
+
+export NAMENODE_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*hdfs-NAMENODE | tail -1)
+env GZIP=-9  tar -cvzf hdfs.tar.gz $NAMENODE_PROCESS_DIR /var/log/hadoop-hdfs/hadoop-cmf*
+
+export HIVESERVER2_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*hive_on_tez-HIVESERVER2 | tail -1)
+tar -cvzf hive.tar.gz $HIVESERVER2_PROCESS_DIR 
+```
