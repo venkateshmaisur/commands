@@ -112,6 +112,10 @@ tshark -r /var/tmp/ldap.pcap  -frame == 7
 tshark -i any -d tcp.port==88,kerberos -R kerberos -nVXs0
 tshark -i any -d tcp.port==7182,ssl -R ssl -nVXs0 | tee /tmp/ssldebug.log
 
+ tshark -r krb.pcap -Y 'udp.port==88'
+
+ $ tshark -r krb.pcap -Y 'udp.port==88'  -R 'frame.number==17' -O kerberos
+
 -i interface (an interface argument of ‘‘any’’)
 -n Don’t convert host addresses to names.
 -vvv Even more verbose output
