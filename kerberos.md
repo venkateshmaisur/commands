@@ -329,3 +329,14 @@ HADOOP_OPTS="-Djava.security.krb5.conf=/usr/java/jdk1.8.0_181-cloudera/jre/lib/s
 8. Finally, running the hdfs command failed with the error regarding TGT missing and we resolved that by export this variable which may need to be set at user profile
 export HADOOP_OPTS="-Djava.security.krb5.conf=/usr/java/jdk1.8.0_181-cloudera/jre/lib/security/cloudera_krb5.conf"
 ```
+
+```
+
+RULE:[1:$1@$0](.*@PRAVIN.COM)s/@.*//
+
+By default, translations based on rules are done maintaining the case of the input principal. For example, given the rule
+
+RULE:[1:$1@$0](.*@EXAMPLE.COM)s/@.*//
+
+If the source string is ambari-qa@EXAMPLE.COM, the result is ambari-qa
+```
