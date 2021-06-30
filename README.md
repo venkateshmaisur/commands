@@ -102,14 +102,17 @@ tcpdump -ni any -nvvvXSs 4096 host localhost and port 8443 -w knox.pcap
 tcpdump -ni any -nvvvXSs 4096 host sme-2012-ad.support.com and port 636 -w tcpdump.pcap
 tcpdump -ni any -nvvvXSs 4096 host <host> and port 636 -w tcpdump.pcap
 
-tcpdump -i eth0 -w /var/tmp/ldap3.pcap port 389 &
-tcpdump -i any -tttt -w /var/tmp/ldap.pcap port 389 &
+tcpdump -i eth0 -w /tmp/ldap3.pcap port 389 &
+tcpdump -i any -tttt -w /tmp/ldap.pcap port 389 &
+
+tcpdump -i any -tttt -w /tmp/krb.pcap port 88 &
 
 tshark -r /var/tmp/ldap.pcap
 tshark -r /var/tmp/ldap.pcap -V
 tshark -r /var/tmp/ldap.pcap  -frame == 7
 
 tshark -i any -d tcp.port==88,kerberos -R kerberos -nVXs0
+tshark -i any -d tcp.port==88,kerberos -R kerberos -nVXs0  | tee /tmp/krbdebug.log
 tshark -i any -d tcp.port==7182,ssl -R ssl -nVXs0 | tee /tmp/ssldebug.log
 
  tshark -r krb.pcap -Y 'udp.port==88'
