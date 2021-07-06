@@ -387,3 +387,22 @@ env GZIP=-9  tar -cvzf hdfs.tar.gz $NAMENODE_PROCESS_DIR /var/log/hadoop-hdfs/ha
 export HIVESERVER2_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*hive_on_tez-HIVESERVER2 | tail -1)
 tar -cvzf hive.tar.gz $HIVESERVER2_PROCESS_DIR 
 ```
+
+
+#### CDP DAS LDAP setup
+```
+data_analytics_studio_user_authentication  LDAP
+das_webapp_ldap_url ldap://10.113.243.16:389
+das_webapp_ldap_basedn OU=hortonworks,DC=SUPPORT,DC=COM
+das_webapp_ldap_user_dn_pattern CN=%s,OU=squadron_users,OU=users,OU=hortonworks,DC=SUPPORT,DC=COM
+das_webapp_ldap_group_dn_pattern CN=%s,OU=groups,OU=hortonworks,DC=SUPPORT,DC=COM
+das_webapp_ldap_domain support.com
+das_webapp_ldap_guid_key cn
+das_webapp_ldap_group_class_key objectClass: group
+das_webapp_ldap_group_membership_key member
+das_webapp_ldap_user_membership_key memberOf
+
+das_webapp_ldap_custom_ldap_query
+das_webapp_ldap_group_filter 
+das_webapp_ldap_user_filter 
+```
