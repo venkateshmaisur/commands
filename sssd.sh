@@ -10,7 +10,7 @@
 
 AD_USER="test1"
 AD_DOMAIN="support.com"
-AD_DC="sme-2012-ad.support.com"
+AD_DC="ad-support-01.SUPPORT.COM"
 AD_ROOT="dc=support,dc=com"
 AD_OU="dc=support,dc=com"
 AD_REALM=${AD_DOMAIN^^}
