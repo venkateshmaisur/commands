@@ -274,3 +274,17 @@ Ambari success logging:
 
 
 ```
+
+```
+   May i know what is the default heap memory for Knox ?
+>> Knox by default doesnt have a default heap settings, process will start requesting memory for OS based on the need(which is unreserved for knox). If OS cannot allocate memory knox will not be able to get heap and will fail with heap issue if such condition arises. 
+
+
+        Also, please let me know if this the fix for "InvalidOperation Handle " or "Invalid Session handle" ?
+>> InvalidOperation and InvalidSession are caused because of the failover by knox to different HS2 , which we see is caused after 15mins timeout on  queries executed by user.  Based on the logs, java heap issue and timeout issue on HS2s occurred at same time.
+
+Addressing knox heap issue can help but without monitoring we cannot confirm, as this could have caused by queries submitted by user, which is taking more than 15mins of compile time. 
+
+
+Heap config is calculated based on number of simultaneous users and if that is not possible to find, a good start would be to set knox heap size to 4GB.
+```
