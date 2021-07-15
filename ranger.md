@@ -45,6 +45,20 @@ ranger.ldap.ad.referral = ignore
 ranger.ldap.ad.user.searchfilter = (&(sAMAccountName={0})(memberOf=CN=support,OU=groups,OU=hortonworks,DC=SUPPORT,DC=COM))
 
 ```
+## CDP Ranger LDAP authentication
+```
+ranger.authentication.method     LDAP
+ranger.ldap.url 				ldap://10.17.103.192:389
+ranger.ldap.bind.dn 	        cn=Manager,dc=pravin,dc=com
+ranger.ldap.bind.password       
+ranger.ldap.user.dnpattern      uid={0},ou=users,dc=pravin,dc=com
+ranger.ldap.user.searchfilter   uid={0}
+ranger.ldap.group.searchbase    ou=groups,dc=pravin,dc=com
+ranger.ldap.group.searchfilter
+ranger.ldap.group.roleattribute
+ranger.ldap.base.dn       	    dc=pravin,dc=com
+ranger.ldap.referral 			ignore
+```
 
 ## CDP Ranger Usersync AD
 
