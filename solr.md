@@ -539,6 +539,18 @@ curl -ik --negotiate -u: "https://pravin-1.pravin.root.hwx.site:8995/solr/ranger
   ```
   
  ```
+  1. SSH to a Solr server node
+2. ls -lrt /var/run/cloudera-scm-agent/process/|grep solr-SOLR_SERVER|tail -1
+3. cd to the directory obtained in step 2
+4. kinit solr/$(hostname -f) -kt solr.keytab
+5. solrctl instancedir --get ranger_audits /tmp/ranger_audits
+6. vim /tmp/ranger_audits/config/solrconfig.xml, find and edit the following content
+       <str name="fieldName">_ttl_</str>
+       <str name="value">+90DAYS</str>
+Change the default 90 days to the number of days you want to keep
+7. Update configuration: solrctl --jaas jaas.conf instancedir --update ranger_audits /tmp/ranger_audits
+8. Reload: solrctl collection --reload ranger_audits
+9. Restart the solr service
   curl -k --negotiate -u : "http://$(hostname -f):8993/solr/ranger_audits/select?q=*%3A*&wt=json&ident=true&rows=1&sort=evtTime+desc"
  ```
 
