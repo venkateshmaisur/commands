@@ -287,10 +287,7 @@ Addressing knox heap issue can help but without monitoring we cannot confirm, as
 
 
 Heap config is calculated based on number of simultaneous users and if that is not possible to find, a good start would be to set knox heap size to 4GB.
-```
 
-If they attach correct HS2 logs check for
-grep 'Completed compiling' hiveserver2.log*  | awk -F' ' '{print $(NF-1)}' | sort -nr | head -10
 
 
 
