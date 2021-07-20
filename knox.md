@@ -288,3 +288,25 @@ Addressing knox heap issue can help but without monitoring we cannot confirm, as
 
 Heap config is calculated based on number of simultaneous users and if that is not possible to find, a good start would be to set knox heap size to 4GB.
 ```
+
+If they attach correct HS2 logs check for
+grep 'Completed compiling' hiveserver2.log*  | awk -F' ' '{print $(NF-1)}' | sort -nr | head -10
+
+
+
+
+```
+ HS2 logs check for
+ 
+grep 'Completed compiling' hiveserver2.log*  | awk -F' ' '{print $(NF-1)}' | sort -nr | head -10
+
+that should give query time
+
+and
+
+ grep 409.116 hiveserver2.log* | grep completed -i
+hiveserver2.log.2021-07-19_1:2021-07-19T00:36:58,215 INFO  [35bf3600-a114-4379-87ce-5491b3a93d80 HiveServer2-HttpHandler-Pool: Thread-2792874]: ql.Driver (:()) - Completed compiling command(queryId=hive_20210719003009_c5f1f15c-cf14-46cb-9e74-bfd645406dfc); Time taken: 409.116 seconds
+
+
+to find the queryId
+```
