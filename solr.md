@@ -514,6 +514,33 @@ kinit
 curl -ik --negotiate -u: "https://pravin-1.pravin.root.hwx.site:8995/solr/ranger_audits/select?q=repo%3Acm_hive%20reqUser%3Ahive%20resource%3Adefault"
 ```
 
+### CDP solr TTL
+7.1.6
+```
+<!-- The update.autoCreateFields property can be turned to false to disable schemaless mode -->
+  <updateRequestProcessorChain name="add-unknown-fields-to-the-schema" default="${update.autoCreateFields:true}"
+           processor="uuid,remove-blank,field-name-mutating,parse-boolean,parse-long,parse-double,parse-date,add-schema-fields">
+    <processor class="solr.DefaultValueUpdateProcessorFactory">
+    	<str name="fieldName">_ttl_</str>
+    	<str name="value">+90DAYS</str>
+    </processor>
+    <processor class="solr.processor.DocExpirationUpdateProcessorFactory">
+    	<int name="autoDeletePeriodSeconds">86400</int>
+    	<str name="ttlFieldName">_ttl_</str>
+    	<str name="expirationFieldName">_expire_at_</str>
+    </processor>
+    <processor class="solr.FirstFieldValueUpdateProcessorFactory">
+    	<str name="fieldName">_expire_at_</str>
+    </processor>
+    <processor class="solr.LogUpdateProcessorFactory"/>
+    <processor class="solr.DistributedUpdateProcessorFactory"/>
+    <processor class="solr.RunUpdateProcessorFactory"/>
+  </updateRequestProcessorChain>
+  ```
+  
+ ```
+  curl -k --negotiate -u : "http://$(hostname -f):8993/solr/ranger_audits/select?q=*%3A*&wt=json&ident=true&rows=1&sort=evtTime+desc"
+ ```
 
 - [Performance Tuning for Ambari Infra](https://docs.hortonworks.com/HDPDocuments/Ambari-2.6.2.0/bk_ambari-operations/content/performance_tuning_for_ambari_infra.html)
 - [Securing Solr Collections with Ranger + Kerberos](https://community.hortonworks.com/articles/15159/securing-solr-collections-with-ranger-kerberos.html)
