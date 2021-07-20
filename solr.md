@@ -538,6 +538,8 @@ curl -ik --negotiate -u: "https://pravin-1.pravin.root.hwx.site:8995/solr/ranger
   </updateRequestProcessorChain>
   ```
   
+ ![CDP SOLR TTL](https://raw.githubusercontent.com/bhagadepravin/commands/master/jpeg/solrttl.png)
+  
  ```
   1. SSH to a Solr server node
 2. ls -lrt /var/run/cloudera-scm-agent/process/|grep solr-SOLR_SERVER|tail -1
