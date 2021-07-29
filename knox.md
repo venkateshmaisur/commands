@@ -307,3 +307,34 @@ hiveserver2.log.2021-07-19_1:2021-07-19T00:36:58,215 INFO  [35bf3600-a114-4379-8
 
 to find the queryId
 ```
+
+
+#### knox oom troubleshooting
+```
+Please set below paratmeter in Knox gateway.sh to generate heapdump when there is OOM.
+
+1.  ADD below parameter for HeapDumpPath
+
+-XX:+PrintClassHistogramBeforeFullGC -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp/
+
+2. When Issue reoccurs again, Please collect below details, before restarting Knox service.
+
+Make sure you update the correct JAVA/_HOME/Path
+
+Login into Knox node:
+
+ps aux | grep knox
+export JAVA_HOME=JAVA_path
+
+Ex: export JAVA_HOME=/usr/jdk64/jdk1.8.0_112
+
+
+
+for i in {1..3}; do sudo -iu knox $JAVA_HOME/bin/jstack -l $(cat /var/run/knox/gateway.pid); sleep 5; done >> /tmp/jstack.out
+/usr/jdk64/jdk1.8.0_112/bin/jmap -heap $(cat /var/run/knox/gateway.pid) > /tmp/jmapheap
+/usr/jdk64/jdk1.8.0_112/bin/jmap -histo:live `cat /var/run/knox/gateway.pid` > /tmp/jmaplive
+( date;set -x;hostname -A;uname -a;top -b -n 4 -c -H -p $(cat /var/run/knox/gateway.pid);ps auxwwwf;netstat -aopen  |grep $(cat /var/run/knox/gateway.pid);ifconfig ) &>  /tmp/knox_os_cmds.out ; tar czhvf ./knox_$(hostname)_$(date +"%Y%m%d%H%M%S").tgz /tmp/jmapheap  /tmp/jstack.out /tmp/jmapheap /tmp/jmaplive /tmp/java*.hprof /usr/hdp/current/knox-server/conf/ /var/log/knox/gateway.log /var/log/knox/gateway-audit.log 2>/dev/null
+
+attach the tar file
+
+```
