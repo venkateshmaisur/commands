@@ -338,3 +338,10 @@ for i in {1..3}; do sudo -iu knox $JAVA_HOME/bin/jstack -l $(cat /var/run/knox/g
 attach the tar file
 
 ```
+
+##### heapdump
+```
+/usr/java/jdk1.8.0_232-cloudera/bin/jmap -dump:format=b,file=/tmp/heapdump.bin 32467
+
+/usr/java/jdk1.8.0_232-cloudera/bin/jmap -dump:live,format=b,file=/tmp/dump.hprof 32467
+```
