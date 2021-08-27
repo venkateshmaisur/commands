@@ -345,3 +345,67 @@ attach the tar file
 
 /usr/java/jdk1.8.0_232-cloudera/bin/jmap -dump:live,format=b,file=/tmp/dump.hprof 32467
 ```
+
+
+
+
+##### Enable cdp Knox Gc logging
+
+```
+CM UI -> Knox -> Configuration -> Knox Service Environment Advanced Configuration Snippet (Safety Valve)
+Add
+Key   --> KNOX_GATEWAY_MEM_OPTS
+
+value --> -verbose:gc -XX:ParallelGCThreads=8 -XX:+UseConcMarkSweepGC -Xloggc:/var/log/knox/gateway/knox-gc.log -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps
+
+
+* jstack
+switch to root user
+su -s /bin/bash knox
+
+# get the java path and knox pid
+
+ps -ef | grep gateway.jar
+pid => ps -ef | grep gateway.jar | awk '{print $2}'  | head -n 1
+
+/usr/java/jdk1.8.0_232-cloudera/bin/jstack -l <pid> > /tmp/jstack1.out
+
+after 30 sec
+
+/usr/java/jdk1.8.0_232-cloudera/bin/jstack -l 18778 > /tmp/jstack2.out
+
+after 30 sec
+
+/usr/java/jdk1.8.0_232-cloudera/bin/jstack -l 18778 > /tmp/jstack3.out
+
+1. Jstacks :
+---
+#!/bin/bash -x 
+for I in 1 2 3 4 5; do kill -3 `cat /var/run/knox/gateway/gateway.pid `; sleep 5 ; done 
+grep -c 'dump' /var/log/knox/gateway.out 
+--- 
+
+2. System stats :
+---
+# netstat -an | grep 8443 
+# top -c -b -n 3 2>&1 > /tmp/top.txt ( this will capture three iterations for top) 
+# sar -n DEV 2 5 > /tmp/sar.network 
+# for ((i=0 ; i<3 ;i++ )) ; do netstat -s >> /tmp/netstat.stats ; done 
+# free -m > /tmp/free.txt 
+# vmstat 2 5 > /tmp/vmstat.txt 
+
+
+
+When Knox service fails to respond again, collect at least three jstack thread dumps of the Knox java service by running following commands, with gap of at least 30 seconds in between each command, so jstack files can be reviewed for possible threads being blocked.
+
+jstack -l <Knox_PID> > /tmp/knox_jstack#.txt 
+
+Increase Knox JVM Heap size and enable GC logging. Knox Heap size should be set based on user's environment.
+
+Save backup copy of /usr/hdp/current/knox-server/bin/gateway.sh script and update the APP_MEM_OPTS setting in the gateway.sh script, e.g.,
+
+APP_MEM_OPTS="-Xmx5g -XX:NewSize=3G -XX:MaxNewSize=3G -verbose:gc -XX:ParallelGCThreads=8 -XX:+UseConcMarkSweepGC -Xloggc:/var/log/knox/knox-gc.log -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps"
+
+```
+
+
