@@ -406,3 +406,42 @@ das_webapp_ldap_custom_ldap_query
 das_webapp_ldap_group_filter 
 das_webapp_ldap_user_filter 
 ```
+
+
+
+### Process
+```bash
+Please get below configs, Hive, Hue , Kafka
+
+# For Hive: Login into hive_on_tez node
+
+export HIVESERVER2_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*hive_on_tez-HIVESERVER2 | tail -1)
+tar -cvzf hive-config.tar.gz $HIVESERVER2_PROCESS_DIR 
+
+attach hive-config.tar.gz
+
+# For Hue, Login into Hue node
+
+export HUE_SERVER_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*HUE_SERVER | tail -1)
+tar -cvzf hue-config.tar.gz $HUE_SERVER_PROCESS_DIR 
+
+attach hue-config.tar.gz
+
+# For Kafka, Login into anyone Kafka node:
+
+export KAFKA_BROKER_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*KAFKA_BROKER | tail -1)
+tar -cvzf kafka-config.tar.gz $KAFKA_BROKER_PROCESS_DIR 
+
+attach kafka-config.tar.gz
+
+# For Atlas, Login into  atlas node:
+
+export ATLAS_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*ATLAS_SERVER | tail -1)
+ps auxwwf | grep atlas-ATLAS_SERVER > /tmp/atlas-ps.txt
+env GZIP=-9  tar -cvzf atlas.tar.gz $ATLAS_PROCESS_DIR /var/log/atlas/application.log /tmp/atlas-ps.txt
+
+attach atlas.tar.gz
+
+
+
+```
