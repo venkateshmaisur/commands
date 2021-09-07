@@ -712,6 +712,53 @@ Processed a total of 6 messages
 
 
 ```
+
+```
+export KAFKA_BROKER_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*KAFKA_BROKER | tail -1)
+kinit -kt $KAFKA_BROKER_PROCESS_DIR/kafka.keytab kafka/`hostname -f`
+
+cat $KAFKA_BROKER_PROCESS_DIR/jaas.conf
+
+Create a new jaas file: and update the keytab and principal from above jass file
+
+$ vi  /tmp/jaas1.conf
+
+KafkaClient {
+com.sun.security.auth.module.Krb5LoginModule required
+useKeyTab=true
+keyTab="/var/run/cloudera-scm-agent/process/118-kafka-KAFKA_BROKER/kafka.keytab"
+principal="kafka/pravinkms-1.pravinkms.root.hwx.site@ROOT.HWX.SITE";
+};
+
+$ vi  /tmp/client.properties
+sasl.kerberos.service.name=kafka
+security.protocol=SASL_PLAINTEXT
+
+$ export KAFKA_OPTS='-Djava.security.auth.login.config=/tmp/jaas1.conf'
+
+$ kafka-topics --list --bootstrap-server `hostname -f`:9092 --command-config /tmp/client.properties | tee /tmp/kafka-list.log
+
+# Also check the atlas consumer lag:
+$ kafka-consumer-groups --describe --bootstrap-server `hostname -f`:9092 --group atlas --command-config /tmp/client.properties | tee /tmp/kafka-consumer-atlas.log
+
+
+Step 3 # We will also check the ATLAS_ENTITIES
+$ kafka-console-consumer --bootstrap-server  `hostname -f`:9092 --topic ATLAS_ENTITIES --consumer.config /tmp/client.properties | tee /tmp/kafka-ATLAS_ENTITIES.log
+
+Step 4, Open a new terminal Login into atlas node:
+
+tailf /var/log/atlas/application.log  | tee /tmp/atlas-latest.log
+
+try to create a table when you have cmd from "Step 3" running.
+
+connect to beeline:
+create database experiments;
+use experiments;
+create table t1 (x int);
+
+attach /tmp/kafka-list.log, /tmp/kafka-consumer-atlas.log, /tmp/kafka-ATLAS_ENTITIES.log , /tmp/atlas-latest.log
+```
+
 1. https://community.hortonworks.com/articles/81680/atlas-tag-based-searches-utilizing-the-atlas-rest.html 
 2. https://community.hortonworks.com/articles/39759/list-atlas-tags-and-traits.html 
 3. https://community.hortonworks.com/articles/58220/howto-install-and-configure-high-availability-on-a.html 
