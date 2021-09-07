@@ -406,3 +406,45 @@ vi aux/descriptors/homepage.json
 
 - Knox UI is up and running properly
 ```
+
+
+
+```
+role=authentication
+authentication.name=ShiroProvider
+authentication.param.sessionTimeout=30
+authentication.param.redirectToUrl=/${GATEWAY_PATH}/knoxsso/knoxauth/login.html
+authentication.param.restrictedCookies=rememberme,WWW-Authenticate
+authentication.param.urls./**=authcBasic
+authentication.param.main.ldapRealm=org.apache.knox.gateway.shirorealm.KnoxLdapRealm
+authentication.param.main.ldapContextFactory=org.apache.knox.gateway.shirorealm.KnoxLdapContextFactory
+authentication.param.main.ldapRealm.contextFactory=$ldapContextFactory
+authentication.param.main.ldapRealm.contextFactory.authenticationMechanism=simple
+authentication.param.main.ldapRealm.contextFactory.url=ldap://10.113.243.16:389
+authentication.param.main.ldapRealm.contextFactory.systemUsername=test1@SUPPORT.COM
+authentication.param.main.ldapRealm.contextFactory.systemPassword=hadoop12345!
+authentication.param.remove=main.pamRealm
+authentication.param.remove=main.pamRealm.service
+
+
+authentication.param.main.cacheManager=org.apache.knox.gateway.shirorealm.KnoxCacheManager
+authentication.param.main.securityManager.cacheManager=$cacheManager
+authentication.param.main.ldapRealm.authenticationCachingEnabled=true
+authentication.param.main.cacheManager.cacheManagerConfigFile=classpath:ehcache.xml
+
+In the Knox configs for "Knox Simplified Topology Management - API Authentication Provider", please ensure to set,
+"authentication.param.main.cacheManager.cacheManagerConfigFile=classpath:ehcache.xml"
+And it will be reflected as the below in the cdp-proxy-api.xml topology file,
+--------------------
+<param>
+<name>main.cacheManager.cacheManagerConfigFile</name>
+<value>classpath:ehcache.xml</value>
+</param>
+--------------------
+Next, please ensure to place your custom "ehcache.xml" under the path "/opt/cloudera/parcels/CDH-<version>/lib/knox/conf/".
+For example, like the below
+---------
+[root@c4235-node4 topologies]# ls -l /opt/cloudera/parcels/CDH-7.1.3-1.cdh7.1.3.p0.4992530/lib/knox/conf/ehcache.xml
+-rwxr-xr-x 1 root root 347
+
+```
