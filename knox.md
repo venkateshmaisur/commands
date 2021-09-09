@@ -6,7 +6,14 @@
 export KNOX_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*KNOX_GATEWAY | tail -1)
 env GZIP=-9  tar -cvzf knox.tar.gz /var/lib/knox/gateway/conf /var/lib/knox/gateway/data/deployments/cdp-proxy-api* $KNOX_PROCESS_DIR /var/log/knox/gateway/gateway.log /var/log/knox/gateway/gateway-audit.log
 ```
+```
+Please reproduce the issue and execute below commands and attach the knox.tar.gz to the case.
 
+
+export KNOX_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*KNOX_GATEWAY | tail -1)
+export KNOX_GATEWAY_SaveAliasCommand=$(ls -1dtr /var/run/cloudera-scm-agent/process/*KNOX_GATEWAY-SaveAliasCommand | tail -1)
+env GZIP=-9  tar -cvzf knox.tar.gz /var/lib/knox/gateway/conf $KNOX_GATEWAY_SaveAliasCommand  $KNOX_PROCESS_DIR /var/log/knox/gateway/gateway.log /var/log/knox/gateway/knoxcli.log /var/log/knox/gateway/gateway-audit.log /var/lib/knox/gateway/data/security/keystores
+```
 
 ```bash
 echo -n | openssl s_client -connect ${knoxserver}:8443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/knoxcert.crt
