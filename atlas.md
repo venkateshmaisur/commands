@@ -11,6 +11,49 @@ grep -i java_home /etc/hadoop/conf/hadoop-env.sh
 export ATLAS_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*ATLAS_SERVER | tail -1)
 ps auxwwf | grep atlas-ATLAS_SERVER > /tmp/atlas-ps.txt
 env GZIP=-9  tar -cvzf atlas.tar.gz $ATLAS_PROCESS_DIR /var/log/atlas/application.log /tmp/atlas-ps.txt
+
+
++++
+If you dont have any data in atlas hbase tables and solr collecttion, we will delete it and follow recreation steps:
+
+Drop Hbase table:
+
+# Login into HBase node, kinit with hbase keytab
+
+$ hbase shell
+
+disable 'atlas_janus'
+disable 'ATLAS_ENTITY_AUDIT_EVENTS'
+drop 'ATLAS_ENTITY_AUDIT_EVENTS' 
+drop 'atlas_janus'
+
+# Login into Solr node, kinit with solr keytab
+
+# check with available collection, if atlas collection are present delete it.
+solrctl collection  --list
+
+solrctl collection --delete vertex_index
+solrctl collection --delete edge_index
+solrctl collection --delete fulltext_index
+
+Stop Atlas:
+
+1. Goto CM UI -> Altas -> Action -> Create Hbase Table for Atlas
+2. Goto CM UI -> Altas -> Action ->  Initialize Atlas
+
+Restart Atlas service, If it still fail to start, Please collect below details.
+
+
+export ATLAS_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*ATLAS_SERVER | tail -1)
+export ATLAS_SERVER-InitializeAtlasRole=$(ls -1dtr /var/run/cloudera-scm-agent/process/*ATLAS_SERVER-InitializeAtlasRole | tail -1)
+export CREATE_TABLE_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*hbase-create-hbase-tables-for-atlas* | tail -1)
+ps auxwwf | grep atlas-ATLAS_SERVER > /tmp/atlas-ps.txt
+
+env GZIP=-9  tar -cvzf atlas.tar.gz $ATLAS_PROCESS_DIR $ATLAS_SERVER-InitializeAtlasRole $CREATE_TABLE_PROCESS_DIR /var/log/atlas/application.log /tmp/atlas-ps.txt
+
+
+attach atlas.tar.gz
+
 ```
 
 ### Atlas Group mapping issue (Linux + AD)
