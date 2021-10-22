@@ -15,6 +15,29 @@ export KNOX_GATEWAY_SaveAliasCommand=$(ls -1dtr /var/run/cloudera-scm-agent/proc
 env GZIP=-9  tar -cvzf knox.tar.gz /var/lib/knox/gateway/conf $KNOX_GATEWAY_SaveAliasCommand  $KNOX_PROCESS_DIR /var/log/knox/gateway/gateway.log /var/log/knox/gateway/knoxcli.log /var/log/knox/gateway/gateway-audit.log /var/lib/knox/gateway/data/security/keystores
 ```
 
+##### knox ldap
+```bash
+role=authentication
+authentication.name=ShiroProvider
+authentication.param.sessionTimeout=30
+authentication.param.redirectToUrl=/${GATEWAY_PATH}/knoxsso/knoxauth/login.html
+authentication.param.restrictedCookies=rememberme,WWW-Authenticate
+authentication.param.urls./**=authcBasic
+authentication.param.main.ldapRealm=org.apache.knox.gateway.shirorealm.KnoxLdapRealm
+authentication.param.main.ldapContextFactory=org.apache.knox.gateway.shirorealm.KnoxLdapContextFactory
+authentication.param.main.ldapRealm.contextFactory=$ldapContextFactory
+authentication.param.main.ldapRealm.contextFactory.authenticationMechanism=simple
+authentication.param.main.ldapRealm.contextFactory.url=ldap://10.113.243.16:389
+authentication.param.main.ldapRealm.searchBase=DC=SUPPORT,DC=COM
+authentication.param.main.ldapRealm.contextFactory.systemUsername=test1@SUPPORT.COM
+authentication.param.main.ldapRealm.contextFactory.systemPassword=hadoop12345!
+authentication.param.main.ldapRealm.userObjectClass=person
+authentication.param.main.ldapRealm.userSearchAttributeName=sAMAccountName
+authentication.param.main.ldapRealm.userSearchFilter=(&amp;(sAMAccountName={0})(memberOf=CN=support,OU=groups,OU=hortonworks,DC=SUPPORT,DC=COM))
+authentication.param.remove=main.pamRealm
+authentication.param.remove=main.pamRealm.service
+```
+
 ```bash
 echo -n | openssl s_client -connect ${knoxserver}:8443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/knoxcert.crt
 watch -n 1 'netstat -anp | grep `cat /var/run/knox/gateway.pid` | grep ESTABLISHED | wc -l' 
