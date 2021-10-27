@@ -95,3 +95,46 @@ default.key.acl.DECRYPT_EEK=pravin
 
 ADD ->
 key.acl.testkey.DECRYPT_EEK=pravin
+
+
+### How to enable hourly log rotation + zipping for kms logs
+```bash
+Follow be steps on ranger kms host: 
+
+- Find log4j extras jar on the Ranger KMS host (usually included with spark2 pkgs)
+# find /usr/hdp/<version>/ -name apache-log4j-extras-1.2.17.jar
+
+(or download and copy the jar to ranger-kms classpath)
+
+# wget http://apache.mirrors.tds.net/logging/log4j/extras/1.2.17/apache-log4j-extras-1.2.17-bin.zip
+# unzip apache-log4j-extras-1.2.17-bin.zip 
+# cp ./apache-log4j-extras-1.2.17/apache-log4j-extras-1.2.17.jar /usr/hdp/<version>/ranger-kms/ews/webapp/lib/
+
+- Configure log4j as below  Ambari> Ranger KMS > Advanced kms-log4j
+
+log4j.logger=INFO, kms
+log4j.additivity.kms=false
+log4j.rootLogger=INFO, kms
+log4j.logger.org.apache.hadoop.conf=ERROR
+log4j.logger.org.apache.hadoop=INFO
+log4j.logger.com.sun.jersey.server.wadl.generators.WadlGeneratorJAXBGrammarGenerator=OFF
+
+log4j.appender.kms=org.apache.log4j.rolling.RollingFileAppender
+log4j.appender.kms.File=${kms.log.dir}/kms.log
+log4j.appender.kms.rollingPolicy=org.apache.log4j.rolling.TimeBasedRollingPolicy
+log4j.appender.kms.rollingPolicy.ActiveFileName=${kms.log.dir}/kms.log
+log4j.appender.kms.rollingPolicy.FileNamePattern=${kms.log.dir}/kms.%d{yyyy-MM-dd_HH}.log.gz
+log4j.appender.kms.layout=org.apache.log4j.PatternLayout
+log4j.appender.kms.layout.ConversionPattern=%d{ISO8601} %-5p %c{1} - %m%n
+
+log4j.appender.kms-audit=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.kms-audit.DatePattern='.'yyyy-MM-dd
+log4j.appender.kms-audit.File=${kms.log.dir}/kms-audit.log
+log4j.appender.kms-audit.Append=true
+log4j.appender.kms-audit.layout=org.apache.log4j.PatternLayout
+log4j.appender.kms-audit.layout.ConversionPattern=%d{ISO8601} %m%n
+log4j.appender.kms-audit.MaxFileSize={{ranger_kms_audit_log_maxfilesize}}MB
+
+log4j.logger.kms-audit=INFO, kms-audit
+log4j.additivity.kms-audit=false
+```
