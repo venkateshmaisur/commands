@@ -341,7 +341,7 @@ Goto -> CM -> Knox -> Knox Gateway Advanced Configuration Snippet (Safety Valve)
  
 name = providerConfigs:sso
 
-value = role=federation#federation.name=SSOCookieProvider#federation.param.sso.authentication.provider.url=https://KNOX-HOSTNAME:8443/gateway/knoxsso/api/v1/websso#role=identity-assertion#identity-assertion.name=HadoopGroupProvider#identity-assertion.enabled=true#identity-assertion.param.CENTRAL_GROUP_CONFIG_PREFIX=gateway.group.config#role=authorization#authorization.name=XASecurePDPKnox#authorization.enabled=true
+value = role=federation#federation.name=SSOCookieProvider#federation.param.sso.authentication.provider.url=https://KNOX-HOSTNAME:8443/gateway/knoxsso/api/v1/websso#role=identity-assertion#identity-assertion.name=HadoopGroupProvider#identity-assertion.enabled=true#identity-assertion.param.CENTRAL_GROUP_CONFIG_PREFIX=gateway.group.config.#role=authorization#authorization.name=XASecurePDPKnox#authorization.enabled=true
 
 #Note: Make sure you update "sso.authentication.provider.url"
 
