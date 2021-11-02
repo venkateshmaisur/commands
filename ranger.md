@@ -855,3 +855,20 @@ export RANGER_USERSYNC_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/proces
 env GZIP=-9 tar -cvzf ranger-usersync.tar.gz $RANGER_USERSYNC_PROCESS_DIR 
 ```
 
+### External Table
+```
+please find the various requirements when creating external tables in Hive. It also captures a few errors if you do not have certain policies or permissions.
+
+When creating External Tables with location clause, one of the following additional access is required (1) or (2)
+(1) Users should have direct read and write access to the HDFS location
+This can be provided through an appropriate HDFS POSIX permission, HDFS ACL, or HDFS Policy in Ranger.
+(2) A URL policy should be in place in Ranger Hadoop SQL policies that provide users with read and write permissions on the HDFS location defined for the table
+If the URL policy is missing the table creation might throw an exception like “FAILED: HiveAccessControlException Permission denied: user” with access enforcer as ranger-acl
+Make sure that the URL defined in Ranger does not have a trailing “/”. If there is one, then the table creation would fail with “Permission denied”. This is currently a known issue - CDPD-29489
+Even if the URL policy is in place, based on the access for user “hive” on the HDFS directory defined in location, the table creation may still fail with - “org.apache.hadoop.security.AccessControlException Permission denied: user=hive”. See below for more details.
+If all the subdirectories are not present, then the user “hive” should have READ, WRITE and EXECUTE privileges on the existing directories on the path as it would then create the necessary sub-directories
+If all the data directories and the data files are pre-existing with required permissions for the kerberos user, still the user “hive” should have READ and EXECUTE privileges on the entire path defined in HDFS location for the table
+The required access for user “hive” on either case listed above can be provided through an appropriate HDFS POSIX permission, HDFS ACL, or HDFS Policy in Ranger.
+If all the subdirectories and/or data files exist on the the HDFS location defined for the table but those are not owned by the user (whose kerberos credentials are used), then make sure that the configuration "ranger.plugin.hive.urlauth.filesystem.schemes" is set to "file:" and not "hdfs:,file:" (which is the default) in both Hive and Hive on Tez services.
+Without this even with a URL policy present for the user, you will get "Permission denied: user [<user>] does not have [ALL] privilege" error in Ranger that is enforced by Hadoop-acl.
+```
