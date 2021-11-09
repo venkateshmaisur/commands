@@ -19,6 +19,7 @@ curl -ik -u admin -H "X-Requested-By: ambari" -X DELETE  http://hostname.example
 
 ## CM How get the Auto-TLS truststore password.
 ```
+https://<CM Host>:7183/api/v17/cm/config
 https://CM-Hostname:PORT/api/v40/certs/truststorePassword
 ```
 
