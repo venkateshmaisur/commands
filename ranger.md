@@ -887,7 +887,7 @@ select * from x_tag;
 create a new tag or use existing tag.. assign it to any hdfs_path entity ( for which there is no ranger policy, we will need to create a new policy)
 6. on Active namnode:
 ls -ltr /etc/ranger/c274_hadoop/policycache
-tar -cvzf policybefore.tar.gz /etc/ranger/c274_hadoop/policycache
+tar -cvzf policybefore.tar.gz /etc/ranger/*_hadoop/policycache
 7. In Ranger UI
 Create a new tag sync policy for Step 5.
 Once its created wait for 30 sec.
@@ -895,7 +895,7 @@ collect few more details once gain
 Step 2, step 3.
 8. On active namenode
 ls -ltr /etc/ranger/c274_hadoop/policycache
-tar -cvzf policyafter.tar.gz /etc/ranger/c274_hadoop/policycache
+tar -cvzf policyafter.tar.gz /etc/ranger/*_hadoop/policycache
 9. login into Ranger node:
 cd /var/log/ranger/admin/
 attach the latest access_log.2021-11-12.log log file.
