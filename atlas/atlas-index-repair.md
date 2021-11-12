@@ -1,17 +1,27 @@
 Atlas Index repair
 
 ```bash
-Since the default Hive database shows up in Advanced search in Atlas UI, there seems to be something wrong with indexing in Solr. In the workaround, we are going to delete the Atlas collections in Solr and then rebuild the index data from HBase.
+Since the default Hive database shows up in Advanced search in Atlas UI, there seems to be something wrong with indexing in Solr. 
+In the workaround, we are going to delete the Atlas collections in Solr and then rebuild the index data from HBase.
 
 Please follow these steps:
 =====
 1. Stop atlas
-2. Remove all atlas collections in solr UI:
------
-curl 'http://c3232-node2.squadron-labs.com:8886/solr/admin/collections?action=DELETE&name=vertex_index'
-curl 'http://c3232-node2.squadron-labs.com:8886/solr/admin/collections?action=DELETE&name=fulltext_index'
-curl 'http://c3232-node2.squadron-labs.com:8886/solr/admin/collections?action=DELETE&name=edge_index'
------
+2. Remove all atlas collections in Solr:
+
+-----Non Kerberos Env --------
+curl "http://$(hostname -f):8886/solr/admin/collections?action=DELETE&name=vertex_index"
+curl "http://$(hostname -f):8886/solr/admin/collections?action=DELETE&name=fulltext_index"
+curl "http://$(hostname -f):8886/solr/admin/collections?action=DELETE&name=edge_index"
+
+----- For Kerbeors Env-----
+curl --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=DELETE&name=fulltext_index"
+curl --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=DELETE&name=edge_index"
+curl --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=DELETE&name=vertex_index"
+--------------------------------
+To confirm if collections are deleted successfully, you can list the collections:
+curl -ik --negotiate -u : "http://$(hostname -f):8886/solr/admin/collections?action=LIST&wt=json"
+
 3. Start atlas and observe that collections are recreated
 4. Can't search 'employee' table in atlas Basic search. it's searchable however, in Advanced search
 5. Implemented steps from https://github.com/apache/atlas/tree/branch-0.8/tools/atlas-index-repair-kit
@@ -28,21 +38,26 @@ curl 'http://c3232-node2.squadron-labs.com:8886/solr/admin/collections?action=DE
 # wget https://raw.githubusercontent.com/apache/atlas/branch-0.8/tools/atlas-index-repair-kit/atlas-index-repair-kit.tar.gz
 # tar xvf atlas-index-repair-kit.tar.gz
 -----
-11. appended following lines to /usr/hdp/current/atlas-server/conf/atlas-application.properties
------
-storage.backend=hbase
-storage.hostname=<fqdn>
-storage.hbase.table=atlas_titan
+11. Update atlas-conf/atlas-titan.properties with details to connect to data-store (like HBase). For example:
+$ grep storage /usr/hdp/current/atlas-server/conf/atlas-application.properties
+
+     storage.backend=hbase
+     storage.hostname=fqdn
+     storage.hbase.table=atlas_titan
 -----
 12. Add following properties in bin/atlas-gremlin.sh at the top of the file:
 -----
-ATLAS_WEBAPP_DIR=/home/atlas/atlas-server/server/webapp
-STORE_CONF_DIR=/etc/hbase/conf
+  ATLAS_WEBAPP_DIR=/usr/hdp/current/atlas-server/server/webapp/
+STORE_CONF_DIR=/etc/hbase/conf/
 -----
 13. Ensure home directory for 'atlas' user exists in HDFS and this directory is owned by 'atlas' user
 # su hdfs
 $ hdfs dfs -mkdir /user/atlas
-$ hdfs dfs -chown atlas:hdfs -R /user/atlas
+$ hdfs dfs -chown atlas:hdfs /user/atlas
+
+set JAVA_HOME
+ps aux | grep atlas
+export JAVA_HOME=/usr/jdk64/jdk1.8.0_112
 
 14. Start Gremlin shell by executing the following command:
 bin/atlas-gremlin.sh bin/atlas-index-repair.groovy
