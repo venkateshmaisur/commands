@@ -872,3 +872,33 @@ The required access for user “hive” on either case listed above can be provi
 If all the subdirectories and/or data files exist on the the HDFS location defined for the table but those are not owned by the user (whose kerberos credentials are used), then make sure that the configuration "ranger.plugin.hive.urlauth.filesystem.schemes" is set to "file:" and not "hdfs:,file:" (which is the default) in both Hive and Hive on Tez services.
 Without this even with a URL policy present for the user, you will get "Permission denied: user [<user>] does not have [ALL] privilege" error in Ranger that is enforced by Hadoop-acl.
 ```
+
+### Ranger sync troubleshooting
+```sh
+
+
+1. Enable tagsync debug and restart tagsync
+2. get the output of
+/usr/hdp/current/kafka-broker/bin/kafka-consumer-groups.sh --describe --group ranger_entities_consumer --bootstrap-server kafka-broker:6667
+3. login into ranger db and collect the output of
+select * from x_tag;
+4. tailf /var/log/ranger/tagsync/tagsync.log  | tee /tmp/tagsyncnew.log
+5. login into atlas ui
+create a new tag or use existing tag.. assign it to any hdfs_path entity ( for which there is no ranger policy, we will need to create a new policy)
+6. on Active namnode:
+ls -ltr /etc/ranger/c274_hadoop/policycache
+tar -cvzf policybefore.tar.gz /etc/ranger/c274_hadoop/policycache
+7. In Ranger UI
+Create a new tag sync policy for Step 5.
+Once its created wait for 30 sec.
+collect few more details once gain
+Step 2, step 3.
+8. On active namenode
+ls -ltr /etc/ranger/c274_hadoop/policycache
+tar -cvzf policyafter.tar.gz /etc/ranger/c274_hadoop/policycache
+9. login into Ranger node:
+cd /var/log/ranger/admin/
+attach the latest access_log.2021-11-12.log log file.
+collect tagsync debug logs both tagsync.log, /tmp/tagsyncnew.log
+10. Also get the audit screenshot of deny from Ranger UI.
+```
