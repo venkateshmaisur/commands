@@ -63,7 +63,7 @@ export JAVA_HOME=/usr/jdk64/jdk1.8.0_112
 bin/atlas-gremlin.sh bin/atlas-index-repair.groovy
 
 15. Start index repair by entering the following in the Gremlin shell:
-> repairAtlasIndex('/etc/atlas/conf/atlas-application.properties')
+>      repairAtlasIndex("atlas-conf/atlas-titan.properties")
 =====
 
 I believe your customer has Kerberos enabled. Youll need to implement the following steps after step 12:
@@ -77,20 +77,29 @@ index.search.backend=solr5
 index.search.solr.mode=cloud
 index.search.solr.zookeeper-url=fqdn:2181/infra-solr
 
-5.2. Copy necessary configuration files from the deployment to atlas-conf folder. For example:
-hadoop-client/conf/core-site.xml
-hadoop-client/conf/hdfs-site.xml
-hadoop-client/conf/yarn-site.xml
-ambari-infra-solr/conf/infra_solr_jaas.conf
-ambari-infra-solr/conf/security.json
+   5.2. Copy necessary configuration files from the deployment to atlas-conf folder. For example:
+         hadoop-client/conf/core-site.xml
+         hadoop-client/conf/hdfs-site.xml
+         hadoop-client/conf/yarn-site.xml
+         ambari-infra-solr/conf/infra_solr_jaas.conf
+         ambari-infra-solr/conf/security.json
 
-5.3. Update bin/atlas-gremlin.sh to set the following variable at the top. For example:
-JAAS_CONF_FILE=infra_solr_jaas.conf
+   5.3. Update bin/atlas-gremlin.sh to set the following variable at the top. For example:
+         JAAS_CONF_FILE=infra_solr_jaas.conf
 
-5.4. Kinit as atlas user with the command like:
-kinit -kt /etc/security/keytabs/atlas.service.keytab atlas/fqdn@EXAMPLE.COM
-=====
+   5.4. Kinit as atlas user with the command like:
+         kinit -kt /etc/security/keytabs/atlas.service.keytab atlas/fqdn@EXAMPLE.COM
 
+6. Ensure home directory for 'atlas' user exists in HDFS and this directory is owned by 'atlas' user
+     su hdfs
+     hdfs dfs -mkdir /user/atlas
+     hdfs dfs -chown atlas:hdfs -R /user/atlas
+
+7. Start Gremlin shell by executing the following command:
+     bin/atlas-gremlin.sh bin/atlas-index-repair.groovy
+
+8. Start index repair by entering the following in the Gremlin shell:
+     repairAtlasIndex("atlas-conf/atlas-titan.properties")
 Refer:
 https://github.com/apache/atlas/tree/branch-0.8/tools/atlas-index-repair-kit
 
