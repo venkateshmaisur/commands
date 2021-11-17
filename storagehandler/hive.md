@@ -1,12 +1,12 @@
 Please find the below steps to encrypt the password. A complete set of logs are available in "815610_encrypt_password_Workaround.txt".
 
-Step 1: Cloudera Manager -> Services -> Hive on Tez -> Configuration -> and then search for property "GENERATE_JCEKS_PASSWORD", if the option is checked, please uncheck the same and restart HiveServer2.
+Step 1: `Cloudera Manager -> Services -> Hive on Tez -> Configuration` -> and then search for property `"GENERATE_JCEKS_PASSWORD"`, if the option is checked, please uncheck the same and restart HiveServer2.
 
 Step 2: Please check the "Securing Password" section of the below URL, where you can encrypt the password using the below steps
 https://cwiki.apache.org/confluence/display/Hive/JDBC+Storage+Handler
 
 You may have to run the below query as HDFS user and make sure the path "/tmp/test.jceks" has enough permission for the user who is accessing it.
-hadoop credential create host1.password -provider jceks:///tmp/test.jceks -v <password>
+`hadoop credential create host1.password -provider jceks:///tmp/test.jceks -v <password>`
 
 Step 3: Create a table with the exact schema to sys.dbs
 
