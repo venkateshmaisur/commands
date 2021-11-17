@@ -10,6 +10,7 @@ hadoop credential create host1.password -provider jceks:///tmp/test.jceks -v <pa
 
 Step 3: Create a table with the exact schema to sys.dbs
 
+```sql  
 CREATE EXTERNAL TABLE blabla.dbs1 (
   DB_ID            bigint,
   DB_LOCATION_URI  string,
@@ -26,5 +27,5 @@ TBLPROPERTIES (
   'hive.sql.dbcp.password.key' = 'host1.password',
   'hive.sql.query' = 'SELECT DB_ID, DB_LOCATION_URI, NAME, OWNER_NAME, OWNER_TYPE FROM DBS'
 );
-
+```
 Step 4: select * from blabla.dbs1 ;
