@@ -6,6 +6,8 @@ Step 2: Please check the "Securing Password" section of the below URL, where you
 https://cwiki.apache.org/confluence/display/Hive/JDBC+Storage+Handler
 
 You may have to run the below query as HDFS user and make sure the path "/tmp/test.jceks" has enough permission for the user who is accessing it.
+
+
 `hadoop credential create host1.password -provider jceks:///tmp/test.jceks -v <password>`
 
 Step 3: Create a table with the exact schema to sys.dbs
@@ -28,4 +30,4 @@ TBLPROPERTIES (
   'hive.sql.query' = 'SELECT DB_ID, DB_LOCATION_URI, NAME, OWNER_NAME, OWNER_TYPE FROM DBS'
 );
 ```
-Step 4: select * from blabla.dbs1 ;
+Step 4: `select * from blabla.dbs1 ;`
