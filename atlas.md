@@ -57,7 +57,7 @@ attach atlas.tar.gz
 ```
 
 ### Enable Atlas metric and atlas performance logging
-```
+```bash
 Please ask customer to enable metric and atlas performance logging
 
 going to CM->Atlas->configuration - Atlas Server Logging Advanced Configuration Snippet (Safety Valve)
@@ -83,6 +83,33 @@ ps auxwwf | grep atlas-ATLAS_SERVER > /tmp/atlas-ps.txt
 env GZIP=-9  tar -cvzf atlas.tar.gz $ATLAS_PROCESS_DIR /var/log/atlas/application.log /tmp/atlas-ps.txt /var/log/atlas/atlas_perf.log  /var/log/atlas/audit.log /var/log/atlas/metric.log
 
 attach atlas.tar.gz
+
+
+1. jstack
+export JAVA_HOME=/usr/java/jdk1.8.0_232-cloudera
+for i in {1..5}; do sudo -iu atlas $JAVA_HOME/bin/jstack -l (atlas-pid); sleep 5; done >> /tmp/jstack.out
+
+2. OS details on Atlas node
+
+( date;set -x;hostname -A;uname -a;top -b -n 1 -c;ps auxwwwf;netstat -aopen;ifconfig;iptables -t nat -nL;cat /proc/meminfo;df -h;mount ) &> /tmp/os_cmds.out
+
+tar -cvzf atlas-jstack.tar.gz /tmp/jstack.out /tmp/os_cmds.out
+
+3. Login into  solr node
+
+ps aux | grep solr-SOLR_SERVER > /tmp/solr-ps.txt
+export SOLR_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*solr-SOLR_SERVER | tail -1)
+env GZIP=-9  tar -cvzf solr.tar.gz $SOLR_PROCESS_DIR  /tmp/solr-ps.txt
+
+4. Login into Hbase master node
+
+
+ps aux | grep hbase-MASTER > /tmp/hbase-ps.txt
+( date;set -x;hostname -A;uname -a;top -b -n 1 -c;ps auxwwwf;netstat -aopen;ifconfig;iptables -t nat -nL;cat /proc/meminfo;df -h;mount ) &> /tmp/os_cmds.out
+export HBASE_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*hbase-MASTER | tail -1)
+env GZIP=-9  tar -cvzf hbase.tar.gz $HBASE_PROCESS_DIR  /tmp/hbase-ps.txt /tmp/os_cmds.out
+
+attach the tar files atlas-jstack.tar.gz ,  solr.tar.gz  , hbase.tar.gz
 ```
 
 ### Atlas Group mapping issue (Linux + AD)
