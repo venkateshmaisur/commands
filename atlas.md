@@ -5,7 +5,7 @@ kinit -kt /etc/security/keytabs/atlas.service.keytab $(klist -kt /etc/security/k
 grep -i java_home /etc/hadoop/conf/hadoop-env.sh
 ```
 
-## Atlas CDP
+## Atlas CDP Recreate hbasse table and solr collection 
 
 ```
 export ATLAS_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*ATLAS_SERVER | tail -1)
@@ -54,6 +54,35 @@ env GZIP=-9  tar -cvzf atlas.tar.gz $ATLAS_PROCESS_DIR $ATLAS_SERVER-InitializeA
 
 attach atlas.tar.gz
 
+```
+
+### Enable Atlas metric and atlas performance logging
+```
+Please ask customer to enable metric and atlas performance logging
+
+going to CM->Atlas->configuration - Atlas Server Logging Advanced Configuration Snippet (Safety Valve)
+
+log4j.appender.perf_appender=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.perf_appender.file=/var/log/atlas/atlas_perf.log
+log4j.appender.perf_appender.append=true
+log4j.category.org.apache.atlas.perf=debug,perf_appender
+log4j.additivity.org.apache.atlas.perf=false
+log4j.appender.METRICS.layout=org.apache.log4j.PatternLayout
+log4j.appender.METRICS.layout.ConversionPattern=%d %x %m%n
+log4j.appender.METRICS.layout.maxFileSize=1024MB
+log4j.additivity.METRICS=true
+log4j.category.METRICS=DEBUG,METRICS
+
+
+Save and restart Atlas service.
+
+Wait for 1 - 2 hour collect metric.log, atlas_perf.log log file
+
+export ATLAS_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*ATLAS_SERVER | tail -1)
+ps auxwwf | grep atlas-ATLAS_SERVER > /tmp/atlas-ps.txt
+env GZIP=-9  tar -cvzf atlas.tar.gz $ATLAS_PROCESS_DIR /var/log/atlas/application.log /tmp/atlas-ps.txt /var/log/atlas/atlas_perf.log  /var/log/atlas/audit.log /var/log/atlas/metric.log
+
+attach atlas.tar.gz
 ```
 
 ### Atlas Group mapping issue (Linux + AD)
