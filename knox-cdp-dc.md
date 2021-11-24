@@ -448,3 +448,86 @@ For example, like the below
 -rwxr-xr-x 1 root root 347
 
 ```
+
+### CDP kerberos authentication
+
+ if you want Homepage + cdp-proxy to have Kerberos authentication, then we need to configure `CM -> Knox -> configuration -> gateway_sso_authentication_provider`
+```bash
+role=authentication
+authentication.name=HadoopAuth
+authentication.param.config.prefix=hadoop.auth.config
+authentication.param.hadoop.auth.config.signature.secret=knox-signature-secret
+authentication.param.hadoop.auth.config.type=kerberos
+authentication.param.hadoop.auth.config.simple.anonymous.allowed=false
+authentication.param.hadoop.auth.config.token.validity=1800
+authentication.param.hadoop.auth.config.cookie.domain=root.hwx.site
+authentication.param.hadoop.auth.config.cookie.path=/
+authentication.param.hadoop.auth.config.kerberos.principal=HTTP/pbhagade-1.pbhagade.root.hwx.site@ROOT.HWX.SITE
+authentication.param.hadoop.auth.config.kerberos.keytab=/var/run/cloudera-scm-agent/process/122-knox-KNOX_GATEWAY/knox.keytab
+authentication.param.hadoop.auth.config.kerberos.name.rules=DEFAULT
+role=identity-assertion
+identity-assertion.name=Default#role=authorization
+authorization.name=XASecurePDPKnox
+
+Make sure you replace authentication.param.hadoop.auth.config.kerberos.principal, keytab(choose any latest knox process dir path) , save and restart stale service.
+
+1. We need to provide a static location of keytab file.. either you can create a copy of knox keytab to the custom location and pass the path. authentication.param.hadoop.auth.config.kerberos.keytab
+
+We can not use variable substitution for gateway_sso_authentication_provider like kerberos-provider
+
+2. Yes you can use _HOST syntax for "authentication.param.hadoop.auth.config.kerberos.principal"
+
+3. For grouo level policy to work.
+
+If you have SSSD configured on knox host, it will resolve groups from SSSD.
+
+If not, you need to add identity-assertion in "gateway_sso_authentication_provider"
+
+role=identity-assertion
+identity-assertion.name=HadoopGroupProvider
+identity-assertion.enabled=true
+identity-assertion.param.CENTRAL_GROUP_CONFIG_PREFIX=gateway.group.config.
+
+and you need to AD details to knox config.
+
+You need to set below CM -> Knox ->  Configurations: -> 
+
+ gateway.group.config.hadoop.security.group.mapping=org.apache.hadoop.security.LdapGroupsMapping
+
+
+Add below configs to "Knox Service Advanced Configuration Snippet (Safety Valve) for conf/gateway-site.xml"
+
+
+ <property>
+        <name>gateway.group.config.hadoop.security.group.mapping.ldap.bind.user</name>
+        <value>uid=guest,ou=people,dc=hadoop,dc=apache,dc=org</value>
+    </property>
+    <property>
+        <name>gateway.group.config.hadoop.security.group.mapping.ldap.bind.password</name>
+        <value>guest-password</value>
+    </property>
+    <property>
+        <name>gateway.group.config.hadoop.security.group.mapping.ldap.url</name>
+        <value>ldap://localhost:33389</value>
+    </property>
+    <property>
+        <name>gateway.group.config.hadoop.security.group.mapping.ldap.base</name>
+        <value></value>
+    </property>
+    <property>
+        <name>gateway.group.config.hadoop.security.group.mapping.ldap.search.filter.user</name>
+        <value>(&amp;(|(objectclass=person)(objectclass=applicationProcess))(cn={0}))</value>
+    </property>
+    <property>
+        <name>gateway.group.config.hadoop.security.group.mapping.ldap.search.filter.group</name>
+        <value>(objectclass=groupOfNames)</value>
+    </property>
+    <property>
+        <name>gateway.group.config.adoop.security.group.mapping.ldap.search.attr.member</name>
+        <value>member</value>
+    </property>
+    <property>
+        <name>gateway.group.config.hadoop.security.group.mapping.ldap.search.attr.group.name</name>
+        <value>cn</value>
+    </property>
+```
