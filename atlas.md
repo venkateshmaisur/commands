@@ -208,6 +208,23 @@ kinit -kt $ATLAS_PROCESS_DIR/atlas.keytab atlas/`hostname -f`
 ```bash
 /bin/bash /usr/hdp/current/atlas-server/hook-bin/import-hive.sh -Dsun.security.jgss.debug=true -Djavax.security.auth.useSubjectCredsOnly=false -Djava.security.auth.login.config=/etc/atlas/conf/atlas_jaas.conf
 ```
+
+#### cdp import script for Hive
+```
+Login into Atlas node:
+export ATLAS_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*ATLAS_SERVER | tail -1)
+kinit -kt $ATLAS_PROCESS_DIR/atlas.keytab atlas/`hostname -f`
+**Note**
+# set JAVA_HOME if not set
+
+
+ /opt/cloudera/parcels/CDH-7.1.7-1.cdh7.1.7.p0.15945976/lib/atlas/hook-bin/import-hive.sh -d <database-name>
+
+if any table is missing:
+ /opt/cloudera/parcels/CDH-7.1.7-1.cdh7.1.7.p0.15945976/lib/atlas/hook-bin/import-hive.sh -t <table-name>
+
+```
+
 ## Triage
 ```
 
