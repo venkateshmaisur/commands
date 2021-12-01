@@ -223,3 +223,67 @@ Login into Kafka node:
 
 tar -cvzf kafka.tar.gz /etc/kafka/conf/* /etc/ranger/*
 ```
+
+
+### Steps to use delegation token
+
+```bash
+
+# Generate the ticket
+
+cat /tmp/jaas_keytab.conf 
+KafkaClient {
+com.sun.security.auth.module.Krb5LoginModule required
+useKeyTab=true
+keyTab="/var/run/cloudera-scm-agent/process/328-kafka-KAFKA_BROKER/kafka.keytab"
+principal="kafka/cdh-63x-ja-2.cdh-63x-ja.root.hwx.site@ROOT.HWX.SITE";
+};
+
+cat /tmp/client.properties
+security.protocol=SASL_SSL
+ssl.truststore.location=/etc/cdep-ssl-conf/CA_STANDARD/truststore.jks
+sasl.kerberos.service.name=kafka
+
+export KAFKA_OPTS="-Djava.security.auth.login.config=/tmp/jaas_keytab.conf"
+
+kafka-delegation-tokens --bootstrap-server cdh-63x-ja-2.cdh-63x-ja.root.hwx.site:9093 --create   --max-life-time-period -1 --command-config /tmp/client.properties --renewer-principal User:kafka
+
+Op
+Calling create token operation with renewers :[User:kafka] , max-life-time-period :-1
+Created delegation token with tokenId : rqzabJYgS46df4acJ54Phg
+
+TOKENID         HMAC                           OWNER           RENEWERS                  ISSUEDATE       EXPIRYDATE      MAXDATE        
+rqzabJYgS46df4acJ54Phg IHZqKd+i9VTjEdOLOOqNeP3uFOS3Iz7i/1Tgnoims8kRiAa8jWe/EGPwIFX7yHCutz0T38w/d7hsVkgbNQnJ+Q== User:kafka      [User:kafka]              2021-12-01T05:51 2021-12-02T05:51 2021-12-08T05:51
+2. Use this delegation token
+cat /tmp/jaas_dt.conf
+KafkaClient {
+    org.apache.kafka.common.security.scram.ScramLoginModule required
+    username="rqzabJYgS46df4acJ54Phg"
+    password="IHZqKd+i9VTjEdOLOOqNeP3uFOS3Iz7i/1Tgnoims8kRiAa8jWe/EGPwIFX7yHCutz0T38w/d7hsVkgbNQnJ+Q=="
+    tokenauth="true";
+};
+
+# ADD in client.properties - sasl.mechanism=SCRAM-SHA-512
+
+cat /tmp/client.properties
+security.protocol=SASL_SSL
+ssl.truststore.location=/etc/cdep-ssl-conf/CA_STANDARD/truststore.jks
+sasl.kerberos.service.name=kafka
+sasl.mechanism=SCRAM-SHA-512
+
+export KAFKA_OPTS="-Djava.security.auth.login.config=/tmp/jaas_dt.conf"
+
+kafka-console-producer --broker-list  cdh-63x-ja-2.cdh-63x-ja.root.hwx.site:9093 --producer.config   /tmp/client.properties --topic test
+Reference: https://docs.cloudera.com/documentation/enterprise/6/6.3/topics/kafka_delegation_tokens_manage.html
+11:31
+# For security reasons, max lifetime for delegation token is restricted to 24days
+
+# As a workaround, these properties can be configured inside a safety valve to override these restrictions
+
+Steps:
+1) Navigate to CM -> Kafka -> Configuration -> "Kafka Broker Advanced Configuration Snippet (Safety Valve) for kafka.properties"
+2) Add the following 
+delegation.token.max.lifetime.ms=31536000000
+delegation.token.expiry.time.ms=31536000000
+3) Restart Kafka
+```
