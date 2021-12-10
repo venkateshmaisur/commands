@@ -24,6 +24,25 @@ For a Kerberos env kinit with Ambari Infra keytab
 ```shell
 kinit -kt /etc/security/keytabs/ambari-infra-solr.service.keytab $(klist -kt /etc/security/keytabs/ambari-infra-solr.service.keytab |sed -n "4p"|cut -d ' ' -f7)
 ```
+### CDP solr triage
+```bash
+# Collect solr process dir and other details.
+
+Login into Solr node:
+
+export SOLR_SERVER_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*SOLR_SERVER | tail -1)
+ps auxwwf | grep SOLR_SERVER > /tmp/solr-ps.txt
+free -g > /tmp/memory.txt
+df -h > /tmp/size.txt
+kinit -kt $SOLR_SERVER_PROCESS_DIR/solr.keytab solr/`hostname -f`
+
+curl -ik --negotiate -u : "https://$(hostname -f):8995/solr/admin/collections?action=clusterstatus&wt=json&indent=true"  > /tmp/solr-clusterstatus.txt
+curl -ik --negotiate -u : "https://$(hostname -f):8995/solr/admin/cores?action=STATUS&wt=json&indent=true" > /tmp/status.txt
+
+env GZIP=-9  tar -cvzf solr.tar.gz $SOLR_SERVER_PROCESS_DIR /var/log/solr-infra/solr_gc.log*.current /tmp/solr-ps.txt /tmp/solr-clusterstatus.txt  /tmp/status.txt /tmp/memory.txt /tmp/size.txt
+
+attach solr.tar.gz 
+```
 
 # Delete Collections
 ## This is for Ranger audit collection
