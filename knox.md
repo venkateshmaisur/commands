@@ -438,4 +438,21 @@ APP_MEM_OPTS="-Xmx5g -XX:NewSize=3G -XX:MaxNewSize=3G -verbose:gc -XX:ParallelGC
 
 ```
 
+###### whitelist
+```
+Please ask the customer to make the below changes and test it again.
 
+CM UI -> Knox -> Configuration -> gateway.dispatch.whitelist
+
+^/.*$;^https?://(.+\.root\.hwx\.site|127\.0\.0\.1|0:0:0:0:0:0:0:1|::1):[0-9]+/?.*$
+
+Save and Restart Knox.
+
+tailf /var/log/knox/gateway/gateway.log
+
+Once all topologies are activated, you will see below logging, then try to repro the issue by logging into Knox homepage, if you face the issue again, share the gateway.log and knox process dir.
+
+
+++
+2021-12-29 06:44:14,733 INFO  knox.gateway (DefaultTopologyService.java:onFileChange(842)) - Generated topology cdp-proxy.xml because the associated descriptor cdp-proxy.json changed.
+```
