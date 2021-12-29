@@ -438,8 +438,9 @@ APP_MEM_OPTS="-Xmx5g -XX:NewSize=3G -XX:MaxNewSize=3G -verbose:gc -XX:ParallelGC
 
 ```
 
-###### whitelist
-```
+#### Knox Gateway Dispatch Whitelist
+
+```bash
 Please ask the customer to make the below changes and test it again.
 
 CM UI -> Knox -> Configuration -> gateway.dispatch.whitelist
