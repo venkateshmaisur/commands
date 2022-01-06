@@ -457,3 +457,61 @@ Once all topologies are activated, you will see below logging, then try to repro
 ++
 2021-12-29 06:44:14,733 INFO  knox.gateway (DefaultTopologyService.java:onFileChange(842)) - Generated topology cdp-proxy.xml because the associated descriptor cdp-proxy.json changed.
 ```
+
+#### access HDFS UI using Knox in HDP 3.1.4
+```bash
+HDP 3.1.4.0-.315
+Ambari 2.7.4
+
+The way HDFSUI is accessed in hdp 3.x is different than the HDP 2.6.5
+
+There are two ways to access HDFSUI using Knox.
+
+1. latest way is to use below url:
+
+https://<knox-host>:8443/gateway/default/hdfs?host=http://<namenode-host>:50700
+
+We were able to access the HDFSUI using Knox.
+
+2. To access HDFSUI using below URL, we have to make changes
+
+https://<knox-host>:8443/gateway/default/hdfs
+
+Edit the topology file and add version to it.
+
+<service>
+<role>HDFSUI</role>
+<version>2.7.0</version>
+<url>http://c4112-node2.knox.com:50070/</url>
+</service>
+
+
++++++++
+Regarding the error with version 2.7.0, Please follow below steps:
+
+1. Stop Knox server
+2. Download hdfsui.tar.gz from the attachment, you need to replace xml files to below locations.
+
+cd /usr/hdp/current/knox-server/data/services/hdfsui/2.7.0/
+mv * /tmp
+
+# untar hdfsui.tar.gz
+place service.xml and rewrite.xml from  hdfsui.tar.gz to "/usr/hdp/current/knox-server/data/services/hdfsui/2.7.0/"
+
+3. mv /usr/hdp/current/knox-server/data/deployments /usr/hdp/current/knox-server/data/deployments_bk1
+
+4. Start Knox server
+
+5. Access HDFSUI using Knox
+https://knox-hostname:8443/gateway/default/hdfs
+
+make sure topology has version 2.7.0
+
+if it still does not work.
+
+test the below curl cmd:
+
+
+curl -i -k -u user-X GET https://knox-hostname:8443/gateway/apro1/hdfs/jmx?qry=java.lang:type=Memory
++++++
+```
