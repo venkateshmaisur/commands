@@ -3,6 +3,13 @@
 
 ![Ranger Troubleshooting](https://github.com/bhagadepravin/commands/blob/master/Ranger%20troubleshooting.png)
 
+
+## cdp-dc
+```bash
+export RANGER_ADMIN_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*RANGER_ADMIN| tail -1)
+env GZIP=-9  tar -cvzf ranger-admin.tar.gz $RANGER_ADMIN_PROCESS_DIR /var/log/ranger/admin/ranger-admin-`hostname -f`-ranger.log /var/log/ranger/admin/catalina.out /var/log/ranger/admin/ranger_db_patch.log
+```
+
 ## Ranger installation RHEL 6
 ```sh
 yum install mysql-server mysql-connector-java -y
