@@ -531,3 +531,20 @@ stack_id 14
 
 insert into serviceconfig(service_config_id,cluster_id,service_name,version,create_timestamp,stack_id,user_name) values(253,4,'KERBEROS',1,1602656506760,14,'admin');
 ```
+
+### Disable kerberos manually
+```bash
+# curl -u admin:<password> -H 'X-Requested-By: test' -X PUT 'http://ambari-host:8080/api/v1/clusters/clustername' 
+-d '[{"session_attributes":{"kerberos_admin":{"principal":"admin/admin","password":"<password>"}}}]' -v 
+
+# curl -u admin:<password> -H 'X-Requested-By: test' -X PUT 'http://ambari-host:8080/api/v1/clusters/clustername' 
+-d '{"Clusters":{"security_type":"NONE"}}' 
+
+# curl -s -H "X-Requested-By:ambari" -u admin -X DELETE "http://ambari-host:8080/api/v1/clusters/clustername/services/KERBEROS" 
+
+# curl -s -H "X-Requested-By:ambari" -u admin -X DELETE "http://ambari-host:8080/api/v1/clusters/clustername/artifacts/kerberos_descriptor"
+
+/var/lib/ambari-server/resources/scripts/configs.py  -t 8443 -s https -a set -l localhost -n ${CLUSTER_NAME} -u ${A_USER} -p "${A_PASSWORD}" -c cluster-env -k security_enabled -v false
+
+https://community.cloudera.com/t5/Customer/How-to-disable-Kerberos-manually-without-Ambari-UI/ta-p/271245
+```
