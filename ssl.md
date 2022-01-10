@@ -203,4 +203,4 @@ done
  ```
 # keytool -list -v -keystore keystore.jks | egrep -i "Owner|Iss"
 # keytool -list -v -keystore truststore.jks | egrep -i "Owner|Iss"
-``
+```
