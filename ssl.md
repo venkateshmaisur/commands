@@ -113,6 +113,14 @@ keytool -import -keystore server.keystore.jks -storepass hadoop -alias gal4.open
 keytool -import -keystore server.truststore.jks -storepass hadoop -alias CARoot -file ca.crt
 ```
 
+examples
+```
+keytool -genkeypair -alias `hostname` -keyalg RSA -keysize 2048 -keypass changeit -storepass changeit -validity 365 -keystore `hostname`-keystore.jks -ext SAN=DNS:c4230-node1.squadron.support.hortonworks.com,IP:172.25.43.142 -dname "CN=`hostname -f`, OU=HWX, O=HWX, C=COM"
+
+ca.ext
+subjectAltName=DNS:hostname
+```
+
 ```sh
 openssl s_client -connect <HS@-hostname>:<port> -tls1
 
