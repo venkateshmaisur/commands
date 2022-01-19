@@ -225,6 +225,47 @@ if any table is missing:
 
 ```
 
+```
+[[ INTERNAL ]]
+
+Action Plan:
+
+1. Login into Atlas node
+2. kinit with admin user, as admin user will have all the  permission for Atlas UI and its entities
+3. cp /etc/atlas/conf/atlas_jaas.conf /etc/atlas/conf/atlas_jaas_new.conf
+
+# update below variables in  /etc/atlas/conf/atlas_jaas_new.conf
+
+   keyTab="{{ATLAS_KEYTAB_FILE}}"
+   principal="{{ATLAS_PRINCIPAL}}";
+
+# Get the latest atlas keytab and princpal and update to atlas_jaas_new.conf file like below 
+
+#Ex:
+ATLAS_KEYTAB_FILE=/var/run/cloudera-scm-agent/process/299-atlas-ATLAS_SERVER/atlas.keytab
+ATLAS_PRINCIPAL=atlas/pbhagade-2.pbhagade.root.hwx.site@ROOT.HWX.SITE
+
++++++ it should look like below ++++
+cat /etc/atlas/conf/atlas_jaas_new.conf
+Client {
+   com.sun.security.auth.module.Krb5LoginModule required
+   useKeyTab=true
+   useTicketCache=false
+   storeKey=true
+   doNotPrompt=false
+   keyTab="/var/run/cloudera-scm-agent/process/299-atlas-ATLAS_SERVER/atlas.keytab"
+   principal="atlas/pbhagade-2.pbhagade.root.hwx.site@ROOT.HWX.SITE";
+};
+++++
+
+# Open a new terminal for Atlas node.
+tailf /var/log/atlas/application.log
+
+# Run the import script on the previous terminal
+
+bash import-hive.sh  -Dsun.security.jgss.debug=true -Djavax.security.auth.useSubjectCredsOnly=false -Djava.security.krb5.conf=/etc/krb5.conf -Djava.security.auth.login.config=/etc/atlas/conf/atlas_jaas_new.conf
+```
+
 ## Triage
 ```
 
