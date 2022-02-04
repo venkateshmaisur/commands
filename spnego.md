@@ -1,4 +1,4 @@
-##### User authentication from Windows Workstation to HDP Realm Using MIT Kerberos Client (with Firefox) 
+#### User authentication from Windows Workstation to HDP Realm Using MIT Kerberos Client (with Firefox) 
 https://community.cloudera.com/t5/Community-Articles/User-authentication-from-Windows-Workstation-to-HDP-Realm/ta-p/245957
 
 Open Firefox, type about:config in URL and hit enter Search for and change below parameters
@@ -9,7 +9,7 @@ network.negotiate-auth.delegation-uris = .domain.com
 network.auth.use-sspi = false
 network.negotiate-auth.allow-non-fqdn = true
 
-##### Configure Mac and Firefox to access HDP/HDF SPNEGO UI
+#### Configure Mac and Firefox to access HDP/HDF SPNEGO UI
 https://community.cloudera.com/t5/Community-Articles/Configure-Mac-and-Firefox-to-access-HDP-HDF-SPNEGO-UI/ta-p/249092
 
 
