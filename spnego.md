@@ -3,11 +3,13 @@ https://community.cloudera.com/t5/Community-Articles/User-authentication-from-Wi
 
 Open Firefox, type about:config in URL and hit enter Search for and change below parameters
 
+```sh
 network.negotiate-auth.trusted-uris = .domain.com
 network.negotiate-auth.using-native-gsslib = false
 network.negotiate-auth.delegation-uris = .domain.com
 network.auth.use-sspi = false
 network.negotiate-auth.allow-non-fqdn = true
+```
 
 #### Configure Mac and Firefox to access HDP/HDF SPNEGO UI
 https://community.cloudera.com/t5/Community-Articles/Configure-Mac-and-Firefox-to-access-HDP-HDF-SPNEGO-UI/ta-p/249092
