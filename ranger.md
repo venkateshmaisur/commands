@@ -880,7 +880,7 @@ If all the subdirectories and/or data files exist on the the HDFS location defin
 Without this even with a URL policy present for the user, you will get "Permission denied: user [<user>] does not have [ALL] privilege" error in Ranger that is enforced by Hadoop-acl.
 ```
 
-### Ranger sync troubleshooting
+### Ranger tagsync troubleshooting
 ```sh
 
 
@@ -908,4 +908,33 @@ cd /var/log/ranger/admin/
 attach the latest access_log.2021-11-12.log log file.
 collect tagsync debug logs both tagsync.log, /tmp/tagsyncnew.log
 10. Also get the audit screenshot of deny from Ranger UI.
+```
+
+### Ranger tagsync hive troubleshooting
+```bash
+1. Enable tagsync debug and restart tagsync service
+
+2. get the output of
+/usr/hdp/current/kafka-broker/bin/kafka-consumer-groups.sh --describe --group ranger_entities_consumer --bootstrap-server kafka-broker:6667 --security-protocol <protocol>
+
+Wait for 5 min and rerun above cmd and share the output of both cmds
+
+3. login into ranger db and collect the output of
+select * from x_tag;
+
+4. tailf /var/log/ranger/tagsync/tagsync.log  | tee /tmp/tagsyncnew.log
+
+5. login into atlas ui
+create a new tag or use existing tag.. assign it to any hive_column entity ( for which there is no ranger policy, we will need to create a new policy)
+
+6. on any HS2 node:
+ls -ltr /etc/ranger/c274_hive/policycache
+tar -cvzf policybefore.tar.gz /etc/ranger/*_hadoop/policycache
+
+
+7. login into Ranger node:
+cd /var/log/ranger/admin/
+attach the latest access_log.2021-11-12.log log file.
+
+collect tagsync debug logs both tagsync.log, /tmp/tagsyncnew.log, along with tagsync configs, rest console outputs while performing action plan.
 ```
