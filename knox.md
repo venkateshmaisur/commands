@@ -515,3 +515,49 @@ test the below curl cmd:
 curl -i -k -u user-X GET https://knox-hostname:8443/gateway/apro1/hdfs/jmx?qry=java.lang:type=Memory
 +++++
 ```
+
+
+#### knox csd
+```bash
+
+1. Stop the knox service from CM UI
+2. Go to CSD directory, /opt/cloudera/cm/csd/
+3. Take a backup of KNOX_C717-7.4.4.jar
+4. Read the jar
+
+#/usr/java/jdk1.8.0_232-cloudera/bin/jar -tvf /opt/cloudera/cm/csd/KNOX_C717-7.4.4.jar | grep -i homepage
+
+5. Extract the homepage.json file, 
+
+#/usr/lib/jvm/latest/bin/jar -xvf /opt/cloudera/cm/csd/KNOX_C715-7.2.4.jar aux/descriptors/homepage.json
+
+6. Modify homepage.json file like below:
+
+vi aux/descriptors/homepage.json
+{
+"provider-config-ref": "homepage",
+"services": [
+{
+"name": "KNOX-METADATA"
+},
+{
+"name": "KNOXSSOUT"
+},
+{
+"name": "KNOX-SESSION"
+}
+],
+"applications": [
+{
+"name": "home"
+}
+]
+
+7. update the jar again:
+#/usr/lib/jvm/latest/bin/jar -uvf /opt/cloudera/cm/csd/KNOX_C715-7.2.4.jar aux/descriptors/homepage.json
+
+8. Restart cm server
+#systemctl restart cloudera-scm-server
+
+9. Start the knox service from CM UI
+```
