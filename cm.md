@@ -60,7 +60,7 @@ awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' ~/.ssh/id_rsa
 
 
 ##### Auto-TLS Use case 2: Enabling Auto-TLS with an intermediate CA signed by an existing Root CA
-```
+```bash
 https://github.com/arlotito/my-simple-bash-ca
 
 https://docs.cloudera.com/cdp-private-cloud-base/7.1.6/security-encrypting-data-in-transit/topics/cm-security-use-case-2.html
