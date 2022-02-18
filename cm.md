@@ -56,3 +56,37 @@ for private use below cmd to add \n
 ```bash
 awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' ~/.ssh/id_rsa
 ```
+
+
+
+##### Auto-TLS Use case 2: Enabling Auto-TLS with an intermediate CA signed by an existing Root CA
+```
+Auto-TLS Use case 2: Enabling Auto-TLS with an intermediate CA signed by an existing Root CA
+
+https://docs.cloudera.com/cdp-private-cloud-base/7.1.6/security-encrypting-data-in-transit/topics/cm-security-use-case-2.html
+
+export JAVA_HOME=/usr/java/jdk1.8.0_232-cloudera/; /opt/cloudera/cm-agent/bin/certmanager --location /var/lib/cloudera-scm-server/certmanager setup --configure-services --stop-at-csr
+
+
+
+
+export JAVA_HOME=/usr/java/jdk1.8.0_232-cloudera/; /opt/cloudera/cm-agent/bin/certmanager --location /var/lib/cloudera-scm-server/certmanager setup --configure-services --stop-at-csr
+
+INFO:root:Logging to /var/log/cloudera-scm-agent/certmanager.log
+Stopping after CSR generation. CSR is located at: /var/lib/cloudera-scm-server/certmanager/CMCA/private/ca_csr.pem
+After signing the CSR, continue Auto-TLS setup by rerunning certmanager setup and passing in --signed-ca-cert <signed_ca_chain.pem>
+
+
+
+
+ openssl pkcs7 -text -inform DER -in ca_csr.p7r | openssl pkcs7 -print_certs -out ca_csr1.pem
+
+
+export JAVA_HOME=/usr/java/jdk1.8.0_232-cloudera/; /opt/cloudera/cm-agent/bin/certmanager --location /var/lib/cloudera-scm-server/certmanager setup --configure-services --signed-ca-cert=/home/ca_csr_new.pem
+
+
+
+openssl x509 -req -in /var/lib/cloudera-scm-server/certmanager/CMCA/private/ca_csr.pem -CA /root/ca/certs/ca.cert.pem -CAkey /root/ca/private/ca.key.pem -out /home/intermediate.crt -days 365 -sha512 -CAcreateserial -extensions v3_ca -extfile openssl.cnf
+
+
+```
