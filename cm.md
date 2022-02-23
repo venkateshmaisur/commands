@@ -103,7 +103,7 @@ openssl x509 -req -in /var/lib/cloudera-scm-server/certmanager/CMCA/private/ca_c
 openssl x509 -in /home/intermediate.crt -text -noout
 cat /home/intermediate.crt  /root/ca/certs/ca.cert.pem >> /home/bundle.pem
 
-mv /var/lib/cloudera-scm-server/certmanager /var/lib/cloudera-scm-server/certmanager_bk
+cp -r /var/lib/cloudera-scm-server/certmanager /var/lib/cloudera-scm-server/certmanager_bk
 
 chown --recursive cloudera-scm:cloudera-scm /var/lib/cloudera-scm-server/certmanager
 
