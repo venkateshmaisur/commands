@@ -50,7 +50,7 @@ KRB5_TRACE=/tmp/krb.log
 systemctl restart cloudera-scm-agent
 ```
 
-### Auto tls using existing certificate: Use Case 3:
+### Auto-TLS using existing certificate: Use Case 3:
 
 ```
 curl -i -u admin:pbhagade -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{
