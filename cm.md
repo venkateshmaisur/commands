@@ -42,7 +42,7 @@ CMF_AGENT_KRB5_CONFIG=/tmp/krb5.conf
 KRB5_CONFIG=/tmp/krb5.conf
 ```
 
-### Cm agent kerbeors debug
+### CM agent kerbeors debug
 ```
 Set below value in /etc/default/cloudera-scm-agent
 KRB5_TRACE=/tmp/krb.log
@@ -50,7 +50,7 @@ KRB5_TRACE=/tmp/krb.log
 systemctl restart cloudera-scm-agent
 ```
 
-### auto tls using existing certificate:
+### Auto tls using existing certificate: Use Case 3:
 
 ```
 curl -i -u admin:pbhagade -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{
