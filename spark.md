@@ -205,3 +205,13 @@ from pyspark_llap.sql.session import HiveWarehouseSession
 make sure you use `%livy.pyspark1
 
 
+
+### SPARK + ATLAS + Lineage
+```
+spark-shell
+spark.sql("create external table blah1 ( name string ) location 'hdfs:///tmp/blah1'")
+
+spark.sql("create table blah2 AS SELECT * FROM blah1 ")
+
+## for managed table we need to HwC
+```
