@@ -118,3 +118,40 @@ curl -ikv -u admin:pbhagade -X POST --header 'Content-Type: application/json' --
 
 
 ```
+
+### Restart CM servicee via cmd line
+```bash
+1) To get the hostId from the full list of hosts:
+
+http://<CM Host>:7180/api/v12/hosts?view=full
+
+2) Get the list of rolenames using the hostId in this endpoint:
+
+http://<CM Host>:7180/api/v12/hosts/<hostId>?view=full 
+
+3) Use the 'roleName' and 'serviceName' to restart individual roles. For example,
+
+# Restart
+curl -u 'admin:admin' -X POST -H "Content-Type:application/json" -d '{"items":["YARN-1-NODEMANAGER-824b3f7f4f6a3214f38b962df88f3c44"]}' 'http://<CM Host>:7180/api/v15/clusters/Cluster%201/services/Impala/roleCommands/restart'
+
+
+
+# Example
+
+curl -ik -u admin:admin https://pbhagade-1.pbhagade.root.hwx.site:7183/api/v12/hosts?view=full
+
+
+curl -ik -u admin:admin https://pbhagade-1.pbhagade.root.hwx.site:7183/api/v12/hosts/4164b8c5-23cd-4e16-b1f3-ff373e5b4c05?view=full 
+
+
+  }, {
+    "clusterName" : "Cluster 1",
+    "serviceName" : "KNOX-1",
+    "roleName" : "KNOX-KNOX_GATEWAY-1",
+    "healthSummary" : "GOOD",
+    "roleStatus" : "STARTED"
+  }, {
+
+
+curl -ik -u 'admin:admin' -X POST -H "Content-Type:application/json" -d '{"items":["KNOX-KNOX_GATEWAY-1"]}' 'https://pbhagade-1.pbhagade.root.hwx.site:7183/api/v15/clusters/Cluster%201/services/KNOX-1/roleCommands/restart'
+```
