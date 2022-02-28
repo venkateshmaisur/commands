@@ -12,6 +12,12 @@
  - [X] Hive LDAP  https://github.com/bhagadepravin/commands/blob/master/hive-ldap
  - [X] NiFi https://bhagadepravin.github.io/commands/nifi
 
+
+##### CDP kerberos ticket
+```bash
+NAME=atlas; KEYTAB=$(find /run/cloudera-scm-agent/process -name ${NAME}.keytab -path "*${NAME}-*" | sort | tail -n 1); PRINCIPAL=$(klist -kt "$KEYTAB" | awk '{ print $4 }' | grep "^${NAME}" | head -n 1); kinit -kt "${KEYTAB}" "${PRINCIPAL}"
+```
+
 ```bash
 env GZIP=-9 tar cvzf ambari-log.tar.gz <log file>
 tail -f /var/log/cloudera-scm-server/cloudera-scm-server.log  | grep "Started Jetty server"
