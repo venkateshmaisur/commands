@@ -66,3 +66,10 @@ Restoring: fulltext_index
 : Time taken: 51 ms: Done!
 Repair Index: Done!
 ```
+
+#### Troubleshooting
+```
+if there is 401 error for solr 
+
+DEFAULT_JVM_OPTS="-Dlog4j.configuration=atlas-log4j.xml -Djava.net.preferIPv4Stack=true -server -Djava.security.auth.login.config=/var/run/cloudera-scm-agent/process/104-atlas-ATLAS_SERVER/conf/atlas_jaas.conf -Djavax.security.auth.useSubjectCredsOnly=false"
+```
