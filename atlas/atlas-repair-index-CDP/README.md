@@ -21,8 +21,9 @@ kinit -kt ${ATLAS_PROCESS_DIR}/atlas.keytab atlas/$(hostname -f)
 
 ##### If SSL is enabled on Cluster, Make sure Solr cert or RootCA certificate is added to JAVA_HOME cacerts
 ```
-openssl s_client -connect solr-hostname:port -showcerts
-keytool -import -file /tmp/rootca.pem -keystore $JAVA_HOME/jre/lib/security/cacerts -alias rootca -storepass changeit
+export JAVA_HOME=/usr/java/jdk1.8.0_232-cloudera
+echo -n | openssl s_client -connect `hostname -f`:31443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/atlas.pem
+keytool -import -file /tmp/atlas.pem -keystore $JAVA_HOME/jre/lib/security/cacerts -alias atlascert -storepass changeit
 ```
 ```bash
 cd /opt/cloudera/parcels/CDH/lib/atlas/tools/atlas-index-repair
@@ -31,17 +32,15 @@ cd /opt/cloudera/parcels/CDH/lib/atlas/tools/atlas-index-repair
 
  Add `"-Djava.security.auth.login.config=/<atlas server directory>/conf/atlas_jaas.conf"` to `DEFAULT_JVM_OPTS` in `repair_index.py`.
 
-atlas_jaas.conf
+vi /opt/cloudera/parcels/CDH/lib/atlas/tools/atlas-index-repair/repair_index.py
 ```bash
-Client {
-   com.sun.security.auth.module.Krb5LoginModule required
-   useKeyTab=true
-   useTicketCache=false
-   storeKey=true
-   doNotPrompt=false
-   keyTab="{{ATLAS_KEYTAB_FILE}}"
-   principal="{{ATLAS_PRINCIPAL}}";
-};
+ls -1dtr /var/run/cloudera-scm-agent/process/*ATLAS_SERVER | tail -1
+/var/run/cloudera-scm-agent/process/104-atlas-ATLAS_SERVER
+
+
+From "-Djava.security.auth.login.config=/<atlas server directory>/conf/atlas_jaas.conf"
+To   "-Djava.security.auth.login.config=/var/run/cloudera-scm-agent/process/104-atlas-ATLAS_SERVER/conf/atlas_jaas.conf"
+
 ```
 ```python
 eg : python repair_index.py [-g <guid>]
