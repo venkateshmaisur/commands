@@ -32,7 +32,6 @@ cd /opt/cloudera/parcels/CDH/lib/atlas/tools/atlas-index-repair
 
  Add `"-Djava.security.auth.login.config=/<atlas server directory>/conf/atlas_jaas.conf"` to `DEFAULT_JVM_OPTS` in `repair_index.py`.
 
-vi /opt/cloudera/parcels/CDH/lib/atlas/tools/atlas-index-repair/repair_index.py
 ```bash
 ls -1dtr /var/run/cloudera-scm-agent/process/*ATLAS_SERVER | tail -1
 /var/run/cloudera-scm-agent/process/104-atlas-ATLAS_SERVER
@@ -40,8 +39,11 @@ ls -1dtr /var/run/cloudera-scm-agent/process/*ATLAS_SERVER | tail -1
 
 From "-Djava.security.auth.login.config=/<atlas server directory>/conf/atlas_jaas.conf"
 To   "-Djava.security.auth.login.config=/var/run/cloudera-scm-agent/process/104-atlas-ATLAS_SERVER/conf/atlas_jaas.conf"
-
 ```
+
+`vi /opt/cloudera/parcels/CDH/lib/atlas/tools/atlas-index-repair/repair_index.py`
+
+
 ```python
 eg : python repair_index.py [-g <guid>]
 ```
