@@ -43,6 +43,15 @@ To   "-Djava.security.auth.login.config=/var/run/cloudera-scm-agent/process/104-
 
 `vi /opt/cloudera/parcels/CDH/lib/atlas/tools/atlas-index-repair/repair_index.py`
 
+#### For kerberos authentication.
+
+```
+
+NAME=atlas; KEYTAB=$(find /run/cloudera-scm-agent/process -name ${NAME}.keytab -path "*${NAME}-*" | sort | tail -n 1); PRINCIPAL=$(klist -kt "$KEYTAB" | awk '{ print $4 }' | grep "^${NAME}" | head -n 1); kinit -kt "${KEYTAB}" "${PRINCIPAL}"
+
+cd /opt/cloudera/parcels/CDH/lib/atlas/tools/atlas-index-repair
+python repair_index.py
+```
 
 ```python
 eg : python repair_index.py [-g <guid>]
