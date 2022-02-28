@@ -22,8 +22,8 @@ kinit -kt ${ATLAS_PROCESS_DIR}/atlas.keytab atlas/$(hostname -f)
 ##### If SSL is enabled on Cluster, Make sure Solr cert or RootCA certificate is added to JAVA_HOME cacerts
 ```
 export JAVA_HOME=/usr/java/jdk1.8.0_232-cloudera
-echo -n | openssl s_client -connect `hostname -f`:31443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/atlas.pem
-keytool -import -file /tmp/atlas.pem -keystore $JAVA_HOME/jre/lib/security/cacerts -alias atlascert -storepass changeit
+echo -n | openssl s_client -connect solr-hostname:port | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/solr.pem
+keytool -import -file /tmp/solr.pem -keystore $JAVA_HOME/jre/lib/security/cacerts -alias solrcert -storepass changeit
 ```
 ```bash
 cd /opt/cloudera/parcels/CDH/lib/atlas/tools/atlas-index-repair
