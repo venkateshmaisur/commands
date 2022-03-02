@@ -943,7 +943,8 @@ Make sure both files has json content. Provide files basic_hivedb.json and advan
 
 NAME=atlas; KEYTAB=$(find /run/cloudera-scm-agent/process -name ${NAME}.keytab -path "*${NAME}-*" | sort | tail -n 1); PRINCIPAL=$(klist -kt "$KEYTAB" | awk '{ print $4 }' | grep "^${NAME}" | head -n 1); kinit -kt "${KEYTAB}" "${PRINCIPAL}"
 
-# python repair_index.py -g <guid> 
+# follow https://github.com/bhagadepravin/commands/tree/master/atlas/atlas-repair-index-CDP
+
 cd /opt/cloudera/parcels/CDH/lib/atlas/tools/atlas-index-repair
 
 
