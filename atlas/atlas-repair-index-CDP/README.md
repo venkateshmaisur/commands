@@ -15,15 +15,14 @@ Steps to execute repair index in Atlas :
 1. Login into Atlas node:
 
 ```bash
-export ATLAS_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*ATLAS_SERVER | tail -1)
-kinit -kt ${ATLAS_PROCESS_DIR}/atlas.keytab atlas/$(hostname -f)
+NAME=atlas; KEYTAB=$(find /run/cloudera-scm-agent/process -name ${NAME}.keytab -path "*${NAME}-*" | sort | tail -n 1); PRINCIPAL=$(klist -kt "$KEYTAB" | awk '{ print $4 }' | grep "^${NAME}" | head -n 1); kinit -kt "${KEYTAB}" "${PRINCIPAL}"
 ```
 
 ##### If SSL is enabled on Cluster, Make sure Solr cert or RootCA certificate is added to JAVA_HOME cacerts
 ```
 export JAVA_HOME=/usr/java/jdk1.8.0_232-cloudera
 echo -n | openssl s_client -connect solr-hostname:port | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/solr.pem
-keytool -import -file /tmp/solr.pem -keystore $JAVA_HOME/jre/lib/security/cacerts -alias solrcert -storepass changeit
+/usr/java/jdk1.8.0_232-cloudera/bin/keytool -import -file /tmp/solr.pem -keystore $JAVA_HOME/jre/lib/security/cacerts -alias solrcert -storepass changeit
 ```
 ```bash
 cd /opt/cloudera/parcels/CDH/lib/atlas/tools/atlas-index-repair
@@ -81,4 +80,43 @@ Repair Index: Done!
 if there is 401 error for solr 
 
 DEFAULT_JVM_OPTS="-Dlog4j.configuration=atlas-log4j.xml -Djava.net.preferIPv4Stack=true -server -Djava.security.auth.login.config=/var/run/cloudera-scm-agent/process/104-atlas-ATLAS_SERVER/conf/atlas_jaas.conf -Djavax.security.auth.useSubjectCredsOnly=false"
+```
+
+### Repair Atlas index:
+
+```bash
+- Advanced search : 
+# curl -u -k <userName> 'https://<atlasFQDN>:21443/api/atlas/v2/search/dsl?limit=300&offset=0&typeName=hive_db' > advanced_hivedb.json
+
+- Basic search: 
+#curl -k -u <userName> -X POST -H 'content-type: application/json' -d '{"attributes":["qualifiedName"],"excludeDeletedEntities":false,"query":"*","limit":300,"offset":0,"typeName":"hive_db"}' https://<AtlasFQDN>:21443/api/atlas/v2/search/basic  > basic_hivedb.json
+
+Please execute above commands with the user who has access to all entities (and all permissions). 
+
+Make sure both files has json content. Provide files basic_hivedb.json and advanced_hivedb.json
+
+
+# python -mjson.tool basic_hivedb.json | grep guid | awk -F':' '{print $2}' | tr -d ',' | sort > basic_guid_sort.out
+# python -mjson.tool advanced_hivedb.json | grep guid | awk -F':' '{print $2}' | tr -d ','  | sort > advanced_guid_sort.out
+
+- Find the missing guid 
+# diff advanced_guid_sort.out basic_guid_sort.out |  tr -d '<' | tr -d '"' > /tmp/sorted.out
+# chmod 777 /tmp/sorted.out
+
+- Once identified, use the index repair tool to reindex these guid. 
+
+# Kinit with atlas keytab:
+
+NAME=atlas; KEYTAB=$(find /run/cloudera-scm-agent/process -name ${NAME}.keytab -path "*${NAME}-*" | sort | tail -n 1); PRINCIPAL=$(klist -kt "$KEYTAB" | awk '{ print $4 }' | grep "^${NAME}" | head -n 1); kinit -kt "${KEYTAB}" "${PRINCIPAL}"
+
+# python repair_index.py -g <guid> 
+cd /opt/cloudera/parcels/CDH/lib/atlas/tools/atlas-index-repair
+
+
+FILENAME="/tmp/sorted.out"
+LINES=$(cat $FILENAME)
+for LINES in $LINES; do python repair_index.py -g $LINES; done
+
+
+-- Once finished, you can redo above api commands and diff to confirm both basic and advanced search has same results. 
 ```
