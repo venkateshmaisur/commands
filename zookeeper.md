@@ -25,6 +25,7 @@ b. run below export cmd and zookeeper client cmd to connect
 ```
 export JVMFLAGS="-Djava.security.auth.login.config=/tmp/zookeeper_client_jaas.conf"
 zookeeper-client -server zk:2181
+ls /znode
 ```
 
 Access the znode
@@ -46,6 +47,7 @@ This will reset the zookeeper super digest temporarily
 ```
     # zookeeper-client
     # addauth digest super:cloudera
+    ls /znode
 ```
 and access the znode
 
