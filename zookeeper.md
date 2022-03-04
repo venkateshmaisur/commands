@@ -49,4 +49,3 @@ This will reset the zookeeper super digest temporarily
 ```
 and access the znode
 
-```
