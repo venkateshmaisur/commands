@@ -298,6 +298,13 @@ Restart Zookeeper Service before disabling kerberos..
 
 Disable the Kerberos using Ambari UI.
 ```
+### Disabled security:
+```
+ 
+# Set command:
+/var/lib/ambari-server/resources/scripts/configs.py -a set -l localhost -t 8443 -s https --unsafe -n clustername -u admin -p “pass” -c cluster-env -k security_enabled -v false
+
+```
 
 ## Adding Hiveserver2 using Ambari REST in a Kerberos Env:
 
