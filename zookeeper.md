@@ -1,12 +1,18 @@
 ### Access zookeeper znode 
 
- znode only allow HTTP user to access.
-There are multuple ways to access zonde
+When we get below error
+```
+Authentication is not valid : /znode
+```
 
-1. 
-a. Create a jaas file with below content and kinit with HTTP principal 
+znode only allow specific user to access.
+There are multuple ways to access that zonde
 
-Create the zookeeper_client_jaas.conf file.
+##### Method I : 
+
+a. Create a jaas file with below content and kinit with user principal 
+
+Create the `zookeeper_client_jaas.conf` file.
 ```
 Client {
 com.sun.security.auth.module.Krb5LoginModule required
@@ -14,16 +20,19 @@ useKeyTab=false
 useTicketCache=true;
 }; 
 ```
+b. run below export cmd and zookeeper client cmd to connect
 
-`export JVMFLAGS="-Djava.security.auth.login.config=/tmp/zookeeper_client_jaas.conf"`
+```
+export JVMFLAGS="-Djava.security.auth.login.config=/tmp/zookeeper_client_jaas.conf"
+zookeeper-client -server zk:2181
+```
 
-`zookeeper-client -server zk:2181`
-
-access the znode
+Access the znode
 
 
-2. second method i
-#### Zookeeper - Super User Authentication and Authorization
+##### Method II: 
+
+###### Zookeeper - Super User Authentication and Authorization
 
 1) In `CM --> Zookeeper --> Configuration add the following to "Java Configuration Options for ZooKeeper Server"`
 ```
