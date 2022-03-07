@@ -168,10 +168,10 @@ and remove "atlas.authentication.ugi-groups.include-hadoop-groups=true" property
 # beeline --silent=true -u "jdbc:hive2://$(hostname -f):2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2"  -e "show tables"
 # echo hadoop | kinit admin/admin
 # /opt/cloudera/parcels/CDH/lib/atlas/hook-bin/import-hive.sh
+```
 
 
-
-## Hive import script
+### HDP Hive import script
 ```sh
 HIVE_HOME=/usr/hdp/current/hive-client
 export HIVE_HOME=/usr/hdp/current/hive-client
@@ -191,22 +191,26 @@ export HIVE_CONF_DIR=/usr/hdp/current/hive-client/conf
 /usr/hdp/current/atlas-server/hook-bin/import-hive.sh
 ```
 
-### cdp import script
+### CDP import script
 ```
-Login into Hbase node:
-export ATLAS_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*ATLAS_SERVER | tail -1)
-kinit -kt $ATLAS_PROCESS_DIR/atlas.keytab atlas/`hostname -f`
+1. Login into Atlas node
+2. kinit with admin user, as admin user will have all the  permission for Atlas UI and its entities
 
-**Note**
-# set JAVA_HOME if not set
-# Make sure atlas service user has access to atlas policy for "update-entity"
+3. export ATLAS_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*ATLAS_SERVER | tail -1)
+   cp $ATLAS_PROCESS_DIR/conf/atlas_jaas.conf /tmp/atlas_jaas.conf
 
-#run:
-/opt/cloudera/parcels/CDH//lib/atlas/hook-bin/import-hbase.sh
-```
+# Open a new terminal for Atlas node.
+tailf /var/log/atlas/application.log
 
-```bash
-/bin/bash /usr/hdp/current/atlas-server/hook-bin/import-hive.sh -Dsun.security.jgss.debug=true -Djavax.security.auth.useSubjectCredsOnly=false -Djava.security.auth.login.config=/etc/atlas/conf/atlas_jaas.conf
+# Run the import script on the previous terminal
+
+cd /opt/cloudera/parcels/CDH/lib/atlas/hook-bin/
+
+bash import-hive.sh  -Dsun.security.jgss.debug=true -Djavax.security.auth.useSubjectCredsOnly=false -Djava.security.krb5.conf=/etc/krb5.conf -Djava.security.auth.login.config=/tmp/atlas_jaas.conf
+
+or
+
+bash import-hive.sh -Djavax.security.auth.useSubjectCredsOnly=false -Djava.security.krb5.conf=/etc/krb5.conf -Djava.security.auth.login.config=/tmp/atlas_jaas.conf
 ```
 
 #### cdp import script for Hive
@@ -223,47 +227,6 @@ kinit -kt $ATLAS_PROCESS_DIR/atlas.keytab atlas/`hostname -f`
 if any table is missing:
  /opt/cloudera/parcels/CDH-7.1.7-1.cdh7.1.7.p0.15945976/lib/atlas/hook-bin/import-hive.sh -t <table-name>
 
-```
-
-```
-[[ INTERNAL ]]
-
-Action Plan:
-
-1. Login into Atlas node
-2. kinit with admin user, as admin user will have all the  permission for Atlas UI and its entities
-3. cp /etc/atlas/conf/atlas_jaas.conf /etc/atlas/conf/atlas_jaas_new.conf
-
-# update below variables in  /etc/atlas/conf/atlas_jaas_new.conf
-
-   keyTab="{{ATLAS_KEYTAB_FILE}}"
-   principal="{{ATLAS_PRINCIPAL}}";
-
-# Get the latest atlas keytab and princpal and update to atlas_jaas_new.conf file like below 
-
-#Ex:
-ATLAS_KEYTAB_FILE=/var/run/cloudera-scm-agent/process/299-atlas-ATLAS_SERVER/atlas.keytab
-ATLAS_PRINCIPAL=atlas/pbhagade-2.pbhagade.root.hwx.site@ROOT.HWX.SITE
-
-+++++ it should look like below ++++
-cat /etc/atlas/conf/atlas_jaas_new.conf
-Client {
-   com.sun.security.auth.module.Krb5LoginModule required
-   useKeyTab=true
-   useTicketCache=false
-   storeKey=true
-   doNotPrompt=false
-   keyTab="/var/run/cloudera-scm-agent/process/299-atlas-ATLAS_SERVER/atlas.keytab"
-   principal="atlas/pbhagade-2.pbhagade.root.hwx.site@ROOT.HWX.SITE";
-};
-++++
-
-# Open a new terminal for Atlas node.
-tailf /var/log/atlas/application.log
-
-# Run the import script on the previous terminal
-
-bash import-hive.sh  -Dsun.security.jgss.debug=true -Djavax.security.auth.useSubjectCredsOnly=false -Djava.security.krb5.conf=/etc/krb5.conf -Djava.security.auth.login.config=/etc/atlas/conf/atlas_jaas_new.conf
 ```
 
 ## Triage
