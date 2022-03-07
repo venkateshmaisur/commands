@@ -5,6 +5,14 @@ kinit -kt /etc/security/keytabs/atlas.service.keytab $(klist -kt /etc/security/k
 grep -i java_home /etc/hadoop/conf/hadoop-env.sh
 ```
 
+## Atlas curls
+```bash
+curl -g -X GET -u admin:password -H "Content-Type: application/json"  -H"Cache-Control: no-cache" "http://<atlas_server>:21000/api/atlas/admin/metrics"  > /tmp/atlas-metrics.out
+
+curl -X GET  -u admin:password  --header 'Accept: application/json;charset=UTF-8' 'http://<atlas_server>:21000/api/atlas/v2/types/typedefs'  > /tmp/atlas-typedefs.out
+
+```
+
 ## Atlas CDP Recreate hbasse table and solr collection 
 
 ```
