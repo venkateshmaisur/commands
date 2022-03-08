@@ -20,7 +20,7 @@ SELECT DISTINCT course_name  FROM course ORDER BY course_name;
 
 CREATE VIEW view_course1 AS SELECT course_id, course_name FROM course WHERE course_name = 'SQL';
 
-create external table external_course AS SELECT * FROM course;
+CREATE EXTERNAL TABLE external_course AS SELECT * FROM course;
 ```
 ### Impala
 ```sql
