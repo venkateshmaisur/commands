@@ -905,7 +905,7 @@ Make sure both files has json content. Provide files basic_hivedb.json and advan
 # python -mjson.tool advanced_hivedb.json | grep guid | awk -F':' '{print $2}' | tr -d ','  | sort > advanced_guid_sort.out
 
 - Find the missing guid 
-# diff advanced_guid_sort.out basic_guid_sort.out |  tr -d '<' | tr -d '"' > /tmp/sorted.out
+# diff  -u  advanced_guid_sort.out basic_guid_sort.out |  tr -d '<' | tr -d '"'   | awk -F " " '{print $2}' | grep -v '^ *$'  | sed -nr '/^.{36,}$/p' >  /tmp/sorted.out
 # chmod 777 /tmp/sorted.out
 
 - Once identified, use the index repair tool to reindex these guid. 
