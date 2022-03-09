@@ -6,10 +6,11 @@ if [ "$EUID" -ne 0 ]
 fi
 
 mkdir -p /root/ca
-cp root.openssl.cnf /root/ca/openssl.cnf 
+
 
 cd /root/ca
-
+yum install wget -y -q
+wget https://raw.githubusercontent.com/bhagadepravin/commands/master/internal-ca/scripts/openssl.cnf
 mkdir -p certs crl newcerts private
 
 chmod 700 private
