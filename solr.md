@@ -575,45 +575,57 @@ Change the default 90 days to the number of days you want to keep
   curl -k --negotiate -u : "http://$(hostname -f):8993/solr/ranger_audits/select?q=*%3A*&wt=json&ident=true&rows=1&sort=evtTime+desc"
  ```
 
-### Manual solr collection clean-up:
-```bash
-Stop Solr service:
+## Manual Steps to cleanup Solr Atlas collection (data + znode) and create the collections without restarting any services.
 
-Check the Solr data dir
+1. Check the Solr data dir and move atlas solr collection to backup dir.
 
-CM UI -> Solr -> configuration -> solr_data_dir
+`CM UI -> Solr -> configuration -> solr_data_dir`
 
 login into all solr instances :
-
+```bash
+mkdir  /tmp/solr-backup/
 cd /var/lib/solr-infra
-mv vertex_index* edge_index* fulltext_index* /tmp/backup/
-
-
-
-kinit with solr keytab:
-
+mv vertex_index* edge_index* fulltext_index* /tmp/solr-backup/
+```
+  
+2. kinit with solr keytab:
+```bash
 NAME=solr; KEYTAB=$(find /run/cloudera-scm-agent/process -name ${NAME}.keytab -path "*${NAME}-*" | sort | tail -n 1); PRINCIPAL=$(klist -kt "$KEYTAB" | awk '{ print $4 }' | grep "^${NAME}" | head -n 1); kinit -kt "${KEYTAB}" "${PRINCIPAL}"
+```
+ 
+3. Create a jaas file with below content and kinit with solr principal 
 
-
-Create a jaas file with below content and kinit with solr principal 
-
-Create the zookeeper_client_jaas.conf file.
-
+Create the `/tmp/zookeeper_client_jaas.conf` file.
+```bash
 Client {
 com.sun.security.auth.module.Krb5LoginModule required
 useKeyTab=false
 useTicketCache=true;
 }; 
+```
 
-export JVMFLAGS="-Djava.security.auth.login.config=/tmp/zookeeper_client_jaas.conf"
+`export JVMFLAGS="-Djava.security.auth.login.config=/tmp/zookeeper_client_jaas.conf"`
 
-zookeeper-client -server zk:2181
+
+4. Connect to Zookeeper and remove atlas collections
+
+```bash
+$ zookeeper-client -server zk:2181
 
 rmr /solr-infra/collections/edge_index
 rmr /solr-infra/collections/vertex_index
 rmr /solr-infra/collections/fulltext_index
-  
-Start Solr
+```
+5 . Create the solr collection for atlas.
+
+```bash
+solrctl collection --create  edge_index -c atlas_configs -s 1 -r 1 -m 1
+solrctl collection --create  fulltext_index -c atlas_configs -s 1 -r 1 -m 1
+solrctl collection --create  vertex_index -c atlas_configs -s 1 -r 1 -m 1
+  ```
+6. Please check atlas logs for any error, when you access Atlas WebUI.
+
+ 
 ```
   
 ```
