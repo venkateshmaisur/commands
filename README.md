@@ -448,6 +448,21 @@ env GZIP=-9  tar -cvzf atlas.tar.gz $ATLAS_PROCESS_DIR /var/log/atlas/applicatio
 
 attach atlas.tar.gz
 
+```
 
 
+#### Zookeeper "Authentication is not valid"
+```
+Create a jaas file with below content and kinit with  principal 
+
+Create the zookeeper_client_jaas.conf file.
+
+Client {
+com.sun.security.auth.module.Krb5LoginModule required
+useKeyTab=false
+useTicketCache=true;
+}; 
+export JVMFLAGS="-Djava.security.auth.login.config=/tmp/zookeeper_client_jaas.conf"
+
+zookeeper-client -server zk:2181
 ```
