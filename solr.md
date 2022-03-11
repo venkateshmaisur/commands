@@ -627,18 +627,16 @@ solrctl collection --create  vertex_index -c atlas_configs -s 1 -r 1 -m 1
 6. Please check atlas logs for any error, when you access Atlas WebUI.
 
  
-
   
+  
+  
+ #### Example cmds   
 ```
   solrctl instancedir --create atlas_configs /opt/cloudera/parcels/CDH/etc/atlas/conf.dist/solr/
 solrctl collection --create  edge_index -c atlas_configs -s 1 -r 1 -m 1
 solrctl collection --create  fulltext_index -c atlas_configs -s 1 -r 1 -m 1
 solrctl collection --create  vertex_index -c atlas_configs -s 1 -r 1 -m 1
-```
-  
-  
- #### Example cmds 
-```
+
   ### ranger_audit solr configs   https://github.com/hortonworks/ranger/tree/cdpd-master/security-admin/contrib/solr_for_audit_setup/conf
 solrctl config --delete ranger_audits
 solrctl instancedir --create ranger_audits /opt/cloudera/parcels/CDH/lib/ranger-admin/contrib/solr_for_audit_setup/conf/
