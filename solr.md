@@ -635,6 +635,9 @@ solrctl collection --create  edge_index -c atlas_configs -s 1 -r 1 -m 1
 solrctl collection --create  fulltext_index -c atlas_configs -s 1 -r 1 -m 1
 solrctl collection --create  vertex_index -c atlas_configs -s 1 -r 1 -m 1
 ```
+  
+  
+ #### Example cmds 
 ```
   ### ranger_audit solr configs   https://github.com/hortonworks/ranger/tree/cdpd-master/security-admin/contrib/solr_for_audit_setup/conf
 solrctl config --delete ranger_audits
