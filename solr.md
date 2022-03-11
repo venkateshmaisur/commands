@@ -17,6 +17,7 @@ https://bhagadepravin.github.io/commands/solr
 - [Saving Indexed Data](https://github.com/bhagadepravin/commands/blob/master/solr.md#saving-indexed-data)
 - [Configuring Solr for Ranger](https://github.com/bhagadepravin/commands/blob/master/solr.md#configuring-solr-for-ranger)
 - [External solr for Atlas](https://github.com/bhagadepravin/commands/blob/master/solr.md#external-solrhdp-search-for-atlas)
+- [manual cleanup solr Atlas collection](https://github.com/bhagadepravin/commands/blob/master/solr.md#manual-steps-to-cleanup-solr-atlas-collection-data--znode-and-create-the-collections-without-restarting-any-services)
 =================================================================================
                                                                                      
 For a Kerberos env kinit with Ambari Infra keytab
@@ -634,7 +635,7 @@ solrctl collection --create  edge_index -c atlas_configs -s 1 -r 1 -m 1
 solrctl collection --create  fulltext_index -c atlas_configs -s 1 -r 1 -m 1
 solrctl collection --create  vertex_index -c atlas_configs -s 1 -r 1 -m 1
 ```
-  
+```
   ### ranger_audit solr configs   https://github.com/hortonworks/ranger/tree/cdpd-master/security-admin/contrib/solr_for_audit_setup/conf
 solrctl config --delete ranger_audits
 solrctl instancedir --create ranger_audits /opt/cloudera/parcels/CDH/lib/ranger-admin/contrib/solr_for_audit_setup/conf/
