@@ -575,6 +575,83 @@ Change the default 90 days to the number of days you want to keep
   curl -k --negotiate -u : "http://$(hostname -f):8993/solr/ranger_audits/select?q=*%3A*&wt=json&ident=true&rows=1&sort=evtTime+desc"
  ```
 
+### Manual solr collection clean-up:
+```bash
+Stop Solr service:
+
+Check the Solr data dir
+
+CM UI -> Solr -> configuration -> solr_data_dir
+
+login into all solr instances :
+
+cd /var/lib/solr-infra
+mv vertex_index* edge_index* fulltext_index* /tmp/backup/
+
+
+
+kinit with solr keytab:
+
+NAME=solr; KEYTAB=$(find /run/cloudera-scm-agent/process -name ${NAME}.keytab -path "*${NAME}-*" | sort | tail -n 1); PRINCIPAL=$(klist -kt "$KEYTAB" | awk '{ print $4 }' | grep "^${NAME}" | head -n 1); kinit -kt "${KEYTAB}" "${PRINCIPAL}"
+
+
+Create a jaas file with below content and kinit with solr principal 
+
+Create the zookeeper_client_jaas.conf file.
+
+Client {
+com.sun.security.auth.module.Krb5LoginModule required
+useKeyTab=false
+useTicketCache=true;
+}; 
+
+export JVMFLAGS="-Djava.security.auth.login.config=/tmp/zookeeper_client_jaas.conf"
+
+zookeeper-client -server zk:2181
+
+rmr /solr-infra/collections/edge_index
+rmr /solr-infra/collections/vertex_index
+rmr /solr-infra/collections/fulltext_index
+  
+Start Solr
+```
+  
+```
+  solrctl instancedir --create atlas_configs /opt/cloudera/parcels/CDH/etc/atlas/conf.dist/solr/
+solrctl collection --create  edge_index -c atlas_configs -s 1 -r 1 -m 1
+solrctl collection --create  fulltext_index -c atlas_configs -s 1 -r 1 -m 1
+solrctl collection --create  vertex_index -c atlas_configs -s 1 -r 1 -m 1
+
+  
+  ### ranger_audit solr configs   https://github.com/hortonworks/ranger/tree/cdpd-master/security-admin/contrib/solr_for_audit_setup/conf
+solrctl config --delete ranger_audits
+solrctl instancedir --create ranger_audits /opt/cloudera/parcels/CDH/lib/ranger-admin/contrib/solr_for_audit_setup/conf/
+solrctl collection --create  ranger_audits -c ranger_audits -s 4 -r 1 -m 5
+
+
+
+solrctl config --delete ranger_audits
+
+Login into Solr node: 
+
+NAME=solr; KEYTAB=$(find /run/cloudera-scm-agent/process -name ${NAME}.keytab -path "*${NAME}-*" | sort | tail -n 1); PRINCIPAL=$(klist -kt "$KEYTAB" | awk '{ print $4 }' | grep "^${NAME}" | head -n 1); kinit -kt "${KEYTAB}" "${PRINCIPAL}"
+
+# Delete
+
+solrctl collection --list
+solrctl collection --delete edge_index
+solrctl collection --delete fulltext_index
+solrctl collection --delete vertex_index
+
+# Create 
+
+solrctl collection --list
+solrctl collection --create  edge_index -c atlas_configs -s 1 -r 1 -m 1
+solrctl collection --create  fulltext_index -c atlas_configs -s 1 -r 1 -m 1
+solrctl collection --create  vertex_index -c atlas_configs -s 1 -r 1 -m 1
+solrctl collection --list
+
+  ```
 - [Performance Tuning for Ambari Infra](https://docs.hortonworks.com/HDPDocuments/Ambari-2.6.2.0/bk_ambari-operations/content/performance_tuning_for_ambari_infra.html)
 - [Securing Solr Collections with Ranger + Kerberos](https://community.hortonworks.com/articles/15159/securing-solr-collections-with-ranger-kerberos.html)
 - [Setup Ranger to use Ambari Infra Solr enabled in SSL](https://community.hortonworks.com/articles/92987/setup-ranger-to-use-ambari-infra-solr-enabled-in-s.html)
