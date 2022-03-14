@@ -938,3 +938,28 @@ attach the latest access_log.2021-11-12.log log file.
 
 collect tagsync debug logs both tagsync.log, /tmp/tagsyncnew.log, along with tagsync configs, rest console outputs while performing action plan.
 ```
+
+#### Ranger audit export data
+```bash
+UI
+curl -ik -H 'Content-Type: application/json' -H 'Accept: application/json' -u admin:admin123 "http://pravin716-1.pravin716.root.hwx.site:6080/service/assets/accessAudit?page=0&pageSize=25&startIndex=0&sortBy=eventTime"
+
+
+
+curl -ik -H 'Content-Type: application/json' -H 'Accept: application/json' -u admin:admin123 "http://pravin716-1.pravin716.root.hwx.site:6080/service/assets/exportAudit?page=0&pageSize=25&startIndex=0&sortBy=eventTime"
+
+
+# You can query to Solr collection directly.
+kinit with solr:
+
+curl -k –negotiate -u : "http://$(hostname -f):8993/solr/ranger_audits/select?q=%3A&wt=json" 
+
+> Query by date/time range
+{SOLR_URL}/solr/ranger_audits/select?q=evtTime:[2021-02-15T00:00:00.000Z+TO+2021-02-22T11:59:59.000Z]&sort=evtTime+desc
+
+> select all: oldest
+{SOLR_URL}/solr/ranger_audits/select?q=*:*&sort=evtTime+asc&rows=1000
+
+> select all: newest
+{SOLR_URL}/solr/ranger_audits/select?q=*:*&sort=evtTime+desc&rows=1000
+```
