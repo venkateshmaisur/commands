@@ -963,3 +963,36 @@ curl -k –negotiate -u : "http://$(hostname -f):8993/solr/ranger_audits/select?
 > select all: newest
 {SOLR_URL}/solr/ranger_audits/select?q=*:*&sort=evtTime+desc&rows=1000
 ```
+
+### Modify Ranger CSD
+```
+1. Stop the Ranger service from CM UI
+2. Go to CSD directory, /opt/cloudera/cm/csd/
+check the CSD as per version cdp and cm
+
+3. Take a backup of RANGER_C716-7.3.1.jar
+4. Read the jar
+
+/usr/java/jdk1.8.0_232-cloudera/bin/jar  tvf RANGER_C716-7.3.1.jar
+
+/usr/java/jdk1.8.0_232-cloudera/bin/jar  tvf RANGER_C716-7.3.1.jar | grep service.sdl
+
+
+5. Extract the homepage.json file, 
+
+/usr/java/jdk1.8.0_232-cloudera/bin/jar  xvf RANGER_C716-7.3.1.jar | grep service.sdl
+
+6. Modify service.sdl file like below:
+
+vi descriptor/service.sdl
+          "name": "rangerlookup_principal",
+          "primary": "rangerlookuptest",
+          "instance": "${host}"
+        },
+
+7. update the jar again:
+ /usr/java/jdk1.8.0_232-cloudera/bin/jar  -uvf RANGER_C716-7.3.1.jar descriptor/service.sdl
+
+8. Restart cm server
+#systemctl restart cloudera-scm-server
+```
