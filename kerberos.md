@@ -340,3 +340,43 @@ RULE:[1:$1@$0](.*@EXAMPLE.COM)s/@.*//
 
 If the source string is ambari-qa@EXAMPLE.COM, the result is ambari-qa
 ```
+
+
+### TSB 2021-544: Microsoft AD November 2021 Security Update
+https://my.cloudera.com/knowledge/TSB-2021-544--Microsoft-AD-November-2021-Security-Update?id=334373
+```
+Error:
+
+2022-03-14 09:35:06,681 - Failed to create principal, HTTP/c174-node1.coelab.cloudera.com@SUPPORT.COM - Can not create principal : HTTP/c174-node1.coelab.cloudera.com@SUPPORT.COM
+
+
+Caused by: javax.naming.directory.InvalidAttributeValueException: [LDAP: error code 19 - 000021C8: AtrErr: DSID-03200BBA, #1:
+        0: 000021C8: DSID-03200BBA, problem 1005 (CONSTRAINT_ATT_TYPE), data 0, Att 90290 (userPrincipalName)
+^@]; remaining name '"cn=HTTP/c174-node1.coelab.cloudera.com,ou=pbhagade,ou=squadron,ou=hortonworks,dc=support,dc=com"'
+        at com.sun.jndi.ldap.LdapCtx.mapErrorCode(LdapCtx.java:3149)
+        at com.sun.jndi.ldap.LdapCtx.processReturnCode(LdapCtx.java:3082
+
+
+
+Remove the HOST SPN from the computer object  followed by running the for CDP 'Regenerate Missing Credentials'  for HDP "Regenerate keytabs " and then join then add the HOST SPN back
+
+Example:
+
+Open PowerShell "Run as Administrator"
+
+Run ./setspn.exe -l 'c174-node1' to list the SPN tied to the computer object. It will list something like this
+
+host/c174-node1.coelab.cloudera.com@SUPPORT.COM
+host/c174-node1
+
+Then remove the host SPNs using the following command 
+
+./setspn.exe -d  host/c174-node1.coelab.cloudera.com@SUPPORT.COM c174-node1
+./setspn.exe -d  host/c174-node1 c174-node1
+
+Now you can run the (CDP) 'Generate Missing Credentials' for HDP "Regenerate keytabs " command to complete it.
+Finally, the host SPNs will need to be added back using the following command'
+
+./setspn.exe -s  host/c174-node1.coelab.cloudera.com@SUPPORT.COM c174-node1
+./setspn.exe -s  host/c174-node1 c174-node1
+```
