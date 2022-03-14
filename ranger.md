@@ -996,3 +996,149 @@ vi descriptor/service.sdl
 8. Restart cm server
 #systemctl restart cloudera-scm-server
 ```
+
+
+### Ranger View authorization behaviour
+
+Both CDP and CDH has same behaviour for Impala and Hive, but not for Spark.
+```sql
+create database db1;
+use db1;
+create table t1 (c1 int, c2 string, c3 int, c4 string);
+insert into t1 values (1, "Kiran", 1, "Anand");
+insert into t1 values (2, "Anand", 2, "Kiran");
+select * from t1;
+create view t1_v1 as select * from db1.t1;
+select * from t1_v1;
+create database db2;
+use db2;
+create view t1_v1 as select * from db1.t1;
+select * from t1_v1;
+
+
+impala-shell -i cdh-63x-gs-3.cdh-63x-gs.root.hwx.site:25003 -d default -k --ssl
+
+show roles;
+
+create role read_role_db2;
+
+grant select on database db2 to role read_role_db2;
+grant role read_role_db2 to group systest;
+
+kinit systest
+
+use db2;
+
+select * from t1_v1;
+```
+
+```sql
+-- Test Setup
+create database db1;
+use db1;
+create table t1 (c1 int, c2 string, c3 int, c4 string);
+insert into t1 values (1, "Kiran", 1, "Anand");
+insert into t1 values (2, "Anand", 2, "Kiran");
+select * from t1;
+create view t1_v1 as select * from db1.t1;
+select * from t1_v1;
+create database db2;
+use db2;
+create view t1_v1 as select * from db1.t1;
+select * from t1_v1; (edited) 
+
+Kiran Anand  12 minutes ago
+-- Grant Privs
+[root@cdh-63x-gs-2 ~]# kinit -kt /var/run/cloudera-scm-agent/process/285-impala-IMPALAD/impala.keytab impala/cdh-63x-gs-2.cdh-63x-gs.root.hwx.site@ROOT.HWX.SITE
+[root@cdh-63x-gs-2 ~]# impala-shell -i cdh-63x-gs-3.cdh-63x-gs.root.hwx.site:25003 -d default -k --ssl
+[cdh-63x-gs-3.cdh-63x-gs.root.hwx.site:25003] default> show roles;
+Query: show roles
++--------------------+
+| role_name          |
++--------------------+
+| admin_role         |
+| cdep_default_admin |
+| cdep_global_admin  |
++--------------------+
+Fetched 3 row(s) in 0.07s
+[cdh-63x-gs-3.cdh-63x-gs.root.hwx.site:25003] default> create role read_role_db2;
+Query: create role read_role_db2
++------------------------+
+| summary                |
++------------------------+
+| Role has been created. |
++------------------------+
+Fetched 1 row(s) in 0.43s
+[cdh-63x-gs-3.cdh-63x-gs.root.hwx.site:25003] default> grant select on database db2 to role read_role_db2;
+Query: grant select on database db2 to role read_role_db2
+Query submitted at: 2022-01-18 16:19:26 (Coordinator: https://cdh-63x-gs-2.cdh-63x-gs.root.hwx.site:25000)
+Query progress can be monitored at: https://cdh-63x-gs-2.cdh-63x-gs.root.hwx.site:25000/query_plan?query_id=3e4d65ea4a746528:4a57164500000000
++---------------------------------+
+| summary                         |
++---------------------------------+
+| Privilege(s) have been granted. |
++---------------------------------+
+Fetched 1 row(s) in 0.18s
+[cdh-63x-gs-3.cdh-63x-gs.root.hwx.site:25003] default> grant role read_role_db2 to group systest;
+Query: grant role read_role_db2 to group systest
+Query submitted at: 2022-01-18 16:19:54 (Coordinator: https://cdh-63x-gs-2.cdh-63x-gs.root.hwx.site:25000)
+Query progress can be monitored at: https://cdh-63x-gs-2.cdh-63x-gs.root.hwx.site:25000/query_plan?query_id=d843c4cdc8a65953:16df4fef00000000
++------------------------+
+| summary                |
++------------------------+
+| Role has been granted. |
++------------------------+ (edited) 
+
+Kiran Anand  11 minutes ago
+-- Tests
+[root@cdh-63x-gs-2 ~]# kdestroy
+[root@cdh-63x-gs-2 ~]# klist
+klist: No credentials cache found (filename: /tmp/krb5cc_0)
+[root@cdh-63x-gs-2 ~]# kinit systest
+Password for systest@ROOT.HWX.SITE:
+[root@cdh-63x-gs-2 ~]# klist
+Ticket cache: FILE:/tmp/krb5cc_0
+Default principal: systest@ROOT.HWX.SITE
+Valid starting       Expires              Service principal
+01/18/2022 16:23:15  01/18/2022 16:48:15  krbtgt/ROOT.HWX.SITE@ROOT.HWX.SITE
+	renew until 01/18/2022 17:53:15
+[root@cdh-63x-gs-2 ~]#
+[root@cdh-63x-gs-2 ~]#
+[root@cdh-63x-gs-2 ~]# impala-shell -i cdh-63x-gs-3.cdh-63x-gs.root.hwx.site:25003 -d default -k --ssl
+[cdh-63x-gs-3.cdh-63x-gs.root.hwx.site:25003] default> show databases;
+Query: show databases
++------------------+----------------------------------------------+
+| name             | comment                                      |
++------------------+----------------------------------------------+
+| _impala_builtins | System database for Impala builtin functions |
+| db1              |                                              |
+| db2              |                                              |
+| default          | Default Hive database                        |
++------------------+----------------------------------------------+
+Fetched 4 row(s) in 0.02s
+[cdh-63x-gs-3.cdh-63x-gs.root.hwx.site:25003] default> use db2;
+Query: use db2
+[cdh-63x-gs-3.cdh-63x-gs.root.hwx.site:25003] db2> show tables;
+Query: show tables
++-------+
+| name  |
++-------+
+| t1_v1 |
++-------+
+Fetched 1 row(s) in 0.01s
+[cdh-63x-gs-3.cdh-63x-gs.root.hwx.site:25003] db2> select * from t1_v1;
+Query: select * from t1_v1
+Query submitted at: 2022-01-18 16:24:02 (Coordinator: https://cdh-63x-gs-3.cdh-63x-gs.root.hwx.site:25000)
+Query progress can be monitored at: https://cdh-63x-gs-3.cdh-63x-gs.root.hwx.site:25000/query_plan?query_id=ef4dc4a3d5133553:f6c85f4e00000000
++----+-------+----+-------+
+| c1 | c2    | c3 | c4    |
++----+-------+----+-------+
+| 2  | Anand | 2  | Kiran |
+| 1  | Kiran | 1  | Anand |
++----+-------+----+-------+
+Fetched 2 row(s) in 0.13s (edited) 
+
+Even for Spark, the behavior is the same across CDH and CDP where view only access is not good enough.
+The main difference I am highlighting is that there is a behavior difference between various services, SQL Engines (Hive and Impala) and Spark where view-only access would give access granted and access denied respectively for those services in both CDH and CDP.
+
+```
