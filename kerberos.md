@@ -371,7 +371,7 @@ host/c174-node1
 
 Then remove the host SPNs using the following command 
 
-./setspn.exe -d  host/c174-node1.coelab.cloudera.com@SUPPORT.COM c174-node1
+./setspn.exe -d  host/c174-node1.coelab.cloudera.com c174-node1
 ./setspn.exe -d  host/c174-node1 c174-node1
 
 Now you can run the (CDP) 'Generate Missing Credentials' for HDP "Regenerate keytabs " command to complete it.
