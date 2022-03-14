@@ -90,3 +90,22 @@ CREATE EXTERNAL TABLE IF NOT EXISTS cloudera_admin_internal.cars(
 
 LOAD DATA INPATH 'hdfs://nameservice1/tenants/cloudera_admin/hdfs/raw/tmp_testing_impala_load/cars.csv' OVERWRITE INTO TABLE cloudera_admin_internal.cars;
 ```
+
+
+### Atlas lineage
+```SQL
+create table brancha(full_name string, ssn string, location string);
+create table branchb(full_name string, ssn string, location string);
+
+insert into brancha(full_name,ssn,location) values ('ryan', '111-222-333', 'chicago'); 
+insert into brancha(full_name,ssn,location) values ('brad', '444-555-666', 'minneapolis'); 
+insert into brancha(full_name,ssn,location) values ('rupert', '000-000-000', 'chicago'); 
+insert into brancha(full_name,ssn,location) values ('john', '555-111-555', 'boston');
+insert into branchb(full_name,ssn,location) values ('jane', '666-777-888', 'dallas'); 
+insert into branchb(full_name,ssn,location) values ('andrew', '999-999-999', 'tampa'); 
+insert into branchb(full_name,ssn,location) values ('ryan', '111-222-333', 'chicago'); 
+insert into branchb(full_name,ssn,location) values ('brad', '444-555-666', 'minneapolis');
+
+
+create table branch_intersect as select b1.full_name,b1.ssn,b1.location from brancha b1 inner join branchb b2 ON b1.ssn = b2.ssn;
+```
