@@ -927,6 +927,107 @@ for LINES in $LINES; do python repair_index.py -g $LINES; done
 -- Once finished, you can redo above api commands and diff to confirm both basic and advanced search has same results. 
 ```
 
+### In CDP repair index failing with below error:
+```bash
+
+OpenJDK 64-Bit Server VM warning: ignoring option MaxPermSize=512m; support was removed in 8.0
+log4j:WARN No appenders could be found for logger (org.apache.atlas.tools.RepairIndex).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+Initializing graph: Graph Initialized!
+Restoring: vertex_index
+Exception in thread "Thread-15" org.janusgraph.core.JanusGraphException: Could not restore Solr index
+        at org.janusgraph.graphdb.olap.job.IndexRepairJob.workerIterationEnd(IndexRepairJob.java:206)
+        at org.janusgraph.graphdb.olap.VertexJobConverter.workerIterationEnd(VertexJobConverter.java:118)
+        at org.janusgraph.diskstorage.keycolumnvalue.scan.StandardScannerExecutor$Processor.run(StandardScannerExecutor.java:305)
+Caused by: org.janusgraph.diskstorage.TemporaryBackendException: Could not restore Solr index
+        at org.janusgraph.diskstorage.solr.Solr6Index.restore(Solr6Index.java:596)
+        at org.janusgraph.diskstorage.indexing.IndexTransaction.restore(IndexTransaction.java:128)
+        at org.janusgraph.graphdb.olap.job.IndexRepairJob.workerIterationEnd(IndexRepairJob.java:201)
+        ... 2 more
+Caused by: org.apache.solr.client.solrj.impl.CloudSolrClient$RouteException: Error from server at https://lpc6001cdp03.grupocgd.com:8985/solr/vertex_index_shard1_replica_n1: Exception writing document id 1mxx4w to the index; possible analysis error: Document contains at least one immense term in field="2zgl_s" (whose UTF8 encoding is longer than the max length 32766), all of which were skipped.  Please correct the analyzer to not produce such terms.  The prefix of the first immense term is: '[99, 114, 101, 97, 116, 101, 32, 116, 97, 98, 108, 101, 32, 105, 102, 32, 110, 111, 116, 32, 101, 120, 105, 115, 116, 115, 32, 101, 110, 114]...', original message: bytes can be at most 32766 in length; got 49689. Perhaps the document has an indexed string field (solr.StrField) which is too large
+
+
+==>
+This issue occurs when the audit record that service was inserting into Solr had resourcefields with data more than 32KB, which is limitation of string datatype of Solr.
+
+
+Workaround:
+
+export SOLR_SERVER_PROCESS_DIR=$(ls -1dtr /var/run/cloudera-scm-agent/process/*SOLR_SERVER | tail -1)
+kinit -kt $SOLR_SERVER_PROCESS_DIR/solr.keytab solr/`hostname -f`
+
+
+Downlaod solr config files for Atlas.
+
+# Get zookeeper details:
+
+$ ps aux | grep solr  | grep DzkHost
+
+$ mkdir /opt/solr
+
+$ /opt/cloudera/parcels/CDH/lib/solr/bin/zkcli.sh --zkhost zookeeper-hostname:2181/solr-infra -cmd downconfig -confdir /opt/solr -confname atlas_configs
+
+cd /opt/solr 
+
+we need to modify managed-schema file.
+
+Make below changes:
+
+-----------------------------
+vim /tmp/managed-schema
+
+
+  <fieldType name="alphaOnlySort" class="solr.TextField" omitNorms="true" sortMissingLast="true">
+    <analyzer>
+      <tokenizer class="solr.KeywordTokenizerFactory"/>
+      <filter class="solr.LowerCaseFilterFactory"/>
+      <filter class="solr.LengthFilterFactory" min="0" max="2500"/>
+      <filter class="solr.TrimFilterFactory"/>
+      <filter class="solr.PatternReplaceFilterFactory" pattern="([^a-z])" replace="all" replacement=""/>
+    </analyzer>
+
+
+solrctl config --delete ranger_audits
+ # add below in analyzer section
+
+<filter class="solr.LengthFilterFactory" min="0" max="2500"/>
+
+
+
+--> 
+  <fieldType name="alphaOnlySort" class="solr.TextField" omitNorms="true" sortMissingLast="true">
+    <analyzer>
+      <tokenizer class="solr.KeywordTokenizerFactory"/>
+      <filter class="solr.LowerCaseFilterFactory"/>
+      <filter class="solr.LengthFilterFactory" min="0" max="2500"/>
+
+Save the file.
+-----------------------------
+
+Delete atlas collections and configs and we will upload new configs and create the collection using those configs.
+
+solrctl collection --delete edge_index
+solrctl collection --delete fulltext_index
+solrctl collection --delete vertex_index
+solrctl config --delete atlas_configs
+
+
+# Upload the configs:
+
+$ /opt/cloudera/parcels/CDH/lib/solr/bin/zkcli.sh --zkhost zookeeper-hostname:2181/solr-infra -cmd upconfig -confdir /opt/solr -confname atlas_configs
+
+
+# Create collections:
+
+solrctl collection --list
+solrctl collection --create  edge_index -c atlas_configs -s 1 -r 1 -m 1
+solrctl collection --create  fulltext_index -c atlas_configs -s 1 -r 1 -m 1
+solrctl collection --create  vertex_index -c atlas_configs -s 1 -r 1 -m 1
+solrctl collection --list
+
+Try repair Index again.
+```
 
 1. https://community.hortonworks.com/articles/81680/atlas-tag-based-searches-utilizing-the-atlas-rest.html 
 2. https://community.hortonworks.com/articles/39759/list-atlas-tags-and-traits.html 
