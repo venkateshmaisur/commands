@@ -1,4 +1,4 @@
-#### User authentication from Windows Workstation to HDP Realm Using MIT Kerberos Client (with Firefox) 
+## User authentication from Windows Workstation to HDP Realm Using MIT Kerberos Client (with Firefox) 
 https://community.cloudera.com/t5/Community-Articles/User-authentication-from-Windows-Workstation-to-HDP-Realm/ta-p/245957
 
 Open Firefox, type about:config in URL and hit enter Search for and change below parameters
@@ -30,7 +30,7 @@ export NSPR_LOG_FILE=/tmp/moz.log
 
 
 
-### CDP HIVE Spnego WebUI troubleshooting.
+# CDP HIVE Spnego WebUI troubleshooting.
 
 Set below configs to enable WebUI when Kerberos is enabled.
 
