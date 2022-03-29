@@ -467,3 +467,13 @@ export JVMFLAGS="-Djava.security.auth.login.config=/tmp/zookeeper_client_jaas.co
 
 zookeeper-client -server zk:2181
 ```
+
+### CDP GCM cipher support for external storage like abfs
+```bash
+CM UI -> HDFS -> Configuration -> Client Java Configuration Options
+#add
+
+-Dorg.wildfly.openssl.path=/usr/lib64 
+
+To add " -Dorg.wildfly.openssl.path=/usr/lib64" in CM UI -> Yarn -> Configuration -> Java Configuration Options for NodeManager {node_manager_java_opts}
+```
