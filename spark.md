@@ -215,3 +215,9 @@ spark.sql("create table blah2 AS SELECT * FROM blah1 ")
 
 ## for managed table we need to HwC
 ```
+
+## CDP spark submit cmd for sparkpi job
+```bash
+cd /opt/cloudera/parcels/CDH/lib/spark/examples/jars
+spark-submit --class org.apache.spark.examples.SparkPi --master yarn-client --num-executors 1 --driver-memory 512m --executor-memory 512m --executor-cores 1 spark-examples*.jar 10
+```
