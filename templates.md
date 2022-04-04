@@ -1,5 +1,9 @@
 Collect tar files of process dir:
 
+```
+kinit -kt $(find /var/run/cloudera-scm-agent/process/ -name "*SOLR_SERVER" | head -1)/solr.keytab solr/`hostname -f`
+```
+
 ### Ranger usersync
 ```bash
 tar -cvf usersync-process.tar $(find /var/run/cloudera-scm-agent/process/ -name "*RANGER_USERSYNC" | head -1)
