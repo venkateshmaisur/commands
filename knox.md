@@ -561,3 +561,35 @@ vi aux/descriptors/homepage.json
 
 9. Start the knox service from CM UI
 ```
+
+#### cdp knox disable sticky session on ha provider
+```
+Login to CM UI,
+Go to Knox --> Configuration --> Knox Gateway Advanced Configuration Snippet (Safety Valve) for conf/cdp-resources.xml
+Click Add,
+
+---------
+Name : providerConfigs:pam
+Value : role=ha#ha.name=HaProvider#ha.param.HIVE=enabled=true;maxFailoverAttempts=3;failoverSleep=1000;enableStickySession=false;noFallback=true;enableLoadBalancing=false
+---------
+
+<param>
+    <name>HIVE</name>
+    <value>enableStickySession=false;noFallback=true;enableLoadBalancing=false;maxFailoverAttempts=0</value>
+</param> 
+
+
+   <service>
+        <role>HIVE</role>
+        <url>...</url>
+        <url>..</url>        
+        <param>
+            <name>retryCount</name>
+            <value>5</value>
+        </param>
+        <param>
+            <name>retryNonSafeRequest</name>
+            <value>true</value>
+        </param> 
+
+```
