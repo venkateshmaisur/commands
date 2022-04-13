@@ -380,3 +380,16 @@ Finally, the host SPNs will need to be added back using the following command'
 ./setspn.exe -s  host/c174-node1.coelab.cloudera.com@SUPPORT.COM c174-node1
 ./setspn.exe -s  host/c174-node1 c174-node1
 ```
+
+## AD Event Viewer
+```bash
+AD -> Event Viewer -> Application and Service logs -> Directory Srvice -> 
+repro the issue and check the latest event log for that same principal which is failing. Get the DN name.
+
+Level Date and Time Source  Event ID  Task Category
+Error 12/10/2021 10:04:04 AM  Microsoft-Windows-ActiveDirectory_DomainService 2974  Global Catalog  "The attribute value provided is not unique in the forest or partition. Attribute: userPrincipalName Value=HTTP/c1807-node4.coelab.cloudera.com@SUPPORT.COM
+CN=GFlYRBicWD,OU=squadron,OU=hortonworks,DC=SUPPORT,DC=COM Winerror: 8648 
+ See http://go.microsoft.com/fwlink/?LinkID=279782 for more details on this policy."
+
+ 
+```
