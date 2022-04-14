@@ -138,3 +138,35 @@ log4j.appender.kms-audit.MaxFileSize={{ranger_kms_audit_log_maxfilesize}}MB
 log4j.logger.kms-audit=INFO, kms-audit
 log4j.additivity.kms-audit=false
 ```
+
+## Auditing to external systems in CDP Private Cloud Base
+```bash
+1. Ranger KMS Server Advanced Configuration Snippet (Safety Valve) for conf/ranger-kms-audit.xml
+
+Name: xasecure.audit.destination.log4j
+Value: true
+
+Name: xasecure.audit.destination.log4j.logger
+Value: ranger.audit
+
+Name: xasecure.audit.log4j.is.enabled
+Value:true
+
+
+2. Ranger KMS Server Logging Advanced Configuration Snippet (Safety Valve)
+
+log4j.appender.RANGER_AUDIT=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.RANGER_AUDIT.File=/var/log/ranger/kms/ranger-audit-test.log
+log4j.appender.RANGER_AUDIT.Append=true
+log4j.appender.RANGER_AUDIT.layout=org.apache.log4j.PatternLayout
+log4j.appender.RANGER_AUDIT.layout.ConversionPattern=%m%n
+log4j.logger.ranger.audit=INFO,RANGER_AUDIT
+log4j.additivity.RANGER_AUDIT=false
+
+
+
+cat /var/log/ranger/kms/ranger-audit-test.log
+{"repoType":7,"repo":"cm_kms","reqUser":"admin","evtTime":"2022-04-14 07:47:21.660","access":"getkeys","resType":"keyname","action":"getkeys","result":1,"agent":"kms","policy":42,"enforcer":"ranger-acl","cliIP":"172.27.187.194","agentHost":"pbhagade-3.pbhagade.root.hwx.site","logType":"RangerAudit","id":"9404917a-7353-413f-aa6e-171ea74e9c71-0","seq_num":1,"event_count":1,"event_dur_ms":1,"tags":[],"cluster_name":"Cluster 1","policy_version":2}
+{"repoType":7,"repo":"cm_kms","reqUser":"admin","evtTime":"2022-04-14 07:47:30.866","access":"getmetadata","resType":"keyname","action":"getmetadata","result":1,"agent":"kms","policy":42,"enforcer":"ranger-acl","cliIP":"172.27.187.194","agentHost":"pbhagade-3.pbhagade.root.hwx.site","logType":"RangerAudit","id":"9404917a-7353-413f-aa6e-171ea74e9c71-1","seq_num":3,"event_count":1,"event_dur_ms":1,"tags":[],"cluster_name":"Cluster 1","policy_version":2}
+
+```
