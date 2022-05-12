@@ -1,3 +1,5 @@
-remote_theme: allejo/jekyll-docs-theme@v1.0.0
-
+title: Pravin Bhagade
 theme: jekyll-theme-hacker
+show_downloads: true
+post_search: true
+search : true
