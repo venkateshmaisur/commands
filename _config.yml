@@ -1,2 +1,8 @@
 title: "Pravin Bhagade"
 remote_theme: just-the-docs/just-the-docs
+aux_links:
+  "Solr Commands":
+    - "https://bhagadepravin.github.io/commands/solr"
+
+# Makes Aux links open in a new tab. Default is false
+aux_links_new_tab: true
