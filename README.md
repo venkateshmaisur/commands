@@ -1,3 +1,10 @@
+aux_links:
+  "Solr Commands":
+    - "https://bhagadepravin.github.io/commands/solr"
+
+# Makes Aux links open in a new tab. Default is false
+aux_links_new_tab: true
+
  - [x] Solr Commands https://bhagadepravin.github.io/commands/solr
  - [x] Ambari Commands https://bhagadepravin.github.io/commands/ambari
  - [x] Ranger Commands https://bhagadepravin.github.io/commands/ranger
