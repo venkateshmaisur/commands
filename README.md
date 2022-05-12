@@ -1,4 +1,8 @@
 
+[Link button](http://example.com/){: .btn .btn-purple }
+
+[Solr Commands](https://bhagadepravin.github.io/commands/solr/){: .btn .btn-purple }
+
 
  - [x] Solr Commands https://bhagadepravin.github.io/commands/solr
  - [x] Ambari Commands https://bhagadepravin.github.io/commands/ambari
