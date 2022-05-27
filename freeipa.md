@@ -44,7 +44,35 @@ Next steps:
 Be sure to back up the CA certificates stored in /root/cacert.p12
 These files are required to create replicas. The password for these
 files is the Directory Manager password
-[root
+
+```bash
+# If Selinux is enabled
+# apt install policycoreutils -y
+# setsebool -P container_manage_cgroup 1
+mkdir -p /var/lib/ipa-data
+
+# Enable Port forwading
+sysctl -w net.ipv4.ip_forward=1
+sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
+sudo sysctl -p /etc/sysctl.conf
+
+git clone https://github.com/freeipa/freeipa-container.git
+cd freeipa-container
+docker build -t freeipa-server -f Dockerfile.centos-7 .
+docker images
+
+# docker run  -e IPA_SERVER_IP=<...ip...> --name freeipa-server -ti -h <HOSTNAME> -p 53:53/udp -p 53:53 -p 80:80 -p 443:443 -p 389:389 -p 636:636 -p 88:88 -p 464:464 -p 88:88/udp -p 464:464/udp -p 123:123/udp --sysctl net.ipv6.conf.all.disable_ipv6=0 -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v /var/lib/ipa-data1:/data:Z -e PASSWORD=admin-password freeipa-server ipa-server-install -U -r <REALM> --ds-password=admin-password --admin-password=admin-password --domain=<DOMAIN> --no-ntp 
+
+docker run  -e IPA_SERVER_IP=10.90.6.198 --name freeipa-server-adsre3 -ti -h mstr1.odp.u18.adsre \
+-p 53:53/udp -p 53:53 -p 80:80 -p 443:443 -p 389:389 -p 636:636 -p 88:88 -p 464:464 -p 88:88/udp -p 464:464/udp -p 123:123/udp \
+--sysctl net.ipv6.conf.all.disable_ipv6=0 -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v /var/lib/ipa-data1:/data:Z \
+-e PASSWORD=admin-password freeipa-server ipa-server-install -U -r ADSRE.ACCELO \
+--ds-password=admin-password --admin-password=admin-password --domain=u18.adsre --no-ntp 
+
+```
+
+
+
 ```
 ##### Update hostname
 ```
