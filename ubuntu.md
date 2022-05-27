@@ -85,26 +85,22 @@ docker images
 # Example: docker run [...] freeipa-server exit-on-finished -U -r EXAMPLE.TEST
 
 
-docker run  -e IPA_SERVER_IP=10.90.6.198 --name freeipa-server-adsre3 -ti -h mstr1.odp.u18.adsre \
+docker run  -e IPA_SERVER_IP=ip-address--name freeipa-server-test -ti -h hostname.domain.test \
 -p 53:53/udp -p 53:53 -p 80:80 -p 443:443 -p 389:389 -p 636:636 -p 88:88 -p 464:464 -p 88:88/udp -p 464:464/udp -p 123:123/udp \
 --sysctl net.ipv6.conf.all.disable_ipv6=0 -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v /var/lib/ipa-data1:/data:Z \
 -e PASSWORD=admin-password freeipa-server ipa-server-install -U -r ADSRE.ACCELO \
---ds-password=admin-password --admin-password=admin-password --domain=u18.adsre --no-ntp 
+--ds-password=admin-password --admin-password=admin-password --domain=domain.test --no-ntp 
 
 
 # Note:
 # Clean up or change data dir " /var/lib/ipa-data" for new configuration
 
-docker stop freeipa-server-adsre
-docker start freeipa-server-adsre
+docker stop freeipa-server
+docker start freeipa-server
 
 # Cleanup container
-# docker stop 8363de7d0653
-# docker rm 8363de7d0653
+# docker stop container-id
+# docker rm container-id
 
-Hostname:       mstr1.odp.u18.adsre
-IP address(es): 172.17.0.2
-Domain name:    u18.adsre
-Realm name:     ADSRE.TEST
 
 ```
