@@ -2,6 +2,16 @@
 * Install Docker on Ubuntu
 * Run FreeIPA Server in Docker Ubuntu
 
+###### The following ports are required by FreeIPA:
+
+* 80 tcp (http)
+* 443 tcp (https)
+* 389 tcp (ldap)
+* 636 tcp (ldaps)
+* 88 tcp+udp (kerberos)
+* 464 tcp+udp (kpasswd)
+* 7389 tcp (separate Dogtag instance - used on RHEL 6)
+
 ## Install Docker on Ubuntu
 
 ```bash
