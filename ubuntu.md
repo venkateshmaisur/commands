@@ -1,4 +1,4 @@
-**Topcis**
+**Topics**
 * Install Docker on Ubuntu
 * Run FreeIPA Server in Docker Ubuntu
 
