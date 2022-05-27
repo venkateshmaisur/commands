@@ -80,8 +80,8 @@ docker images
 # docker run  -e IPA_SERVER_IP=<...ip...> --name freeipa-server -ti -h <HOSTNAME> -p 53:53/udp -p 53:53 -p 80:80 -p 443:443 -p 389:389 -p 636:636 -p 88:88 -p 464:464 -p 88:88/udp -p 464:464/udp -p 123:123/udp --sysctl net.ipv6.conf.all.disable_ipv6=0 -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v /var/lib/ipa-data1:/data:Z -e PASSWORD=admin-password freeipa-server ipa-server-install -U -r <REALM> --ds-password=admin-password --admin-password=admin-password --domain=<DOMAIN> --no-ntp 
 
 # Note: Else it will keep on running.
-* exit-on-finished
-Example: docker run [...] freeipa-server exit-on-finished -U -r EXAMPLE.TEST
+# * exit-on-finished
+# Example: docker run [...] freeipa-server exit-on-finished -U -r EXAMPLE.TEST
 
 
 docker run  -e IPA_SERVER_IP=10.90.6.198 --name freeipa-server-adsre3 -ti -h mstr1.odp.u18.adsre \
