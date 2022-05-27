@@ -63,7 +63,7 @@ cd freeipa-container
 docker build -t freeipa-server -f Dockerfile.centos-7 .
 docker images
 
-# docker run --name freeipa-server-adsre -ti -h mstr1.odp.u18.adsre \
+docker run --name freeipa-server-adsre -ti -h mstr1.odp.u18.adsre \
 --sysctl net.ipv6.conf.all.disable_ipv6=0 -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
 -v /var/lib/ipa-data:/data:Z -e PASSWORD=admin-password \
 freeipa-server ipa-server-install -U -r ADSRE.TEST --ds-password=admin-password \
