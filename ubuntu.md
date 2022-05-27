@@ -1,3 +1,6 @@
+**Topcis**
+* Install Docker on Ubuntu
+* Run FreeIPA Server in Docker Ubuntu
 
 ## Install Docker on Ubuntu
 
@@ -38,4 +41,49 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plu
 # sudo apt-get purge docker-ce docker-ce-cli containerd.io docker-compose-plugin
 # sudo rm -rf /var/lib/docker
 # sudo rm -rf /var/lib/containerd
+```
+
+## Run FreeIPA Server in Docker Ubuntu
+```bash
+# Install docker first.
+
+# Build FreeIPA server image
+sudo apt update
+sudo apt install git -y
+
+
+# If Selinux is enabled
+# apt install policycoreutils -y
+# setsebool -P container_manage_cgroup 1
+mkdir -p /var/lib/ipa-data
+
+
+git clone https://github.com/freeipa/freeipa-container.git
+cd freeipa-container
+docker build -t freeipa-server -f Dockerfile.centos-7 .
+docker images
+
+# docker run --name freeipa-server-adsre -ti -h mstr1.odp.u18.adsre --sysctl net.ipv6.conf.all.disable_ipv6=0 -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v /var/lib/ipa-data:/data:Z -e PASSWORD=admin-password freeipa-server ipa-server-install -U -r ADSRE.TEST --ds-password=admin-password --admin-password=admin-password --domain=u18.adsre --no-ntp -p 53:53/udp -p 53:53 \
+-p 80:80 -p 443:443 -p 389:389 -p 636:636 -p 88:88 -p 464:464 \
+-p 88:88/udp -p 464:464/udp -p 123:123/udp
+
+
+docker stop freeipa-server-adsre
+docker start freeipa-server-adsre
+
+# Cleanup container
+# docker stop 8363de7d0653
+# docker rm 8363de7d0653
+
+Hostname:       mstr1.odp.u18.adsre
+IP address(es): 172.17.0.2
+Domain name:    u18.adsre
+Realm name:     ADSRE.TEST
+
+
+
+
+docker run -e IPA_SERVER_IP=10.12.0.98 -p 53:53/udp -p 53:53 \
+    -p 80:80 -p 443:443 -p 389:389 -p 636:636 -p 88:88 -p 464:464 \
+-p 88:88/udp -p 464:464/udp -p 123:123/udp
 ```
