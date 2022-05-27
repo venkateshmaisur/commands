@@ -11,7 +11,6 @@
 * 88 tcp+udp (kerberos)
 * 464 tcp+udp (kpasswd)
 * 7389 tcp (separate Dogtag instance - used on RHEL 6)
-
 * other ports for port mapping 123(ntp) 53(dns/resolvd)
 
 ## Install Docker on Ubuntu
