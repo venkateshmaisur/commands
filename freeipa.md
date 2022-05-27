@@ -47,7 +47,7 @@ files is the Directory Manager password
 ```
 
 
-
+## Run FreeIPA Server in Docker
 ```bash
 # If Selinux is enabled
 # apt install policycoreutils -y
