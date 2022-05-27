@@ -82,6 +82,9 @@ freeipa-server ipa-server-install -U -r ADSRE.TEST --ds-password=admin-password 
 -p 88:88/udp -p 464:464/udp -p 123:123/udp
 
 
+# Note:
+# Clean up or change data dir " /var/lib/ipa-data" for new configuration
+
 docker stop freeipa-server-adsre
 docker start freeipa-server-adsre
 
