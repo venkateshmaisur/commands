@@ -9,6 +9,15 @@ curl -ivk -H "X-Requested-By: ambari" -u admin:admin -X POST -d '{ "Credential" 
 
 curl -ik -u admin -H "X-Requested-By: ambari" -X DELETE  http://hostname.example.com:8080/api/v1/clusters/CLUSTERNAME/credentials/kdc.admin.credential 
 ```
+
+```bash
+kadmin -s admin_server -r realm -p principal -w password 
+
+	Command: [/usr/bin/kadmin, -c, /tmp/ambari_krb_3045285871637086107cc, -s, stg-hdpins-utility101.fsins.az7, -r, FSINS.AZ7, -q, get_principal admin/admin@FSINS.AZ7]
+    
+kinit -S kadmin/<FQDN kadmin server>@EXAMPLE.COM admin/admin@EXAMPLE.COM
+
+```
 ## Ambari config.py
 
 ```sql
