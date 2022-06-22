@@ -150,6 +150,27 @@ DELETE kkp_mapping_service FROM kkp_mapping_service INNER JOIN kerberos_keytab_p
 DELETE FROM kerberos_keytab_principal WHERE principal_name='HTTP/ambari_server%';
 DELETE FROM kerberos_principal WHERE principal_name='HTTP/ambari_server%'
 ```
+
+```
+For Ambari Server 2.7.4 below are the steps:
+
+1. Backup ambari server Database.
+2. Check the principal entries which we want to delete.
+
+ambari=> select * from kerberos_principal where principal_name like 'HTTP%';
+ambari=> select * from kerberos_keytab_principal where principal_name like 'HTTP%';
+
+# Delete the principal entry from ambari database.
+
+# Make sure you replace "HTTP%" with the principal which you want to delete with full FQDN name, else "HTTP%" will delete all HTTP principals
+
+ambari=> delete  from kkp_mapping_service where kkp_id in (select kkp_id from kerberos_keytab_principal where principal_name like 'HTTP%');
+ambari=> delete  from kerberos_keytab_principal where principal_name like 'HTTP%';
+ambari=> delete  from kerberos_principal where principal_name like 'HTTP%';
+
+3. Restart ambari server
+4. Regenerate missing keytabs through ambari server.
+```
 ## Kerberos cahce cleanup
 ```
 1. Manually created ambari server keytab using below command
