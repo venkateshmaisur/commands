@@ -200,3 +200,55 @@ GRANT UNLIMITED TABLESPACE TO RANGERDBA11;
 `select username, default_tablespace from user_users;`
 
 ![Ranger Oracle](https://github.com/bhagadepravin/commands/blob/master/jpeg/image%20(5).png)
+
+
+## Oracle Setup via Docker
+```sql
+oracle
+
+https://dbtut.com/index.php/2020/01/09/how-to-install-oracle-database-in-docker/
+
+docker pull store/oracle/database-enterprise:12.2.0.1
+
+download sqlplus:
+
+https://www.oracle.com/tools/downloads/sqlcl-downloads.html
+cd ~/Downloads
+#Note: version/filename of file will change for each release
+unzip sqlcl-19.2.1.206.1649.zip
+
+#Assuming you already have an /oracle directory (I had one for the instant client)
+cp -r sqlcl /oracle
+
+#Give sqlcl execute permission
+cd /oracle/sqlcl/bin
+chmod 755 sql
+
+#rename to sqlcl so no confusion (optional)
+mv sql sqlcl
+
+#Add directory to path so can run anywhere in the command line:
+
+#Temporary access:
+PATH=$PATH:/oracle/sqlcl/bin
+
+#Permanent access:
+#Note: See Barry's comment below about storing in /etc/paths.d on Mac
+vi ~/.bash_profile
+#Add just above the export PATH line
+PATH=$PATH:/oracle/sqlcl/bin
+
+
+Use below cmd to connect,grant:
+sqlcl system/Welcome@//localhost:1521/ORCLPDB1
+ grant connect, resource to pravin identified by Welcome;
+conn pravin/Welcome@//localhost:1521/ORCLPDB1
+
+
+alter session set "_ORACLE_SCRIPT"=true;
+create user oracle identified by oracle;
+
+GRANT ALL PRIVILEGES TO oracle;
+grant sysdba to oracle;
+
+```
