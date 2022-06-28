@@ -531,3 +531,8 @@ Add below configs to "Knox Service Advanced Configuration Snippet (Safety Valve)
         <value>cn</value>
     </property>
 ```
+
+for knoxsso enabled service
+```
+curl -ik -c c1 -b c1 -X GET  --negotiate -u:  "https://knox-hostname:8443/gateway/cdp-proxy/yarn/jmx"
+```
