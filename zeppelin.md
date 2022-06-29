@@ -398,5 +398,5 @@ Use below cmd to get password:
 
 # To add a new user account line, use the above command with the -p (or --password) option:
 
-/usr/lib/jvm/java-1.8.0-openjdk/bin/java -jar shiro-tools-hasher-1.3.2-cli.jar
+/usr/lib/jvm/java-1.8.0-openjdk/bin/java -jar shiro-tools-hasher-1.3.2-cli.jar -p
 ```
