@@ -387,3 +387,15 @@ from Zeppelin UI ---> credentials tab in zeppelin UI set the user name and passw
 
 jdbc.jdbc <userName> <Password>
 ```
+
+## Reset Zeppelin user or add user with enc password.
+```bash
+Download shiro-tools-hasher-1.3.2-cli.jar from https://repo1.maven.org/maven2/org/apache/shiro/tools/shiro-tools-hasher/
+or build one using maven
+mvn org.apache.maven.plugins:maven-dependency-plugin:2.10:get  dependency:get -DgroupId=org.apache.shiro.tools -DartifactId=shiro-tools-hasher -Dclassifier=cli -Dversion=1.3.2 -DrepoUrl=http://repo1.maven.org/maven2
+
+Use below cmd to get password:
+
+# To add a new user account line, use the above command with the -p (or --password) option:
+
+/usr/lib/jvm/java-1.8.0-openjdk/bin/java -jar shiro-tools-hasher-1.3.2-cli.jar
