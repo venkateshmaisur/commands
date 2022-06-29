@@ -260,6 +260,8 @@ https://KNOX_HOST:8443/gateway/cdp-proxy/solr/
 #### YARN ResourceManager API
 ```
 curl -iku knoxui:knoxui https://localhost:8443/gateway/cdp-proxy-api/resourcemanager/v1/cluster
+# for cdp-proxy-api
+curl -kL -s -c cookie.txt -b cookie.txt -u knoxui:knoxui "https://localhost:8443/gateway/cdp-proxy/yarn/jmx"
 ```
 ### YARN UI
 #### YARN UI V1
@@ -530,9 +532,4 @@ Add below configs to "Knox Service Advanced Configuration Snippet (Safety Valve)
         <name>gateway.group.config.hadoop.security.group.mapping.ldap.search.attr.group.name</name>
         <value>cn</value>
     </property>
-```
-
-for knoxsso enabled service
-```
-curl -ik -c c1 -b c1 -X GET  --negotiate -u:  "https://knox-hostname:8443/gateway/cdp-proxy/yarn/jmx"
 ```
