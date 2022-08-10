@@ -121,7 +121,7 @@ echo "$LDAP_BASE_DOMAIN" >basedomain.ldif
 sudo ldapadd -x -D cn=Manager,dc=pravin,dc=com -W -f basedomain.ldif
 
 define LDAP_FAKE_USER <<EOF
-dn: cn=admin,dc=ldap,dc=dev
+dn: cn=admin,ou=users,dc=pravin,dc=com
 objectClass: inetOrgPerson
 sn: admin
 cn: admin
@@ -130,7 +130,7 @@ uid: 10001
 userPassword: changeit
 displayName: admin 
 
-dn: cn=pbhagade,dc=ldap,dc=dev
+dn: cn=pbhagade,ou=users,dc=pravin,dc=com
 objectClass: inetOrgPerson
 sn: pbhagade
 cn: pbhagade
@@ -157,3 +157,7 @@ sudo ldapadd -x -D cn=Manager,dc=pravin,dc=com -W -f fakeuser.ldif
 ### INSTAL LDAPADMINi
 ### FOLLOW HERE http://www.server-world.info/en/note?os=CentOS_7&p=openldap&f=7
 # sudo yum --enablerepo=epel -y install phpldapadmin -y
+
+# ldapsearch -x -h localhost -D "cn=Manager,dc=pravin,dc=com" -W -b "dc=pravin,dc=com"
+
+# ldapsearch -x -h localhost -D "cn=pbhagade,ou=users,dc=pravin,dc=com" -w 'changeit' -b "dc=pravin,dc=com" "(cn=admin)"
