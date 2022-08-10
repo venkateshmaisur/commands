@@ -5,7 +5,7 @@
 # and pass as a parameter with the script. To create use: slappasswd
 
 # Clean packages
-sudo yum clean all
+# sudo yum clean all
 
 # Install openldap as service manager and php ldap module
 yum -y install openldap-servers openldap-clients openldap-* nss-pam-ldap* php70w-ldap --skip-broken
